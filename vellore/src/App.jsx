@@ -1,15 +1,20 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
 
-function App() {
-
+const App = () => {
   return (
-    <>
-      
-    </>
-  )
-}
+    <div className="h-screen w-screen overflow-hidden flex items-center justify-center">
+      <video
+        className="w-full h-full object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline 
+      >
+        <source src="/videos/TshirtVideo-vmake.mov" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  );
+};
 
-export default App
+export default App;
