@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  FaMapMarkerAlt,
+ 
   FaPhone,
   FaSearch,
   FaHeart,
@@ -9,10 +9,10 @@ import {
 
 const Navbar = () => {
   return (
-    <header className="border-b">
+    <header className="shadow-md">
       {/* Top Bar - Desktop Only */}
-      <div className="hidden md:flex justify-between items-center px-6 py-4">
-        <div className="text-2xl font-bold">Vellore</div>
+      <div className="hidden md:flex justify-between items-center px-20 py-10">
+        <div className="text-6xl font-bold">Vellor</div>
         <div className="flex gap-10 text-sm">
           {/* <div className="flex items-center gap-2">
             <FaMapMarkerAlt className="text-gray-600" />
@@ -21,39 +21,44 @@ const Navbar = () => {
               <div>192 Orchard St, Brooklyn, CA</div>
             </div>
           </div> */}
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <FaPhone className="text-gray-600" />
             <div>
               <div className="text-gray-400 text-xs uppercase">Phone</div>
               <div>(+0051) 8286 41 53</div>
             </div>
-          </div>
+          </div> */}
         </div>
-        <div className="flex items-center gap-4 text-lg">
+        <div className="flex items-center gap-6 text-2xl">
           <FaSearch className="cursor-pointer" />
           <div className="relative cursor-pointer">
             <FaHeart />
-            <span className="absolute -top-2 -right-2 bg-black text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
+            {/* <span className="absolute -top-2 -right-2 bg-black text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
               0
-            </span>
+            </span> */}
           </div>
           <div className="relative cursor-pointer">
             <FaShoppingCart />
-            <span className="absolute -top-2 -right-2 bg-black text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
+            {/* <span className="absolute -top-2 -right-2 bg-black text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
               0
-            </span>
+            </span> */}
           </div>
         </div>
       </div>
-
+        <hr width="1400" className="mx-auto"/>
       {/* Main Navigation */}
-      <nav className="hidden md:flex justify-between items-center px-6 py-3 border-t text-sm">
-        <ul className="flex gap-6">
-          <li className="text-gray-400">HOME</li>
-          <li className="hover:text-black">SHOP</li>
-          <li className="hover:text-black">PRODUCT</li>
-          <li className="hover:text-black">BLOG</li>
-          <li className="hover:text-black">PAGES</li>
+      <nav className="hidden md:flex justify-between items-center px-20 py-3 text-md">
+        <ul className="flex gap-6 text-primary">
+          <li className="hover:text-gray-400">
+            <a href="#home">HOME</a></li>
+          <li className="hover:text-gray-400">
+            <a href="#shop">SHOP</a></li>
+          <li className="hover:text-gray-400">
+            <a href="#product">PRODUCT</a></li>
+          {/* <li className="hover:text-black">
+            <a href="">BLOG</a></li> */}
+          <li className="hover:text-gray-400">
+            <a href="#about">ABOUT</a></li>
         </ul>
         {/* <div className="flex gap-6">
           <div className="cursor-pointer">ENGLISH ▼</div>
@@ -62,23 +67,23 @@ const Navbar = () => {
       </nav>
 
       {/* Bottom Navbar - Mobile Only */}
-      <div className="fixed bottom-0 left-0 right-0 md:hidden bg-white border-t shadow-md z-50">
-        <div className="flex justify-around items-center py-2 text-xl">
-          <FaSearch className="text-gray-700" />
+      <div className="fixed bottom-5 left-0 right-0 md:hidden bg-white z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] rounded-t-xl">
+        <div className="flex justify-around items-center py-2 text-xl text-primary">
+          <FaSearch className="hover:text-gray-400" />
           <div className="relative">
-            <FaHeart className="text-gray-700" />
-            <span className="absolute -top-1 -right-2 bg-black text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
+            <FaHeart className="hover:text-gray-400" />
+            {/* <span className="absolute -top-1 -right-2 bg-black text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
               0
-            </span>
+            </span> */}
           </div>
-          <div className="text-base font-bold">Vellore</div>
+          <div className="text-xl font-bold">Vellor</div>
           <div className="relative">
-            <FaShoppingCart className="text-gray-700" />
-            <span className="absolute -top-1 -right-2 bg-black text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
+            <FaShoppingCart className="hover:text-gray-400" />
+            {/* <span className="absolute -top-1 -right-2 bg-black text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
               0
-            </span>
+            </span> */}
           </div>
-          <FaPhone className="text-gray-700" />
+          <FaPhone className="hover:text-gray-400" />
         </div>
       </div>
     </header>
