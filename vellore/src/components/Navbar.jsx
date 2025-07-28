@@ -23,7 +23,7 @@ const Navbar = () => {
     <>
       <header className="shadow-md max-w-[1560px] mx-auto fixed top-0 right-0 left-0 z-50 bg-white">
         {!isScrolled && (
-          <div className="hidden md:flex justify-between items-center px-20 py-10">
+          <div className="hidden md:flex justify-between items-center px-20 py-6">
             <div className="text-6xl font-bold text-primary">Vellor</div>
             <div className="flex items-center gap-6 text-2xl text-primary">
               <FaSearch className="cursor-pointer hover:text-gray-400 transition-colors" />
@@ -42,7 +42,7 @@ const Navbar = () => {
         )}
         
         <nav className={`hidden md:flex items-center px-20 text-md ${
-          isScrolled ? 'justify-between py-4' : 'justify-center py-3'
+          isScrolled ? 'justify-between py-6' : 'justify-center py-4'
         }`}>
           {isScrolled && (
             <div className="text-2xl font-bold text-primary">

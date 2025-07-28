@@ -7,7 +7,6 @@ const App = () => {
     <>
      <Navbar/>
       <HeroSection/>
-      <div className='h-400'></div>
     </>
   );
 };

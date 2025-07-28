@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+
 @theme{
+    /* colors */
     --color-primary: #4f0d17;
+    --color-secondary: #e6c55d;
+
+
+    /* Fonts */
+    --font-heading: "Raleway", sans-serif;
+    --font-content: "Roboto", sans-serif;
 }
