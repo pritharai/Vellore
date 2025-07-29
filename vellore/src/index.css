@@ -1,13 +1,29 @@
 @import "tailwindcss";
 
 
-@theme{
+@theme {
+
     /* colors */
     --color-primary: #4f0d17;
-    --color-secondary: #e6c55d;
+    --color-secondary: #f6e1c5;
+    /* --color-secondary: #baac9d; */
+    /* --color-secondary: #e6c55d; */
+
+
+    
+    /* Semantic Colors */
+    --color-success: #2d5a3d;
+    --color-warning: #b8860b;
+    --color-error: #8b2635;
+    --color-info: #4a5568;
+
+
 
 
     /* Fonts */
     --font-heading: "Raleway", sans-serif;
     --font-content: "Roboto", sans-serif;
+}
+.s{
+    color: #fcc45ce3;
 }
