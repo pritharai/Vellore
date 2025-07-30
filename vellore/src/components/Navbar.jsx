@@ -21,7 +21,7 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="max-w-[1560px] mx-auto fixed top-0 right-0 left-0 z-50 bg-white">
+      <header className= "shadow-md max-w-[1560px] mx-auto fixed top-0 right-0 left-0 z-50 bg-white">
         {!isScrolled && (
           <div className="hidden md:flex justify-between items-center px-20 py-6">
             <div className="text-6xl font-bold text-primary">Vellor</div>
@@ -78,7 +78,7 @@ const Navbar = () => {
           )}
         </nav>
 
-        <div className="fixed bottom-5 left-0 right-0 md:hidden bg-white z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] rounded-t-xl">
+        <div className="fixed bottom-0 left-0 right-0 md:hidden bg-white z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] rounded-t-xl">
           <div className="flex justify-around items-center py-2 text-xl text-primary">
             <FaSearch className="hover:text-gray-400 transition-colors" />
             <div className="relative">
