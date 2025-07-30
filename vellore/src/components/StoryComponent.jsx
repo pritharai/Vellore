@@ -14,7 +14,7 @@ const {title, subtitle, image, description} = storyData
                 <img
                     src={image}
                     className="w-full"
-                    alt="hero-core-1"
+                    alt={title}
                 />
             </div>
 
