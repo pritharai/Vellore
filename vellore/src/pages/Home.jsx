@@ -42,9 +42,9 @@ const Home = () => {
                 'a statement of purpose, not just style.',
                 'an identity beyond fast trends.',
               ]}
-              loop={0} // 0 = infinite
-              cursor
-              cursorStyle='_'
+              loop={0} 
+            //   cursor
+            //   cursorStyle='_'
               typeSpeed={50}
               deleteSpeed={30}
               delaySpeed={2000}
