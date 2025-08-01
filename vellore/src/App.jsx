@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
-import ProductDetail from './components/ProductDetails';
+
 
 
 const App = () => {
@@ -10,7 +10,9 @@ const App = () => {
      <Navbar/>
      <div>
       {/* <Home/> */}
-      <ProductDetail/>
+      {/* <ProductDetail/> */}
+      {/* <Wishlist/> */}
+      <Cart/>
      </div>
     </>
   );
