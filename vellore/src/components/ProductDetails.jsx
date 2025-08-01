@@ -35,8 +35,8 @@ const ProductDetail = () => {
                                 key={size}
                                 onClick={() => selectSize(size)}
                                 className={`px-4 py-2 border hover:cursor-pointer rounded-md text-sm font-medium ${selectedSize === size
-                                        ? 'bg-black text-white border-black'
-                                        : 'bg-white border-gray-400'
+                                    ? 'bg-black text-white border-black'
+                                    : 'bg-white border-gray-400'
                                     }`}
                             >
                                 {size}
