@@ -1,13 +1,17 @@
 import React from 'react';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
+import ProductDetail from './components/ProductDetails';
 
 
 const App = () => {
   return (
     <>
      <Navbar/>
-      <Home/>
+     <div>
+      {/* <Home/> */}
+      <ProductDetail/>
+     </div>
     </>
   );
 };

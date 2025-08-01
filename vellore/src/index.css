@@ -5,12 +5,14 @@
 
     /* colors */
     --color-primary: #4f0d17;
+    --color-primary-hover: #3d0a12;/* darker shade */
+    --color-primary-light: #6a1a25;/* lighter shade */
     --color-secondary: #f6e1c5;
     /* --color-secondary: #baac9d; */
     /* --color-secondary: #e6c55d; */
 
 
-    
+
     /* Semantic Colors */
     --color-success: #2d5a3d;
     --color-warning: #b8860b;
@@ -24,6 +26,7 @@
     --font-heading: "Raleway", sans-serif;
     --font-content: "Roboto", sans-serif;
 }
-.s{
+
+.s {
     color: #fcc45ce3;
 }
