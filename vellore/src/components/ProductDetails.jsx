@@ -34,7 +34,7 @@ const ProductDetail = () => {
                             <button
                                 key={size}
                                 onClick={() => selectSize(size)}
-                                className={`px-4 py-2 border rounded-md text-sm font-medium ${selectedSize === size
+                                className={`px-4 py-2 border hover:cursor-pointer rounded-md text-sm font-medium ${selectedSize === size
                                         ? 'bg-black text-white border-black'
                                         : 'bg-white border-gray-400'
                                     }`}
@@ -50,7 +50,7 @@ const ProductDetail = () => {
                     <div className="inline-flex border border-gray-300 rounded-md overflow-hidden">
                         <button
                             onClick={() => changeQty(-1)}
-                            className="px-4 py-2 text-lg font-bold bg-white"
+                            className="px-4 py-2 text-lg font-bold bg-white hover:cursor-pointer "
                         >
                             −
                         </button>
@@ -62,7 +62,7 @@ const ProductDetail = () => {
                         />
                         <button
                             onClick={() => changeQty(1)}
-                            className="px-4 py-2 text-lg font-bold bg-white"
+                            className="px-4 py-2 text-lg font-bold bg-white hover:cursor-pointer "
                         >
                             +
                         </button>
