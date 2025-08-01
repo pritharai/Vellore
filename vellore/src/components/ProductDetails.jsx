@@ -62,7 +62,7 @@ const ProductDetail = () => {
                         />
                         <button
                             onClick={() => changeQty(1)}
-                            className="px-4 py-2 text-lg font-bold bg-white hover:cursor-pointer "
+                            className="px-4 py-2 text-lg font-bold bg-white hover:cursor-pointer"
                         >
                             +
                         </button>
