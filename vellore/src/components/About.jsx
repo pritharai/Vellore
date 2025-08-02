@@ -11,14 +11,15 @@ const About = () => {
                         className="text-5xl font-extrabold leading-tight mb-6"
                         style={{ fontFamily: 'Raleway, sans-serif' }}
                     >
-                        Elevate Confidence,<br />
-                        Celebrate Identity
+                        Vellor — a need for calm<br/>
+                         in the chaos of fast fashion
                     </h1>
                     <p
                         className="text-lg mb-8"
                         style={{ fontFamily: 'Roboto, sans-serif' }}
                     >
-                        At our core, we believe fashion is a reflection of your inner story. Our collections embrace authenticity, style, and diversity. With fast updates and tailored trends, you can rely on us for fashion that feels personal and empowering.
+                        In a world chasing trends and timelines, Vellor chooses stillness. We create oversized T-shirts that don’t just clothe, but comfort. Each piece is thoughtfully designed with intention — minimal in style, rich in detail, and made to last. We believe fashion should feel good — not just look good. That’s why our fabrics are breathable, our fits are relaxed, and our designs are timeless. No logos shouting for attention. No clutter. Just clean, effortless wear for everyday ease.
+
                     </p>
                     <a
                         href="#"
