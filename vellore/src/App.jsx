@@ -9,7 +9,7 @@ import Testimonials from './components/Testimonials';
 import ProductBanner from './components/ProductsBanner';
 import Products from './components/Product';
 
-import About from './components/About';
+import AboutPage from './pages/AboutPage';
 
 const App = () => {
   return (
@@ -26,7 +26,7 @@ const App = () => {
         <Route path="/testimonials" element={<Testimonials />} />
         <Route path="/products-banner" element={<ProductBanner />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/about" element={<About/>} />
+        <Route path="/about" element={<AboutPage/>} />
 
         {/* Optional: Add a fallback 404 route */}
         <Route path="*" element={<h2 className="text-center mt-10">404 - Page Not Found</h2>} />

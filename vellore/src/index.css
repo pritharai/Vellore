@@ -8,8 +8,9 @@
     --color-primary-hover: #3d0a12;/* darker shade */
     --color-primary-light: #6a1a25;/* lighter shade */
     --color-secondary: #f6e1c5;
-    --color-tertiary: #fcc45ce3;
+    --color-tertiary: #ff930f;
      --color-tertiary-light: #fdd491;
+     --color-tertiary-gradient:  #fec76f ;
     /* --color-secondary: #baac9d; */
     /* --color-secondary: #e6c55d; */
 
@@ -31,4 +32,16 @@
 
 .s {
     color: #fcc45ce3;
+}
+@keyframes spin-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 10s linear infinite;
 }

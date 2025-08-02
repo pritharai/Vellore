@@ -2,10 +2,10 @@ import React from "react";
 
 const Testimonials = () => {
   return (
-    <section className="bg-[#f6e1c5] py-16 px-4 mt-25">
+    <section className="bg-primary py-16 px-4 mt-25">
       <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-4xl font-bold text-[#4f0d17] mb-12">
-          Testimonials: Hear from Our Fans
+        <h2 className="text-4xl font-bold text-secondary mb-12">
+          Testimonials
         </h2>
 
         <div className="flex flex-col md:flex-row justify-center gap-8">
