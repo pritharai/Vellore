@@ -2,8 +2,8 @@ import React from 'react'
 import HeroSection from '../components/HeroSection'
 import HeroCoreStory from '../components/HeroCoreStory'
 import { Typewriter } from 'react-simple-typewriter'
-import about_hero from '../components/About'
-import About_Hero from '../components/About'
+import About from '../components/About'
+import Testimonials from '../components/Testimonials'
 
 const Home = () => {
     return (
@@ -48,7 +48,9 @@ const Home = () => {
                 </div>
             </div>
             </section>
-            <About_Hero/>
+            <About/>
+            <Testimonials/>
+
         </>
     )
 }

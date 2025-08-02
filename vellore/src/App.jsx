@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import ProductDetail from './components/ProductDetails';
 import Cart from './components/Cart';
 import Wishlist from './components/Wishlist';
+import Testimonials from './components/Testimonials';
 
 
 const App = () => {
