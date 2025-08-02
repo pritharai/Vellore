@@ -4,6 +4,8 @@ import HeroCoreStory from '../components/HeroCoreStory'
 import { Typewriter } from 'react-simple-typewriter'
 import About from '../components/About'
 import Testimonials from '../components/Testimonials'
+import ProductBanner from '../components/ProductsBanner'
+import Products from '../components/Product'
 
 const Home = () => {
     return (
@@ -50,7 +52,8 @@ const Home = () => {
             </section>
             <About/>
             <Testimonials/>
-
+            <ProductBanner/>
+            <Products/>
         </>
     )
 }
