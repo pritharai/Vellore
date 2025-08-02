@@ -50,8 +50,7 @@ const Home = () => {
                 </div>
             </div>
             </section>
-            {/* <About/> */}
-            {/* <Testimonials/> */}
+
             
         </>
     )

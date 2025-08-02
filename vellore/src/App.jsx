@@ -8,6 +8,7 @@ import Wishlist from './components/Wishlist';
 import Testimonials from './components/Testimonials';
 import ProductBanner from './components/ProductsBanner';
 import Products from './components/Product';
+
 import About from './components/About';
 
 const App = () => {
@@ -31,6 +32,7 @@ const App = () => {
         <Route path="*" element={<h2 className="text-center mt-10">404 - Page Not Found</h2>} />
       </Routes>
     </Router>
+
   );
 };
 
