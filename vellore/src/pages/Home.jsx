@@ -52,8 +52,7 @@ const Home = () => {
             </section>
             <About/>
             <Testimonials/>
-            <ProductBanner/>
-            <Products/>
+            
         </>
     )
 }

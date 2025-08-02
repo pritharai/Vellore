@@ -14,17 +14,6 @@ const ProductDetail = () => {
 
     return (
         <div className="max-w-[1100px] mx-auto bg-white shadow-lg rounded-lg overflow-hidden md:mt-50 flex flex-col lg:flex-row">
-
-            {/* <div className="w-full lg:w-1/2 bg-gray-100">
-                <img
-                    src="/images/hero-core-1.jpg"
-                    alt="Product"
-                    className="w-full h-full object-cover"
-                />
-            </div> */}
-
-
-
             <div className="w-full lg:w-1/2 bg-gray-100 h-[300px] md:h-[400px] lg:h-auto lg:max-h-[600px]">
                 <img
                     src="/images/hero-core-1.jpg"
