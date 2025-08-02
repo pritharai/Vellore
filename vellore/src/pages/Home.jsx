@@ -50,10 +50,8 @@ const Home = () => {
                 </div>
             </div>
             </section>
-            <About/>
+            {/* <About/> */}
             {/* <Testimonials/> */}
-            <ProductBanner/>
-            <Products/>
             
         </>
     )

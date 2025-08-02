@@ -52,16 +52,16 @@ handleScroll()
           
           <ul className="flex gap-6 text-primary">
             <li className="hover:text-gray-400 transition-colors">
-              <a href="#home">HOME</a>
+              <a href="/">HOME</a>
             </li>
             <li className="hover:text-gray-400 transition-colors">
               <a href="#shop">SHOP</a>
             </li>
             <li className="hover:text-gray-400 transition-colors">
-              <a href="#product">PRODUCT</a>
+              <a href="/products">PRODUCT</a>
             </li>
             <li className="hover:text-gray-400 transition-colors">
-              <a href="#about">ABOUT</a>
+              <a href="/about">ABOUT</a>
             </li>
           </ul>
           
