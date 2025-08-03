@@ -1,4 +1,5 @@
 import About from "../components/About"
+import Emblem from "../components/Emblem"
 import FAQ from "../components/FAQ"
 import Testimonials from "../components/Testimonials"
 
@@ -9,6 +10,7 @@ const AboutPage = () => {
         <About/>
         {/* <Testimonials/> */}
         <FAQ/>
+        <Emblem/>
         </section>
       
     )
