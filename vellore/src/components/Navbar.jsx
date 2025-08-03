@@ -37,6 +37,9 @@ handleScroll()
                 <Link to="/cart"><FaShoppingCart className="hover:text-gray-400 transition-colors" /></Link>
                 
               </div>
+              <div className="relative cursor-pointer">
+            <Link to="/auth" className="hover:text-gray-400 transition-colors">LOGIN</Link>
+            </div>
             </div>
           </div>
         )}
@@ -62,7 +65,7 @@ handleScroll()
               <Link to="#shop">SHOP</Link>
             </li> */}
             <li className="hover:text-gray-400 transition-colors">
-              <Link to="/products">PRODUCT</Link>
+              <Link to="/products">PRODUCTS</Link>
             </li>
             <li className="hover:text-gray-400 transition-colors">
               <Link to="/about">ABOUT</Link>
@@ -81,6 +84,7 @@ handleScroll()
                 <Link to="/cart"><FaShoppingCart className="hover:text-gray-400 transition-colors" /></Link>
                 
               </div>
+            
             </div>
           )}
         </nav>
