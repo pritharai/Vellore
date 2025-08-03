@@ -27,14 +27,14 @@ handleScroll()
           <div className="hidden md:flex justify-between items-center px-20 py-6">
             <div className="text-6xl font-bold text-primary"><Link to="/">Vellor</Link></div>
             <div className="flex items-center gap-6 text-2xl text-primary">
-              <Link to="/search"><FaSearch className="cursor-pointer hover:text-gray-400 transition-colors" /></Link>
+              <Link to="/search"><FaSearch className="cursor-pointer hover:text-primary-light transition-colors" /></Link>
               
               <div className="relative cursor-pointer">
-                <Link to="/wishlist"><FaHeart className="hover:text-gray-400 transition-colors" /></Link>
+                <Link to="/wishlist"><FaHeart className="hover:text-primary-light transition-colors" /></Link>
                 
               </div>
               <div className="relative cursor-pointer">
-                <Link to="/cart"><FaShoppingCart className="hover:text-gray-400 transition-colors" /></Link>
+                <Link to="/cart"><FaShoppingCart className="hover:text-primary-light transition-colors" /></Link>
                 
               </div>
             </div>
@@ -55,30 +55,30 @@ handleScroll()
           )}
           
           <ul className="flex gap-6 text-primary">
-            <li className="hover:text-gray-400 transition-colors">
+            <li className="hover:text-primary-light transition-colors">
               <Link to="/">HOME</Link>
             </li>
             {/* <li className="hover:text-gray-400 transition-colors">
               <Link to="#shop">SHOP</Link>
             </li> */}
-            <li className="hover:text-gray-400 transition-colors">
+            <li className="hover:text-primary-light transition-colors">
               <Link to="/products">PRODUCT</Link>
             </li>
-            <li className="hover:text-gray-400 transition-colors">
+            <li className="hover:text-primary-light transition-colors">
               <Link to="/about">ABOUT</Link>
             </li>
           </ul>
           
           {isScrolled && (
             <div className="flex items-center gap-4 text-xl text-primary">
-              <Link to="/search"><FaSearch className="cursor-pointer hover:text-gray-400 transition-colors" /></Link>
+              <Link to="/search"><FaSearch className="cursor-pointer hover:text-primary-light transition-colors" /></Link>
               
               <div className="relative cursor-pointer">
-                <Link to="/wishlist"><FaHeart className="hover:text-gray-400 transition-colors" /></Link>
+                <Link to="/wishlist"><FaHeart className="hover:text-primary-light transition-colors" /></Link>
                 
               </div>
               <div className="relative cursor-pointer">
-                <Link to="/cart"><FaShoppingCart className="hover:text-gray-400 transition-colors" /></Link>
+                <Link to="/cart"><FaShoppingCart className="hover:text-primary-light transition-colors" /></Link>
                 
               </div>
             </div>
@@ -87,15 +87,15 @@ handleScroll()
 
         <div className="fixed bottom-0 left-0 right-0 md:hidden bg-white z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] rounded-t-xl">
           <div className="flex justify-around items-center py-2 text-xl text-primary">
-            <Link to="/search"><FaSearch className="cursor-pointer hover:text-gray-400 transition-colors" /></Link>
+            <Link to="/search"><FaSearch className="cursor-pointer hover:text-primary-light transition-colors" /></Link>
             <div className="relative">
-              <Link to="/wishlist"><FaHeart className="hover:text-gray-400 transition-colors" /></Link>
+              <Link to="/wishlist"><FaHeart className="hover:text-primary-light transition-colors" /></Link>
             </div>
             <div className="text-xl font-bold">Vellor</div>
             <div className="relative">
-              <Link to="/cart"><FaShoppingCart className="hover:text-gray-400 transition-colors" /></Link>
+              <Link to="/cart"><FaShoppingCart className="hover:text-primary-light transition-colors" /></Link>
             </div>
-            <FaPhone className="hover:text-gray-400 transition-colors" />
+            <FaPhone className="hover:text-primary-light transition-colors" />
           </div>
         </div>
       </header>

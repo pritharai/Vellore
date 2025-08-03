@@ -10,6 +10,7 @@ import ProductBanner from './components/ProductsBanner';
 import Products from './components/Product';
 
 import AboutPage from './pages/AboutPage';
+import Footer from './components/Footer';
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
         {/* Optional: Add a fallback 404 route */}
         <Route path="*" element={<h2 className="text-center mt-10">404 - Page Not Found</h2>} />
       </Routes>
+      <Footer/>
     </Router>
 
   );
