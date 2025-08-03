@@ -4,7 +4,7 @@ import { FiArrowRight } from "react-icons/fi";
 
 const ComingSoon = () => {
   return (
-    <section className="bg-white text-primary py-26 px-6 sm:px-12 max-w-[1560px]">
+    <section className="bg-white text-primary py-26 px-6 sm:px-12 max-w-[1560px] mx-auto">
       <div className="max-w-6xl mx-auto text-center">
         
         <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
@@ -17,8 +17,8 @@ const ComingSoon = () => {
         </p>
 
         <Link
-          to="/shop"
-          className="mt-8 inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-full hover:bg-primary-dark transition-all duration-300"
+          to="/products"
+          className="mt-8 inline-flex items-center gap-2 px-6 py-3 bg-primary text-secondary rounded-full hover:bg-primary-dark transition-all duration-300"
         >
           Explore Current Collection <FiArrowRight />
         </Link>
