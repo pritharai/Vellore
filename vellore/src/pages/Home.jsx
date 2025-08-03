@@ -6,6 +6,7 @@ import About from '../components/About'
 import Testimonials from '../components/Testimonials'
 import ProductBanner from '../components/ProductsBanner'
 import Products from '../components/Product'
+import ComingSoon from '../components/ComingSoon'
 
 const Home = () => {
     return (
@@ -51,7 +52,7 @@ const Home = () => {
             </div>
             </section>
 
-            
+            <ComingSoon/>
         </>
     )
 }
