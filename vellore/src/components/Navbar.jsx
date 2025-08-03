@@ -22,11 +22,12 @@ handleScroll()
 
   return (
     <>
-      <header className= "shadow-md max-w-[1560px] mx-auto fixed top-0 right-0 left-0 z-50 bg-white">
+      <header className= "shadow-md max-w-[1560px] mx-auto fixed top-0 right-0 left-0 z-50 bg-primary-light">
         {!isScrolled && (
           <div className="hidden md:flex justify-between items-center px-20 py-6">
-            <div className="text-6xl font-bold text-primary"><Link to="/">Vellor</Link></div>
-            <div className="flex items-center gap-6 text-2xl text-primary">
+            {/* <div className="text-6xl font-bold text-primary"><Link to="/">Vellor</Link></div> */}
+            <img src="/images/logo_vellore.png" alt="logo" width={150} height={200} />
+            <div className="flex items-center gap-6 text-2xl text-tertiary">
               <Link to="/search"><FaSearch className="cursor-pointer hover:text-gray-400 transition-colors" /></Link>
               
               <div className="relative cursor-pointer">
@@ -50,11 +51,13 @@ handleScroll()
         }`}>
           {isScrolled && (
             <div className="text-2xl font-bold text-primary">
-              <Link to="/">Vellor</Link>
+              {/* <Link to="/">Vellor</Link> */}
+            <img src="/images/logo_vellore.png" alt="logo" width={100} height={50} />
+
             </div>
           )}
           
-          <ul className="flex gap-6 text-primary">
+          <ul className="flex gap-6 text-tertiary-gradient">
             <li className="hover:text-gray-400 transition-colors">
               <Link to="/">HOME</Link>
             </li>
@@ -70,7 +73,7 @@ handleScroll()
           </ul>
           
           {isScrolled && (
-            <div className="flex items-center gap-4 text-xl text-primary">
+            <div className="flex items-center gap-4 text-xl text-tertiary-gradient">
               <Link to="/search"><FaSearch className="cursor-pointer hover:text-gray-400 transition-colors" /></Link>
               
               <div className="relative cursor-pointer">
