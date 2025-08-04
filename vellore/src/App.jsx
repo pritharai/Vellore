@@ -8,19 +8,20 @@ import Wishlist from './components/Wishlist';
 import Testimonials from './components/Testimonials';
 import ProductBanner from './components/ProductsBanner';
 import Products from './components/Product';
-
 import AboutPage from './pages/AboutPage';
 import Footer from './components/Footer';
 import AuthPage from './pages/AuthPage';
+import ScrollToTop from './components/ScrollToTop';
 
 const App = () => {
   return (
     <Router>
+      <ScrollToTop/>
       <Routes>
-        {/* Auth Page — no navbar/footer */}
+        
         <Route path="/auth" element={<AuthPage />} />
 
-        {/* Other routes — include navbar/footer */}
+        
         <Route
           path="*"
           element={
