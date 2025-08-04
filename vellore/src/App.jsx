@@ -12,6 +12,7 @@ import AboutPage from './pages/AboutPage';
 import Footer from './components/Footer';
 import AuthPage from './pages/AuthPage';
 import ScrollToTop from './components/ScrollToTop';
+import Contact from './components/Contact';
 
 const App = () => {
   return (
@@ -36,6 +37,8 @@ const App = () => {
                 <Route path="/products-banner" element={<ProductBanner />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/about" element={<AboutPage />} />
+                <Route path="/contact" element={<Contact />} />
+                
                 <Route path="*" element={<h2 className="text-center mt-10">404 - Page Not Found</h2>} />
               </Routes>
               <Footer />

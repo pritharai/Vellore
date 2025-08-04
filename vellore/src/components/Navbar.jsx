@@ -186,6 +186,11 @@ const Navbar = () => {
                 ABOUT
               </Link>
             </li>
+            <li>
+              <Link to="/contact" className="list-item relative px-2 py-1">
+                CONTACT
+              </Link>
+            </li>
           </ul>
 
           {isScrolled && (
@@ -225,7 +230,9 @@ const Navbar = () => {
                 <FaShoppingCart className="hover:text-gray-400 transition-colors" />
               </Link>
             </div>
+            <Link to='/contact' >
             <FaPhone className="hover:text-gray-400 transition-colors" />
+            </Link>
           </div>
         </div>
       </header>

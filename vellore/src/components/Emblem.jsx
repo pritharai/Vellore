@@ -2,7 +2,7 @@
 
 const Emblem = () => {
   return (
-    <section className="py-20 bg-primary text-center max-w-[1560px] mx-auto mt-20">
+    <section className="py-20 bg-primary text-center max-w-[1560px] mx-auto">
       <img
         src="/images/logo_vellore.png"
         alt="Vellor Logo"
