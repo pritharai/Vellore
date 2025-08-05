@@ -1,38 +1,31 @@
+
 @import "tailwindcss";
 
-
 @theme {
+  /* colors */
+  --color-primary: #4f0d17;
+  --color-primary-hover: #3d0a12; /* darker shade */
+  --color-primary-light: #6a1a25; /* lighter shade */
+  --color-secondary: #f6e1c5;
+  --color-tertiary: #ff930f;
+  --color-tertiary-light: #fdd491;
+  --color-tertiary-gradient: #fec76f;
 
-    /* colors */
-    --color-primary: #4f0d17;
-    --color-primary-hover: #3d0a12;/* darker shade */
-    --color-primary-light: #6a1a25;/* lighter shade */
-    --color-secondary: #f6e1c5;
-    --color-tertiary: #ff930f;
-     --color-tertiary-light: #fdd491;
-     --color-tertiary-gradient:  #fec76f ;
-    /* --color-secondary: #baac9d; */
-    /* --color-secondary: #e6c55d; */
+  /* Semantic Colors */
+  --color-success: #2d5a3d;
+  --color-warning: #b8860b;
+  --color-error: #8b2635;
+  --color-info: #4a5568;
 
-
-
-    /* Semantic Colors */
-    --color-success: #2d5a3d;
-    --color-warning: #b8860b;
-    --color-error: #8b2635;
-    --color-info: #4a5568;
-
-
-
-
-    /* Fonts */
-    --font-heading: "Raleway", sans-serif;
-    --font-content: "Roboto", sans-serif;
+  /* Fonts */
+  --font-heading: "Raleway", sans-serif;
+  --font-content: "Roboto", sans-serif;
 }
 
 .s {
-    color: #fcc45ce3;
+  color: #fcc45ce3;
 }
+
 @keyframes spin-slow {
   0% {
     transform: rotate(0deg);
@@ -44,4 +37,51 @@
 
 .animate-spin-slow {
   animation: spin-slow 10s linear infinite;
+}
+
+@layer components {
+  .list-item {
+    position: relative;
+    display: inline-block;
+    transition: color 0.3s ease;
+  }
+
+  
+  .list-item::before {
+    content: "";
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    width: 12px;
+    height: 12px;
+    border: 3px solid var(--color-primary);
+    border-width: 0 0 3px 3px;
+    opacity: 0;
+    transition: all 0.6s;
+  }
+
+  .list-item:hover::before {
+    opacity: 1;
+    bottom: -8px;
+    left: -8px;
+  }
+
+  .list-item::after {
+    content: "";
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 12px;
+    height: 12px;
+    border: 3px solid var(--color-primary);
+    border-width: 3px 3px 0 0;
+    opacity: 0;
+    transition: all 0.6s;
+  }
+
+  .list-item:hover::after {
+    opacity: 1;
+    top: -8px;
+    right: -8px;
+  }
 }

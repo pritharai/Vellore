@@ -1,4 +1,3 @@
-// components/FAQ.jsx
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
@@ -34,7 +33,7 @@ const FAQ = () => {
   };
 
   return (
-    <section className="max-w-[1560px] py-20 px-6 bg-[#fef9f6] text-primary md:h-[660px]">
+    <section className="max-w-[1560px] py-20 px-6 bg-[#fef9f6] text-primary md:h-[660px] mx-auto">
       <div className="mx-auto max-w-[1280px]">
         <h2
           className="text-4xl font-extrabold text-center mb-12"
@@ -45,31 +44,35 @@ const FAQ = () => {
 
         <div className="space-y-6">
           {faqs.map((faq, index) => (
-            <div
+            <motion.div
               key={index}
+              layout
               className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm"
+              transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
             >
               <button
                 onClick={() => toggleIndex(index)}
-                className="w-full flex gap-5 items-center justify-between p-5 text-left"
+                className="w-full flex gap-5 items-center justify-between p-5 text-left focus:outline-none hover:cursor-pointer"
+                aria-expanded={openIndex === index}
               >
                 <span className="text-lg font-medium text-primary">
                   {faq.question}
                 </span>
-                <ChevronDown size={20}
+                <ChevronDown
+                  size={20}
                   className={`transform transition-transform duration-300 ${
                     openIndex === index ? "rotate-180" : ""
                   }`}
                 />
               </button>
 
-              <AnimatePresence>
+              <AnimatePresence initial={false}>
                 {openIndex === index && (
                   <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.1, ease: "easeOut" }}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.25 }}
                     className="px-5 pb-5 text-gray-700 text-base font-[400]"
                     style={{ fontFamily: "Roboto, sans-serif" }}
                   >
@@ -77,7 +80,7 @@ const FAQ = () => {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

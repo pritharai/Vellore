@@ -38,7 +38,7 @@ const imageVariant = {
 
 const About = () => {
   return (
-    <section className="py-20 px-6 overflow-hidden">
+    <section className=" py-8 md:py-20 px-6 overflow-hidden">
       <motion.div
         className="max-w-[1560px] mx-auto flex flex-col md:flex-row items-center justify-around"
         variants={containerVariants}
