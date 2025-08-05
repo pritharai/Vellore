@@ -85,7 +85,7 @@ const Home = () => {
                         className='text-secondary flex flex-col gap-10 p-5 lg:mt-25'
                         variants={fadeUp}
                     >
-                        <h2 className='text-5xl font-[200]'>Our Promise to you</h2>
+                        <h2 className='text-5xl font-bold' style={{ fontFamily: 'Inter' }}>Our Promise to you</h2>
                         <p className='text-lg'>
                             At Vellor, we promise to deliver more than just oversized T-shirts — we deliver a feeling.
                             Each piece is designed with purpose: minimal, versatile, and timeless. We put comfort first,

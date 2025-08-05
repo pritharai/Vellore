@@ -131,7 +131,7 @@ const Navbar = () => {
       <header className="shadow-md max-w-[1560px] mx-auto fixed top-0 right-0 left-0 z-50 bg-white">
         {!isScrolled && (
           <div className="hidden md:flex justify-between items-center px-20 py-6">
-            <div className="text-6xl font-bold text-primary">
+            <div className="text-6xl font-bold text-primary" style={{ fontFamily: 'Brittany Signature' }}>
               <Link to="/">Vellor</Link>
             </div>
             <div className="flex items-center gap-6 text-2xl text-primary">
@@ -165,7 +165,7 @@ const Navbar = () => {
           }`}
         >
           {isScrolled && (
-            <div className="text-2xl font-bold text-primary">
+            <div className="text-2xl font-bold text-primary" style={{ fontFamily: 'Brittany Signature' }}>
               <Link to="/">Vellor</Link>
             </div>
           )}
@@ -223,7 +223,7 @@ const Navbar = () => {
               </Link>
             </div>
             <Link to="/">
-              <div className="text-xl font-bold">Vellor</div>
+              <div className="text-xl font-bold" style={{ fontFamily: 'Brittany Signature' }}>Vellor</div>
             </Link>
             <div className="relative">
               <Link to="/cart">

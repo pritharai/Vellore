@@ -1,6 +1,9 @@
 
 @import "tailwindcss";
 
+@import './styles/font.css';
+
+
 @theme {
   /* colors */
   --color-primary: #4f0d17;
@@ -85,3 +88,4 @@
     right: -8px;
   }
 }
+
