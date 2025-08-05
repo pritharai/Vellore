@@ -23,14 +23,14 @@ const Products = () => {
     <>
       {/* Page Fade-In */}
       <motion.section
-        className="max-w-[1560px] md:mt-50 py-10 px-6 bg-gray-50 mx-auto"
+        className="max-w-[1560px] md:mt-40 py-10 px-6 mx-auto"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
         {/* Title Animation */}
         <motion.div
-          className="flex items-center px-12 text-primary font-bold py-10"
+          className="flex items-center px-12 justify-center md:justify-start text-primary font-bold pb-5"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -46,7 +46,7 @@ const Products = () => {
           animate="show"
         >
           {sampleProducts.map((product, index) => (
-            <motion.div key={index} variants={cardVariants} whileHover={{ scale: 1.05 }}>
+            <motion.div key={index} variants={cardVariants} >
               <ProductCard product={product} />
             </motion.div>
           ))}

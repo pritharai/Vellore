@@ -6,7 +6,7 @@ import Testimonials from "../components/Testimonials"
 const AboutPage = () => {
     return(
        
-        <section className="py-15">
+        <section className="md:pt-15">
         <About/>
         {/* <Testimonials/> */}
         <FAQ/>
