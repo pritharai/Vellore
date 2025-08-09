@@ -15,6 +15,7 @@ import Products from './components/Product';
 import AboutPage from './pages/AboutPage';
 import Contact from './components/Contact';
 import AuthPage from './pages/AuthPage';
+import ShippingPolicy from './components/ShippingPolicy'; 
 
 const App = () => {
   return (
@@ -41,6 +42,7 @@ const App = () => {
                 <Route path="/products" element={<Products />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/shipping" element={<ShippingPolicy />} />
                 <Route path="*" element={<h2 className="text-center mt-10">404 - Page Not Found</h2>} />
               </Routes>
               <Footer />
