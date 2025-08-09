@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Marcellus&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap');
 
 @import "tailwindcss";
 
@@ -21,7 +23,7 @@
   --color-info: #4a5568;
 
   /* Fonts */
-  --font-heading: "Raleway", sans-serif;
+  --font-heading: "Lugrasimo", sans-serif;
   --font-content: "Roboto", sans-serif;
 }
 

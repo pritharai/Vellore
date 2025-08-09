@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { FaUser, FaLock } from "react-icons/fa";
 import { FiMail } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
+import { FaLocationDot } from "react-icons/fa6";
+import { FaPhoneAlt } from "react-icons/fa";
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -54,42 +56,69 @@ const AuthPage = () => {
           </div>
 
           <form className="space-y-5">
-            {!isLogin && (
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Your Name"
-                  className="w-full px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-                <FaUser className="absolute right-4 top-3.5 text-gray-400" />
-              </div>
-            )}
+  {!isLogin && (
+    <>
+      {/* Name */}
+      <div className="relative">
+        <input
+          type="text"
+          placeholder="Your Name"
+          className="w-full px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+        <FaUser className="absolute right-4 top-3.5 text-gray-400" />
+      </div>
 
-            <div className="relative">
-              <input
-                type="email"
-                placeholder="Email Address"
-                className="w-full px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <FiMail className="absolute right-4 top-3.5 text-gray-400" />
-            </div>
+      {/* Address */}
+      <div className="relative">
+        <input
+          type="text"
+          placeholder="Address"
+          className="w-full px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+        <FaLocationDot className="absolute right-4 top-3.5 text-gray-400" />
+      </div>
 
-            <div className="relative">
-              <input
-                type="password"
-                placeholder="Password"
-                className="w-full px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <FaLock className="absolute right-4 top-3.5 text-gray-400" />
-            </div>
+      {/* Phone Number */}
+      <div className="relative">
+        <input
+          type="tel"
+          placeholder="Phone Number"
+          className="w-full px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+        <FaPhoneAlt className="absolute right-4 top-3.5 text-gray-400" />
+      </div>
+    </>
+  )}
 
-            <button
-              type="submit"
-              className="w-full bg-primary text-white py-3 rounded-full hover:bg-primary-hover transition duration-300"
-            >
-              {isLogin ? "Login" : "Sign Up"}
-            </button>
-          </form>
+  {/* Email */}
+  <div className="relative">
+    <input
+      type="email"
+      placeholder="Email Address"
+      className="w-full px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
+    />
+    <FiMail className="absolute right-4 top-3.5 text-gray-400" />
+  </div>
+
+  {/* Password */}
+  <div className="relative">
+    <input
+      type="password"
+      placeholder="Password"
+      className="w-full px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
+    />
+    <FaLock className="absolute right-4 top-3.5 text-gray-400" />
+  </div>
+
+  {/* Submit Button */}
+  <button
+    type="submit"
+    className="w-full bg-primary text-white py-3 rounded-full hover:bg-primary-hover transition duration-300"
+  >
+    {isLogin ? "Login" : "Sign Up"}
+  </button>
+</form>
+
 
           {/* 🔒 3. Google OAuth Option */}
           <div className="flex items-center justify-center mt-6">
@@ -120,7 +149,7 @@ const AuthPage = () => {
                 Already have an account?{" "}
                 <button
                   onClick={() => setIsLogin(true)}
-                  className="text-primary hover:underline font-medium transition-all"
+                  className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hover:underline font-medium transition-all"
                 >
                   Login
                 </button>

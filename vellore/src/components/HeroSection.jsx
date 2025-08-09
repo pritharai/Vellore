@@ -9,7 +9,7 @@ const HeroSection = () => {
 
         <div className='flex gap-5 flex-col md:flex-row '>
           <p className='text-[28px] font-bold text-primary ml-6'>Every Fit Tells A Story</p>
-          <button className=' w-fit bg-primary mr-5 px-4 py-4 md:py-0 ml-6 md:ml-0 hover:cursor-pointer hover:-translate-y-[1px] active:scale-[0.99] text-secondary font-bold'>Tell Your Story</button>
+          <button className=' w-fit bg-primary mr-5 px-4 py-4 md:py-0 ml-6 md:ml-0 hover:cursor-pointer hover:-translate-y-[1px] active:scale-[0.99] text-secondary font-bold' onClick={() => window.location.href = '/products'}>Tell Your Story</button>
         </div>
       </div>
     </section>

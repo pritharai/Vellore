@@ -23,7 +23,7 @@ const Home = () => {
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.6 }}
             >
-                <h1 className='h-[192px] lg:h-[250px] overflow-hidden font-[300] font-content text-primary text-[clamp(2rem,4vw,3.5rem)]'>
+                <h1 className='h-[192px] lg:h-[250px] overflow-hidden font-[300] font-heading text-primary text-[clamp(2rem,4vw,3.5rem)]'>
                     Vellor was born out of a need — <br />
                     <span className='inline-block'>
                         <Typewriter
@@ -85,8 +85,8 @@ const Home = () => {
                         className='text-secondary flex flex-col gap-10 p-5 lg:mt-25'
                         variants={fadeUp}
                     >
-                        <h2 className='text-5xl font-bold' style={{ fontFamily: 'Inter' }}>Our Promise to you</h2>
-                        <p className='text-lg'>
+                        <h2 className='text-5xl font-bold'>Our Promise to you</h2>
+                        <p className='text-lg' style={{fontFamily: 'var(--font-content)'}}>
                             At Vellor, we promise to deliver more than just oversized T-shirts — we deliver a feeling.
                             Each piece is designed with purpose: minimal, versatile, and timeless. We put comfort first,
                             crafting oversized fits that breathe, move with you, and feel effortlessly at home. Our
