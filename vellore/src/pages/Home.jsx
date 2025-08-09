@@ -23,7 +23,7 @@ const Home = () => {
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.6 }}
             >
-                <h1 className='h-[192px] lg:h-[250px] overflow-hidden font-[300] font-heading text-primary text-[clamp(2rem,4vw,3.5rem)]'>
+                <h1 className='h-[192px] lg:h-[250px] overflow-hidden font-[300] text-primary text-[clamp(2rem,4vw,3.5rem)]' style={{ fontFamily: 'Lugrasimo' }}>
                     Vellor was born out of a need — <br />
                     <span className='inline-block'>
                         <Typewriter

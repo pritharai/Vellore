@@ -1,50 +1,50 @@
 // components/Footer.jsx
-import {
-  FaInstagram,
-  FaTwitter,
-  FaFacebookF,
-  FaEnvelope,
-} from "react-icons/fa";
+import { FaInstagram, FaTwitter, FaFacebookF, FaEnvelope } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-<footer className="bg-white text-primary py-12 px-6 sm:px-12 shadow-[0_-6px_12px_-2px_rgba(0,0,0,0.1)] max-w-[1560px] mx-auto">
-
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 ">
+    <footer className="bg-white text-primary py-12 px-6 sm:px-12 shadow-[0_-6px_12px_-2px_rgba(0,0,0,0.1)] max-w-[1560px] mx-auto">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         
         {/* Brand */}
         <div>
-          <h2 className="text-2xl font-semibold tracking-wide text-primary">Vellor</h2>
+          <h2 className="text-2xl font-semibold tracking-wide text-primary" style={{ fontFamily: 'Brittany Signature' }}>Vellor</h2>
           <p className="text-sm text-primary-gradient mt-3">
-            Timeless, breathable fashion — made to last.
+            Every Fit Tells a Story
           </p>
-        </div>
-
-        {/* Navigation */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4 text-primary">Shop</h3>
-          <ul className="space-y-2 text-primary-gradient text-sm">
-            <li><a href="#" className="hover:text-primary-light transition">New Arrivals</a></li>
-            <li><a href="#" className="hover:text-primary-light transition">Best Sellers</a></li>
-            <li><a href="#" className="hover:text-primary-light transition">Men</a></li>
-            <li><a href="#" className="hover:text-primary-light transition">Women</a></li>
-          </ul>
         </div>
 
         {/* Support */}
         <div>
           <h3 className="text-lg font-semibold mb-4 text-primary">Support</h3>
           <ul className="space-y-2 text-primary-gradient text-sm">
-            <li><a href="#" className="hover:text-primary-light transition">Contact Us</a></li>
-            <li><a href="#" className="hover:text-primary-light transition">Shipping & Returns</a></li>
-            <li><a href="#" className="hover:text-primary-light transition">FAQs</a></li>
-            <li><a href="#" className="hover:text-primary-light transition">Privacy Policy</a></li>
+            <li>
+              <a href="/contact" className="hover:text-primary-light transition">
+                Contact Us
+              </a>
+            </li>
+            <li>
+              <Link to="/shipping" className="hover:text-primary-light transition">
+                Shipping & Returns
+              </Link>
+            </li>
+            <li>
+              <a href="/faqs" className="hover:text-primary-light transition">
+                FAQs
+              </a>
+            </li>
+            {/* <li>
+              <a href="#" className="hover:text-primary-light transition">
+                Privacy Policy
+              </a>
+            </li> */}
           </ul>
         </div>
 
-        {/* Newsletter & Social */}
+        {/* Stay Connected */}
         <div>
-          <h3 className="text-lg font-semibold mb-4 text-primary">Stay Connected</h3>
+          <h3 className="text-lg font-semibold mb-4 text-primary ">Stay Connected</h3>
           <form className="flex items-center space-x-2 mb-4">
             <input
               type="email"
@@ -60,10 +60,18 @@ const Footer = () => {
           </form>
 
           <div className="flex space-x-4 text-primary-light text-xl">
-            <a href="#" className="hover:text-primary-light transition"><FaInstagram /></a>
-            <a href="#" className="hover:text-primary-light transition"><FaTwitter /></a>
-            <a href="#" className="hover:text-primary-light transition"><FaFacebookF /></a>
-            <a href="#" className="hover:text-primary-light transition"><FaEnvelope /></a>
+            <a href="#" className="hover:text-primary-light transition">
+              <FaInstagram />
+            </a>
+            <a href="#" className="hover:text-primary-light transition">
+              <FaTwitter />
+            </a>
+            <a href="#" className="hover:text-primary-light transition">
+              <FaFacebookF />
+            </a>
+            <a href="#" className="hover:text-primary-light transition">
+              <FaEnvelope />
+            </a>
           </div>
         </div>
       </div>
