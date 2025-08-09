@@ -110,7 +110,8 @@
 // export default Navbar;
 
 import React, { useState, useEffect } from "react";
-import { FaPhone, FaSearch, FaHeart, FaShoppingCart } from "react-icons/fa";
+import { FaPhone, FaSearch, FaHeart, FaShoppingCart, FaEllipsisV } from "react-icons/fa";
+import { GiClothes } from "react-icons/gi";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
@@ -125,6 +126,11 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  
+  const [showMore, setShowMore] = useState(false);
+
+  
+  
 
   return (
     <>
@@ -212,29 +218,47 @@ const Navbar = () => {
           )}
         </nav>
 
-        <div className="fixed bottom-0 left-0 right-0 md:hidden bg-white z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] rounded-t-xl">
-          <div className="flex justify-around items-center py-2 text-xl text-primary">
-            <Link to="/search">
-              <FaSearch className="cursor-pointer hover:text-gray-400 transition-colors" />
-            </Link>
-            <div className="relative">
-              <Link to="/wishlist">
-                <FaHeart className="hover:text-gray-400 transition-colors" />
-              </Link>
-            </div>
-            <Link to="/">
-              <div className="text-xl font-bold" style={{ fontFamily: 'Brittany Signature' }}>Vellor</div>
-            </Link>
-            <div className="relative">
-              <Link to="/cart">
-                <FaShoppingCart className="hover:text-gray-400 transition-colors" />
-              </Link>
-            </div>
-            <Link to='/contact' >
-            <FaPhone className="hover:text-gray-400 transition-colors" />
-            </Link>
-          </div>
+         <div className="fixed bottom-0 left-0 right-0 md:hidden bg-white z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] rounded-t-xl">
+      <div className="flex justify-around items-center py-2 text-xl text-primary">
+        {/* My Products */}
+        <Link to="/products" className="hover:text-gray-400 transition-colors">
+          <GiClothes className="cursor-pointer" />
+        </Link>
+
+        {/* Vellor Logo */}
+        <Link to="/">
+          <div className="text-xl font-bold" style={{ fontFamily: 'Brittany Signature' }}>Vellor</div>
+        </Link>
+
+        {/* Cart */}
+        <Link to="/cart">
+          <FaShoppingCart className="hover:text-gray-400 transition-colors" />
+        </Link>
+
+        {/* Three Dots Menu */}
+        <button
+          onClick={() => setShowMore(!showMore)}
+          className="hover:text-gray-400 transition-colors"
+        >
+          <FaEllipsisV />
+        </button>
+      </div>
+
+      {/* Dropdown Menu */}
+      {showMore && (
+        <div className="absolute bottom-14 right-4 bg-white shadow-lg rounded-lg p-3 flex flex-col gap-3 text-primary text-lg">
+          <Link to="/search" className="hover:text-gray-400 transition-colors">
+            <FaSearch className="inline mr-2" /> Search
+          </Link>
+          <Link to="/wishlist" className="hover:text-gray-400 transition-colors">
+            <FaHeart className="inline mr-2" /> Wishlist
+          </Link>
+          <Link to="/contact" className="hover:text-gray-400 transition-colors">
+            <FaPhone className="inline mr-2" /> Contact
+          </Link>
         </div>
+      )}
+    </div>
       </header>
     </>
   );
