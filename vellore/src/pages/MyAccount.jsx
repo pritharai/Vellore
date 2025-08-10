@@ -1,9 +1,27 @@
 // pages/MyAccount.jsx
 import { useState } from "react";
-import { FaBoxOpen, FaHistory, FaEdit, FaHeadset, FaMapMarkerAlt, FaPhoneAlt, FaUser } from "react-icons/fa";
+import {
+  FaBoxOpen,
+  FaHistory,
+  FaEdit,
+  FaHeadset,
+  FaMapMarkerAlt,
+  FaPhoneAlt,
+  FaUser,
+  FaSignOutAlt,
+} from "react-icons/fa";
 
 const MyAccount = () => {
   const [activeTab, setActiveTab] = useState("orders");
+
+  const handleLogout = () => {
+    // Clear authentication data
+    localStorage.removeItem("authToken");
+    sessionStorage.removeItem("authToken");
+
+    // Redirect to login page
+    window.location.href = "/auth";
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-54">
@@ -12,13 +30,15 @@ const MyAccount = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Sidebar */}
-        <aside className="bg-white rounded-2xl shadow p-4">
+        <aside className="bg-white rounded-2xl shadow p-4 flex flex-col justify-between">
           <ul className="space-y-3">
             <li>
               <button
                 onClick={() => setActiveTab("orders")}
                 className={`flex items-center gap-3 w-full p-3 rounded-lg transition ${
-                  activeTab === "orders" ? "bg-primary text-white" : "hover:bg-gray-100"
+                  activeTab === "orders"
+                    ? "bg-primary text-white"
+                    : "hover:bg-gray-100"
                 }`}
               >
                 <FaBoxOpen /> <span>Track Orders</span>
@@ -28,7 +48,9 @@ const MyAccount = () => {
               <button
                 onClick={() => setActiveTab("history")}
                 className={`flex items-center gap-3 w-full p-3 rounded-lg transition ${
-                  activeTab === "history" ? "bg-primary text-white" : "hover:bg-gray-100"
+                  activeTab === "history"
+                    ? "bg-primary text-white"
+                    : "hover:bg-gray-100"
                 }`}
               >
                 <FaHistory /> <span>Order History</span>
@@ -38,7 +60,9 @@ const MyAccount = () => {
               <button
                 onClick={() => setActiveTab("feedback")}
                 className={`flex items-center gap-3 w-full p-3 rounded-lg transition ${
-                  activeTab === "feedback" ? "bg-primary text-white" : "hover:bg-gray-100"
+                  activeTab === "feedback"
+                    ? "bg-primary text-white"
+                    : "hover:bg-gray-100"
                 }`}
               >
                 <FaEdit /> <span>Give Feedback</span>
@@ -48,7 +72,9 @@ const MyAccount = () => {
               <button
                 onClick={() => setActiveTab("profile")}
                 className={`flex items-center gap-3 w-full p-3 rounded-lg transition ${
-                  activeTab === "profile" ? "bg-primary text-white" : "hover:bg-gray-100"
+                  activeTab === "profile"
+                    ? "bg-primary text-white"
+                    : "hover:bg-gray-100"
                 }`}
               >
                 <FaUser /> <span>Profile Details</span>
@@ -58,13 +84,25 @@ const MyAccount = () => {
               <button
                 onClick={() => setActiveTab("support")}
                 className={`flex items-center gap-3 w-full p-3 rounded-lg transition ${
-                  activeTab === "support" ? "bg-primary text-white" : "hover:bg-gray-100"
+                  activeTab === "support"
+                    ? "bg-primary text-white"
+                    : "hover:bg-gray-100"
                 }`}
               >
                 <FaHeadset /> <span>Contact Support</span>
               </button>
             </li>
           </ul>
+
+          {/* Logout Button */}
+          <div className="pt-6 border-t mt-6">
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-3 w-full p-3 rounded-lg text-red-600 hover:bg-red-100 transition"
+            >
+              <FaSignOutAlt /> <span>Logout</span>
+            </button>
+          </div>
         </aside>
 
         {/* Main Content */}
@@ -125,7 +163,9 @@ const ProfileDetails = () => (
         />
       </div>
       <div>
-        <label className="block mb-1 text-gray-700">Email (cannot be changed)</label>
+        <label className="block mb-1 text-gray-700">
+          Email (cannot be changed)
+        </label>
         <input
           type="email"
           defaultValue="johndoe@email.com"
