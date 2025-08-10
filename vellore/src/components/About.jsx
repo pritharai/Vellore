@@ -74,14 +74,14 @@ const About = () => {
           </motion.p>
 
           <motion.a
-            href="#"
+            href="/products"
             className="inline-block px-6 py-3 bg-primary text-white rounded-md hover:bg-[#3d0a12] transition-all duration-200 text-lg"
             style={{ fontFamily: 'Raleway, sans-serif' }}
             variants={fadeUpVariant}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
           >
-            Learn More →
+            Buy Now →
           </motion.a>
         </div>
 

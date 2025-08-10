@@ -66,7 +66,7 @@ const Home = () => {
                         y: 0,
                         transition: {
                             staggerChildren: 0.3,
-                            duration: 0.8,
+                            duration: 0.5,
                         },
                     },
                 }}

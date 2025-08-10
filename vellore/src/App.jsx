@@ -18,8 +18,9 @@ import AuthPage from './pages/AuthPage';
 import ShippingPolicy from './pages/ShippingPolicy';
 import FAQs from "./pages/Faq";
 import MyAccount from './pages/MyAccount';
+import ConfirmOrder from './pages/confirmOrder';
 
-import { FaInstagram } from 'react-icons/fa';
+import AdminDashboard from './components/AdminDashboard';
 
 import InstagramButton from './components/Insta';
 
@@ -51,6 +52,9 @@ const App = () => {
                 <Route path="/shipping" element={<ShippingPolicy />} />
                 <Route path="/faqs" element={<FAQs />} />
                 <Route path="/my-account" element={<MyAccount />} />
+                <Route path="/search" element={<h2 className="text-center mt-10">Search Page</h2>} />
+                <Route path="/admin-dashboard" element={<AdminDashboard />} />
+                <Route path="/confirm-order" element={<ConfirmOrder />} />
                 <Route path="*" element={<h2 className="text-center mt-10">404 - Page Not Found</h2>} />
               </Routes>
               <InstagramButton /> {/* Added here so it shows on all pages */}
