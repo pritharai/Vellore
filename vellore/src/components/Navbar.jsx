@@ -110,7 +110,7 @@
 // export default Navbar;
 
 import React, { useState, useEffect } from "react";
-import { FaPhone, FaSearch, FaHeart, FaShoppingCart, FaEllipsisV } from "react-icons/fa";
+import { FaPhone, FaSearch, FaHeart, FaShoppingCart, FaEllipsisV, FaUser } from "react-icons/fa";
 import { GiClothes } from "react-icons/gi";
 import { Link } from "react-router-dom";
 
@@ -155,8 +155,8 @@ const Navbar = () => {
                 </Link>
               </div>
               <div className="relative cursor-pointer">
-                <Link to="/auth" className="hover:text-gray-400 transition-colors">
-                  LOGIN
+                <Link to="/my-account" className="hover:text-gray-400 transition-colors">
+                  <FaUser className="hover:text-gray-400 transition-colors" />
                 </Link>
               </div>
             </div>
@@ -255,6 +255,9 @@ const Navbar = () => {
           </Link>
           <Link to="/contact" className="hover:text-gray-400 transition-colors">
             <FaPhone className="inline mr-2" /> Contact
+          </Link>
+          <Link to="/my-account" className="hover:text-gray-400 transition-colors">
+            <FaUser className="inline mr-2" /> My Account
           </Link>
         </div>
       )}
