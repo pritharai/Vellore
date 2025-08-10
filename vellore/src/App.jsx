@@ -19,10 +19,11 @@ import ShippingPolicy from './pages/ShippingPolicy';
 import FAQs from "./pages/Faq";
 import MyAccount from './pages/MyAccount';
 import ConfirmOrder from './pages/confirmOrder';
-
+import ThankYou from './pages/Thankyou';
 import AdminDashboard from './components/AdminDashboard';
 
 import InstagramButton from './components/Insta';
+import AdminOrders from './components/orders';
 
 const App = () => {
   return (
@@ -55,6 +56,8 @@ const App = () => {
                 <Route path="/search" element={<h2 className="text-center mt-10">Search Page</h2>} />
                 <Route path="/admin-dashboard" element={<AdminDashboard />} />
                 <Route path="/confirm-order" element={<ConfirmOrder />} />
+                <Route path="/thank-you" element={<ThankYou />} />'
+                <Route path="/orders" element={<AdminOrders />} />
                 <Route path="*" element={<h2 className="text-center mt-10">404 - Page Not Found</h2>} />
               </Routes>
               <InstagramButton /> {/* Added here so it shows on all pages */}

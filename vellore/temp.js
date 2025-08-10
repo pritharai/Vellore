@@ -1,6 +1,7 @@
 Stock Alert
 Selective Cart
-Buy Now page
-Payment
-Address Confirmation
-Order Confirmation
+// Buy Now page
+// Payment
+// Address Confirmation
+// Order Confirmation
+
