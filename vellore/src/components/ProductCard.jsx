@@ -36,13 +36,8 @@ const ProductCard = ({ product }) => {
           {/* Buttons */}
           <div className="flex gap-3 mt-4">
             {/* View Product Button with animation */}
-            <button
-              className="group relative w-full py-3 px-3 text-lg rounded-md font-semibold text-white backdrop-blur-md border border-white/30 overflow-hidden shadow-lg shadow-primary/20 transition-all duration-500 ease-in-out hover:scale-[1.03] active:scale-95 hover:cursor-pointer"
-            >
-              <span
-                className="relative z-10"
-                onClick={goToProduct}
-              >
+            <button className="group relative w-full py-3 px-3 text-lg rounded-md font-semibold text-white backdrop-blur-md border border-white/30 overflow-hidden shadow-lg shadow-primary/20 transition-all duration-500 ease-in-out hover:scale-[1.03] active:scale-95 hover:cursor-pointer">
+              <span className="relative z-10" onClick={goToProduct}>
                 View Product
               </span>
 
@@ -71,19 +66,31 @@ const ProductCard = ({ product }) => {
           onClick={() => setShowStory(false)}
         >
           <div
-            className="bg-white p-6 rounded-md max-w-md w-full"
+            className="bg-white p-6 rounded-md max-w-2xl w-full flex gap-6"
             onClick={(e) => e.stopPropagation()} // Prevent modal close on inner click
           >
-            <h2 className="font-bold mb-3 text-xl">
-              Story of {product.title}
-            </h2>
-            <p className="text-gray-700">{product.story}</p>
-            <button
-              className="mt-4 px-4 py-2 bg-primary text-white rounded"
-              onClick={() => setShowStory(false)}
-            >
-              Close
-            </button>
+            {/* Image Section */}
+            <div className="flex-shrink-0 w-1/2">
+              <img
+                src={product.image} // Make sure this is the correct field for product image
+                alt={product.title}
+                className="w-full h-full object-cover rounded"
+              />
+            </div>
+
+            {/* Text Section */}
+            <div className="flex-1">
+              <h2 className="font-bold mb-3 text-xl">
+                Story of {product.title}
+              </h2>
+              <p className="text-gray-700">{product.story}</p>
+              <button
+                className="mt-4 px-4 py-2 bg-primary text-white rounded"
+                onClick={() => setShowStory(false)}
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}

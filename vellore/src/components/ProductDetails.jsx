@@ -49,8 +49,8 @@ const ProductDetail = () => {
             </div>
 
             <div className="w-full lg:w-1/2 p-10 flex flex-col gap-6">
-                <h2 className="text-2xl font-semibold">Unisex Oversized Tee</h2>
-                <div className="text-lg font-content text-black">₹899.00</div>
+                <h2 className="text-2xl font-semibold text-primary">Unisex Oversized Tee</h2>
+                <div className="text-lg font-content text-primary">₹899.00</div>
 
                 <div>
                     <div className="text-sm mb-2 font-medium">Size</div>
