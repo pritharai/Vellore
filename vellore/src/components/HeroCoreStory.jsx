@@ -32,7 +32,7 @@ const HeroCoreStory = () => {
       <div className="text-center mt-40">
         <Link
           to="/products"
-          className="inline-block px-6 py-3 text-lg font-medium text-white bg-primary rounded-md shadow-lg hover:bg-primary/80 transition-all duration-300"
+          className="inline-block px-6 py-3 text-lg font-medium text-secondary bg-primary rounded-md shadow-lg hover:bg-primary-hover transition-all duration-300"
         >
           Read More
         </Link>

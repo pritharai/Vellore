@@ -214,6 +214,11 @@ const Navbar = () => {
                   <FaShoppingCart className="hover:text-gray-400 transition-colors" />
                 </Link>
               </div>
+              <div className="relative cursor-pointer">
+                <Link to="/my-account" className="hover:text-gray-400 transition-colors">
+                  <FaUser className="hover:text-gray-400 transition-colors" />
+                </Link>
+              </div>
             </div>
           )}
         </nav>

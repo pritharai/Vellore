@@ -119,7 +119,7 @@ const Cart = () => {
               </button>
               <button
                 onClick={() => removeItem(item.id)}
-                className="px-4 py-2 border-2 border-primary text-primary rounded-md hover:bg-primary-light hover:text-white transition"
+                className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-hover hover:text-white transition"
               >
                 Add to Wishlist
               </button>
