@@ -21,9 +21,12 @@ import MyAccount from './pages/MyAccount';
 import ConfirmOrder from './pages/confirmOrder';
 import ThankYou from './pages/Thankyou';
 import AdminDashboard from './components/AdminDashboard';
-
+import ResetPassword from './components/ResetPassword';
 import InstagramButton from './components/Insta';
 import AdminOrders from './components/orders';
+import VerifyPage from './components/Verify';
+import UserProfilePage from './components/Profile';
+import AddAddress from './components/Address';
 
 const App = () => {
   return (
@@ -58,6 +61,10 @@ const App = () => {
                 <Route path="/confirm-order" element={<ConfirmOrder />} />
                 <Route path="/thank-you" element={<ThankYou />} />'
                 <Route path="/orders" element={<AdminOrders />} />
+                <Route path="/verify" element={<VerifyPage />} />
+                <Route path="/profile" element={<UserProfilePage />} />
+                <Route path="/reset-password/:token" element={<ResetPassword />} />
+                <Route path="Address" element={<AddAddress />} />
                 <Route path="*" element={<h2 className="text-center mt-10">404 - Page Not Found</h2>} />
               </Routes>
               <InstagramButton /> {/* Added here so it shows on all pages */}
