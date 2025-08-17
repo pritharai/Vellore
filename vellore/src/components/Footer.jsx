@@ -5,14 +5,15 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="bg-white text-primary py-12 px-6 sm:px-12 shadow-[0_-6px_12px_-2px_rgba(0,0,0,0.1)] max-w-[1560px] mx-auto">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         
         {/* Brand */}
         <div>
-          <h2 className="text-2xl font-semibold tracking-wide text-primary" style={{ fontFamily: 'Brittany Signature' }}>Vellor</h2>
+          {/* <h2 className="text-2xl font-semibold tracking-wide text-primary" style={{ fontFamily: 'Brittany Signature' }}>Vellor</h2>
           <p className="text-sm text-primary-gradient mt-3">
             Every Fit Tells a Story
-          </p>
+          </p> */}
+          <img src="/images/logo_full_1.jpg" alt="Vellor Logo" className="w-48 mb-4" />
         </div>
 
         {/* Support */}
@@ -53,7 +54,7 @@ const Footer = () => {
             />
             <button
               type="submit"
-              className="px-4 py-2 bg-primary-light text-tertiary-gradient hover:text-primary rounded-full text-sm hover:bg-tertiary-gradient transition"
+              className="px-4 py-2 bg-primary-light text-white hover:text-primary rounded-full text-sm hover:bg-white hover:border-1 transition"
             >
               Subscribe
             </button>
