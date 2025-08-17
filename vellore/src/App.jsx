@@ -27,6 +27,8 @@ import AdminOrders from './components/orders';
 import VerifyPage from './components/Verify';
 import UserProfilePage from './components/Profile';
 import AddAddress from './components/Address';
+import Search from './components/Search';
+import PageNotFound from './pages/PageNotFound';
 
 const App = () => {
   return (
@@ -56,7 +58,7 @@ const App = () => {
                 <Route path="/shipping" element={<ShippingPolicy />} />
                 <Route path="/faqs" element={<FAQs />} />
                 <Route path="/my-account" element={<MyAccount />} />
-                <Route path="/search" element={<h2 className="text-center mt-10">Search Page</h2>} />
+                <Route path="/search" element={<Search/>} />
                 <Route path="/admin-dashboard" element={<AdminDashboard />} />
                 <Route path="/confirm-order" element={<ConfirmOrder />} />
                 <Route path="/thank-you" element={<ThankYou />} />'
@@ -64,8 +66,9 @@ const App = () => {
                 <Route path="/verify" element={<VerifyPage />} />
                 <Route path="/profile" element={<UserProfilePage />} />
                 <Route path="/reset-password/:token" element={<ResetPassword />} />
-                <Route path="Address" element={<AddAddress />} />
-                <Route path="*" element={<h2 className="text-center mt-10">404 - Page Not Found</h2>} />
+                <Route path="/address" element={<AddAddress />} />
+                <Route path="/search" element={<Search />} />
+                <Route path="*" element={<PageNotFound/>} />
               </Routes>
               <InstagramButton /> {/* Added here so it shows on all pages */}
               <Footer />
