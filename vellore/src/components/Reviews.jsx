@@ -4,23 +4,25 @@ import {
   getReviewsByProduct,
   createReview,
   deleteReview,
-} from "../services/reviewService"; 
+} from "../services/reviewService";
 import { useSelector } from "react-redux";
+import { MdDelete } from "react-icons/md";
+import { toast } from "react-toastify";
 
 const Reviews = ({ productId }) => {
-    
+
   const queryClient = useQueryClient();
-  const {user} = useSelector((state) => state.auth)
+  const { user } = useSelector((state) => state.auth)
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
 
-  
   const { data: reviews = [], isLoading } = useQuery({
     queryKey: ["reviews", productId],
     queryFn: () => getReviewsByProduct(productId),
   });
 
-  
+
+
   const { mutate: addReview, isPending: adding } = useMutation({
     mutationFn: createReview,
     onSuccess: () => {
@@ -28,14 +30,20 @@ const Reviews = ({ productId }) => {
       setComment("");
       setRating(5);
     },
+    onError: (err) => {
+      toast.error(err.message)
+    }
   });
 
-  
+
   const { mutate: removeReview } = useMutation({
     mutationFn: deleteReview,
     onSuccess: () => {
       queryClient.invalidateQueries(["reviews", productId]);
     },
+    onError: (err) => {
+      toast.error(err.message)
+    }
   });
 
   const handleSubmit = (e) => {
@@ -69,20 +77,20 @@ const Reviews = ({ productId }) => {
               </p>
             </div>
 
-            
+
             {user?._id === review.user._id && (
               <button
                 onClick={() => removeReview(review._id)}
-                className="text-red-500 text-sm hover:underline"
+                className="text-red-500 text-sm hover:cursor-pointer"
               >
-                Delete
+                <MdDelete size="25" />
               </button>
             )}
           </div>
         ))}
       </div>
 
-      
+
       {user && (
         <form
           onSubmit={handleSubmit}
@@ -107,14 +115,14 @@ const Reviews = ({ productId }) => {
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            className="w-full border rounded-md p-2 mb-3 focus:ring focus:ring-primary/50"
+            className="w-full border rounded-md p-2 mb-3 resize-none focus:ring focus:ring-primary/50"
             placeholder="Write your review..."
           />
 
           <button
             type="submit"
             disabled={adding}
-            className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-hover transition"
+            className="bg-primary cursor-pointer text-white px-4 py-2 rounded-md hover:bg-primary-hover transition"
           >
             {adding ? "Submitting..." : "Submit Review"}
           </button>
