@@ -1,77 +1,38 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
-const loadPersistedState = () => {
-  try {
-    const persistedState = localStorage.getItem('authState');
-    if (persistedState) {
-      const parsed = JSON.parse(persistedState);
-      if (parsed.user && typeof parsed.isAuthenticated === 'boolean') {
-        return parsed;
-      }
-    }
-  } catch (error) {
-    console.log('Failed to parse authState from localStorage:', error.message);
-  }
-  return {
-    user: null,
-    isAuthenticated: false,
-  };
+const initialState = {
+  isAuthenticated: false,
+  user: null,
+  loading: false,
+  error: null,
 };
 
-const initialState = loadPersistedState();
-
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
-    setCredentials: (state, action) => {
-      const userData = action.payload.user;
-      state.user = {
-        _id: userData._id,
-        email: userData.email,
-        role: userData.role || 'user',
-        name: userData.name,
-        phone: userData.phone,
-        address: userData.address,
-      };
+    setUser(state, action) {
       state.isAuthenticated = true;
-      try {
-        localStorage.setItem('authState', JSON.stringify(state));
-      } catch (error) {
-        console.log('Failed to save authState to localStorage:', error.message);
-      }
+      state.user = action.payload;
+      state.loading = false;
+      state.error = null;
     },
-    updateUser: (state, action) => {
-      const userData = action.payload.user;
-      state.user = {
-        _id: userData._id,
-        email: userData.email,
-        role: userData.role || 'user',
-        name: userData.name,
-        phone: userData.phone,
-        address: userData.address,
-      };
-      state.isAuthenticated = true;
-      try {
-        localStorage.setItem('authState', JSON.stringify(state));
-      } catch (error) {
-        console.log('Failed to save authState to localStorage:', error.message);
-      }
+    setLoading(state, action) {
+      state.loading = action.payload;
+      state.error = null;
     },
-    logout: (state) => {
-      state.user = null;
+    setError(state, action) {
+      state.error = action.payload;
+      state.loading = false;
+    },
+    logout(state) {
       state.isAuthenticated = false;
-      try {
-        localStorage.removeItem('authState');
-      } catch (error) {
-        console.log(
-          'Failed to remove authState from localStorage:',
-          error.message
-        );
-      }
+      state.user = null;
+      state.loading = false;
+      state.error = null;
     },
   },
 });
 
-export const { setCredentials, updateUser, logout } = authSlice.actions;
+export const { setUser, setLoading, setError, logout } = authSlice.actions;
 export default authSlice.reducer;

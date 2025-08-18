@@ -1,22 +1,65 @@
-// pages/AuthPage.jsx
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaUser, FaLock } from "react-icons/fa";
 import { FiMail } from "react-icons/fi";
-import { FcGoogle } from "react-icons/fc";
-import { FaLocationDot } from "react-icons/fa6";
 import { FaPhoneAlt } from "react-icons/fa";
+import { useAuth } from "../hooks/useAuth";
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
+  const { login, register, isLoggingIn, error, isAuthenticated } = useAuth();
 
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    phone: "",
+    gender: "",
+  });
 
-  // 🔒 3. Google OAuth Handler Placeholder
-  const handleGoogleLogin = () => {
-    // redirect to your backend Google auth endpoint or trigger Google SDK login
-    window.location.href = "https://your-backend.com/auth/google"; // Replace with actual
+  const [formErrors, setFormErrors] = useState({});
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    if (!formData.email) errors.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) errors.email = "Invalid email format";
+    if (!formData.password) errors.password = "Password is required";
+    if (!isLogin) {
+      if (!formData.name) errors.name = "Name is required";
+      if (!formData.phone) errors.phone = "Phone number is required";
+      else if (!/^\d{10}$/.test(formData.phone)) errors.phone = "Invalid phone number (10 digits required)";
+      if (!formData.gender) errors.gender = "Gender is required";
+    }
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    if (isLogin) {
+      login({ email: formData.email, password: formData.password });
+    } else {
+      register(formData, {
+        onSuccess: () => {
+          navigate("/verify", { state: { email: formData.email } });
+        },
+      });
+    }
   };
 
   return (
@@ -55,83 +98,102 @@ const AuthPage = () => {
             </p>
           </div>
 
-          <form className="space-y-5">
-  {!isLogin && (
-    <>
-      {/* Name */}
-      <div className="relative">
-        <input
-          type="text"
-          placeholder="Your Name"
-          className="w-full px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
-        />
-        <FaUser className="absolute right-4 top-3.5 text-gray-400" />
-      </div>
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            {!isLogin && (
+              <>
+                {/* Name */}
+                <div className="relative">
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="Your Name"
+                    className="w-full px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                  <FaUser className="absolute right-4 top-3.5 text-gray-400" />
+                  {formErrors.name && (
+                    <p className="text-red-500 text-sm mt-1">{formErrors.name}</p>
+                  )}
+                </div>
 
-      {/* Address */}
-      <div className="relative">
-        <input
-          type="text"
-          placeholder="Address"
-          className="w-full px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
-        />
-        <FaLocationDot className="absolute right-4 top-3.5 text-gray-400" />
-      </div>
+                {/* Phone Number */}
+                <div className="relative">
+                  <input
+                    type="number"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    placeholder="Phone Number"
+                    className="w-full px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                  <FaPhoneAlt className="absolute right-4 top-3.5 text-gray-400" />
+                  {formErrors.phone && (
+                    <p className="text-red-500 text-sm mt-1">{formErrors.phone}</p>
+                  )}
+                </div>
 
-      {/* Phone Number */}
-      <div className="relative">
-        <input
-          type="tel"
-          placeholder="Phone Number"
-          className="w-full px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
-        />
-        <FaPhoneAlt className="absolute right-4 top-3.5 text-gray-400" />
-      </div>
-    </>
-  )}
+                {/* Gender */}
+                <div className="relative">
+                  <select
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleInputChange}
+                    className="w-full px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                  {formErrors.gender && (
+                    <p className="text-red-500 text-sm mt-1">{formErrors.gender}</p>
+                  )}
+                </div>
+              </>
+            )}
 
-  {/* Email */}
-  <div className="relative">
-    <input
-      type="email"
-      placeholder="Email Address"
-      className="w-full px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
-    />
-    <FiMail className="absolute right-4 top-3.5 text-gray-400" />
-  </div>
+            {/* Email */}
+            <div className="relative">
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="Email Address"
+                className="w-full px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <FiMail className="absolute right-4 top-3.5 text-gray-400" />
+              {formErrors.email && (
+                <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
+              )}
+            </div>
 
-  {/* Password */}
-  <div className="relative">
-    <input
-      type="password"
-      placeholder="Password"
-      className="w-full px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
-    />
-    <FaLock className="absolute right-4 top-3.5 text-gray-400" />
-  </div>
+            {/* Password */}
+            <div className="relative">
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                placeholder="Password"
+                className="w-full px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <FaLock className="absolute right-4 top-3.5 text-gray-400" />
+              {formErrors.password && (
+                <p className="text-red-500 text-sm mt-1">{formErrors.password}</p>
+              )}
+            </div>
 
-  {/* Submit Button */}
-  <button
-    type="submit"
-    className="w-full bg-primary text-white py-3 rounded-full hover:bg-primary-hover transition duration-300 hover:cursor-pointer"
-  >
-    {isLogin ? "Login" : "Sign Up"}
-  </button>
-</form>
-
-
-          {/* 🔒 3. Google OAuth Option */}
-          <div className="flex items-center justify-center mt-6">
+            {/* Submit Button */}
             <button
-              onClick={handleGoogleLogin}
-              className="flex items-center justify-center w-full gap-3 border border-gray-300 px-6 py-2 rounded-full hover:shadow-md transition duration-300 hover:cursor-pointer"
+              type="submit"
+              disabled={isLoggingIn}
+              className="w-full bg-primary text-white py-3 rounded-full hover:curspro hover:bg-primary-hover transition duration-300 disabled:opacity-50"
             >
-              <FcGoogle size={22} />
-              <span className="text-sm text-gray-600 font-medium">
-                Continue with Google
-              </span>
+              {isLoggingIn ? "Processing..." : isLogin ? "Login" : "Sign Up"}
             </button>
-          </div>
+          </form>
 
           <div className="text-center mt-6 text-sm text-gray-600">
             {isLogin ? (
@@ -139,7 +201,7 @@ const AuthPage = () => {
                 Don’t have an account?{" "}
                 <button
                   onClick={() => setIsLogin(false)}
-                  className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent font-medium hover:underline transition-all hover:cursor-pointer"
+                  className="bg-gradient-to-r hover:cursor-pointer from-primary to-secondary bg-clip-text text-transparent hover:underline font-medium transition-all"
                 >
                   Sign Up
                 </button>
@@ -149,7 +211,7 @@ const AuthPage = () => {
                 Already have an account?{" "}
                 <button
                   onClick={() => setIsLogin(true)}
-                  className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hover:underline font-medium transition-all hover:cursor-pointer"
+                  className="bg-gradient-to-r hover:cursor-pointer from-primary to-secondary bg-clip-text text-transparent hover:underline font-medium transition-all"
                 >
                   Login
                 </button>
@@ -157,11 +219,10 @@ const AuthPage = () => {
             )}
           </div>
 
-          {/* 🛍 2. Footer CTA */}
           <div className="mt-10 text-center">
             <button
               onClick={() => navigate("/")}
-              className="text-sm text-primary underline hover:text-white transition hover:cursor-pointer"
+              className="text-sm text-primary underline hover:text-tertiary transition hover:cursor-pointer"
             >
               ← Back to Shop
             </button>
