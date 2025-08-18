@@ -26,6 +26,14 @@ export const resendOtp = async (data) => {
     throw new Error(error.response?.data?.message || "Resend Otp failed");
   }
 };
+export const verifyUser = async (data) => {
+  try {
+    const response = await api.post("/user/verify_user", data);
+    return response.data.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Something went wrong");
+  }
+};
 
 export const logout = async () => {
   try {

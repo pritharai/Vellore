@@ -1,6 +1,7 @@
 import axios from "axios";
 import { refreshAccessToken } from "./userService";
-
+import {store} from '../redux/index';
+import {setUser} from '../redux/authSlice'
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   withCredentials: true,
@@ -25,7 +26,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       try {
         const user = await refreshAccessToken();
-        // redux set user
+        store.dispatch(setUser(user.user))
       } catch (error) {
         return Promise.reject(error);
       }

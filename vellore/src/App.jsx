@@ -29,54 +29,57 @@ import UserProfilePage from './components/Profile';
 import AddAddress from './components/Address';
 import Search from './components/Search';
 import PageNotFound from './pages/PageNotFound';
+import Notification from './components/Notification';
+import AuthProvider from './components/AuthProvider';
 
 const App = () => {
   return (
     <Router>
       <ScrollToTop />
+      <AuthProvider>
+        <Notification />
+        <Routes>
+          {/* Auth page without Navbar/Footer */}
+          <Route path="/auth" element={<AuthPage />} />
 
-      <Routes>
-        {/* Auth page without Navbar/Footer */}
-        <Route path="/auth" element={<AuthPage />} />
-
-        {/* All other pages with Navbar/Footer layout */}
-        <Route
-          path="*"
-          element={
-            <>
-              <Navbar />
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/product/:id" element={<ProductDetail />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/wishlist" element={<Wishlist />} />
-                <Route path="/testimonials" element={<Testimonials />} />
-                <Route path="/products-banner" element={<ProductBanner />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/shipping" element={<ShippingPolicy />} />
-                <Route path="/faqs" element={<FAQs />} />
-                <Route path="/my-account" element={<MyAccount />} />
-                <Route path="/search" element={<Search/>} />
-                <Route path="/admin-dashboard" element={<AdminDashboard />} />
-                <Route path="/confirm-order" element={<ConfirmOrder />} />
-                <Route path="/thank-you" element={<ThankYou />} />'
-                <Route path="/orders" element={<AdminOrders />} />
-                <Route path="/verify" element={<VerifyPage />} />
-                <Route path="/profile" element={<UserProfilePage />} />
-                <Route path="/reset-password/:token" element={<ResetPassword />} />
-                <Route path="/address" element={<AddAddress />} />
-                <Route path="/search" element={<Search />} />
-                <Route path="*" element={<PageNotFound/>} />
-              </Routes>
-              <InstagramButton /> {/* Added here so it shows on all pages */}
-              <Footer />
-            </>
-          }
-        />
-      </Routes>
-
+          {/* All other pages with Navbar/Footer layout */}
+          <Route
+            path="*"
+            element={
+              <>
+                <Navbar />
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/product/:id" element={<ProductDetail />} />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/wishlist" element={<Wishlist />} />
+                  <Route path="/testimonials" element={<Testimonials />} />
+                  <Route path="/products-banner" element={<ProductBanner />} />
+                  <Route path="/products" element={<Products />} />
+                  <Route path="/about" element={<AboutPage />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/shipping" element={<ShippingPolicy />} />
+                  <Route path="/faqs" element={<FAQs />} />
+                  <Route path="/my-account" element={<MyAccount />} />
+                  <Route path="/search" element={<Search />} />
+                  <Route path="/admin-dashboard" element={<AdminDashboard />} />
+                  <Route path="/confirm-order" element={<ConfirmOrder />} />
+                  <Route path="/thank-you" element={<ThankYou />} />'
+                  <Route path="/orders" element={<AdminOrders />} />
+                  <Route path="/verify" element={<VerifyPage />} />
+                  <Route path="/profile" element={<UserProfilePage />} />
+                  <Route path="/reset-password/:token" element={<ResetPassword />} />
+                  <Route path="/address" element={<AddAddress />} />
+                  <Route path="/search" element={<Search />} />
+                  <Route path="*" element={<PageNotFound />} />
+                </Routes>
+                <InstagramButton /> {/* Added here so it shows on all pages */}
+                <Footer />
+              </>
+            }
+          />
+        </Routes>
+      </AuthProvider>
       {/* Glow animation */}
       <style>
         {`
