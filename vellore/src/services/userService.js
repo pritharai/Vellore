@@ -47,7 +47,6 @@ export const changePassword = async (data) => {
   try {
     const response = await api.post("/user/change_password", data);
     return response.data.data;
-    return;
   } catch (error) {
     throw new Error(error.response?.data?.message || "Something went wrong");
   }
