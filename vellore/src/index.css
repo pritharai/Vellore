@@ -114,3 +114,6 @@ input[type=number] {
   -moz-appearance: textfield; 
   appearance: textfield;      
 }
+input, textarea {
+  caret-color: black; /* or any visible color */
+}
