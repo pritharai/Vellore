@@ -1,4 +1,3 @@
-// components/ProductCard.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -7,7 +6,7 @@ const ProductCard = ({ product }) => {
   const [showStory, setShowStory] = useState(false);
 
   const goToProduct = () => {
-    navigate(`/product/${product.id}`);
+    navigate(`/product/${product._id}`);
   };
 
   return (

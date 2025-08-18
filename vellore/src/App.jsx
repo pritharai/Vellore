@@ -42,7 +42,7 @@ const App = () => {
             {/* Public Routes */}
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/verify" element={<Verify />} />
-            <Route path="/reset-password/:token" element={<ResetPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
 
             <Route
               path="/"
