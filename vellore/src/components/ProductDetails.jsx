@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { getProductById } from "../services/productService";
 import { getVariantImages } from "../services/variantImageService";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { addToWishlist } from "../services/wishlistService";
+import { FaChevronLeft, FaChevronRight, FaHeart } from "react-icons/fa";
 import Reviews from "./Reviews";
 
 const ProductDetail = () => {
@@ -15,19 +16,36 @@ const ProductDetail = () => {
   const [showSizeChart, setShowSizeChart] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  // Fetch product
   const { data: product, isLoading, error } = useQuery({
     queryKey: ["product", id],
     queryFn: () => getProductById(id),
   });
+
+  // Variant
   const selectedVariant = product?.variants?.find(
     (v) => v.color.toLowerCase() === selectedColor?.name.toLowerCase()
   );
+
+  // Variant images
   const { data: variantImages, isLoading: imagesLoading } = useQuery({
     queryKey: ["variantImages", selectedVariant?._id],
     queryFn: () => getVariantImages({ variantId: selectedVariant._id }),
     enabled: !!selectedVariant?._id,
   });
 
+  // Wishlist Mutation
+  const wishlistMutation = useMutation({
+    mutationFn: addToWishlist,
+    onSuccess: () => {
+      toast.success("Added to wishlist!");
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+
+  // Set default color
   useEffect(() => {
     if (product?.colors?.length > 0 && !selectedColor) {
       setSelectedColor(product.colors[0]);
@@ -35,31 +53,37 @@ const ProductDetail = () => {
     }
   }, [product]);
 
-  const changeQty = (delta) => {
-    setQuantity((prev) => Math.max(1, prev + delta));
+  const handleAddToWishlist = () => {
+    if (!selectedSize) {
+      toast.error("Please select a size first");
+      return;
+    }
+    if (!selectedVariant?._id) {
+      toast.error("Please select a color/variant first");
+      return;
+    }
+
+    wishlistMutation.mutate({
+      variantId: selectedVariant._id,
+      size: selectedSize,
+    });
   };
 
-  const selectSize = (size) => {
-    setSelectedSize(size);
-  };
-
+  const changeQty = (delta) => setQuantity((prev) => Math.max(1, prev + delta));
+  const selectSize = (size) => setSelectedSize(size);
   const selectColor = (color) => {
     setSelectedColor(color);
-    setCurrentImageIndex(0); 
+    setCurrentImageIndex(0);
   };
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
-
   const prevImage = () => {
     setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
-  if (isLoading) {
-    return <div className="text-center py-12">Loading product...</div>;
-  }
-
+  if (isLoading) return <div className="text-center py-12">Loading product...</div>;
   if (error) {
     toast.error(error.message);
     return (
@@ -75,6 +99,7 @@ const ProductDetail = () => {
 
   return (
     <>
+      {/* Size Chart Modal */}
       {showSizeChart && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
           <div className="bg-white rounded-lg relative p-4 max-w-[90%] md:max-w-[600px] shadow-lg">
@@ -94,7 +119,7 @@ const ProductDetail = () => {
       )}
 
       <div className="max-w-[1100px] mx-auto bg-white shadow-md overflow-hidden md:mt-50 md:mb-25 flex flex-col md:flex-row">
-        {/* Image Carousel */}
+        {/* Image Section */}
         <div className="w-full md:w-1/2 flex flex-col bg-gray-100 md:min-h-[1000px] relative aspect-square md:aspect-[4/3]">
           {imagesLoading ? (
             <div className="flex items-center justify-center h-full">Loading images...</div>
@@ -140,12 +165,24 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        {/* Product Details */}
+        {/* Details Section */}
         <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col gap-6">
-          <h2 className="text-2xl font-semibold text-primary">{product?.name}</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-semibold text-primary">{product?.name}</h2>
+            {/* Wishlist Button */}
+            <button
+              onClick={handleAddToWishlist}
+              className="text-2xl text-gray-400 hover:text-red-500 transition"
+              disabled={wishlistMutation.isPending}
+            >
+              <FaHeart />
+            </button>
+          </div>
+
           <div className="text-lg font-content text-primary">
             ₹{product?.price?.toLocaleString("en-IN")}
           </div>
+
           {product?.averageRating > 0 && (
             <div className="text-sm text-gray-600 font-bold">
               Rating: {product.averageRating} ({product.reviewCount} reviews)
@@ -177,13 +214,6 @@ const ProductDetail = () => {
               })}
             </div>
           </div>
-
-          <button
-            onClick={() => setShowSizeChart(!showSizeChart)}
-            className="text-sm text-primary hover:cursor-pointer text-left underline mt-2 hover:text-primary-hover transition"
-          >
-            View Size Chart
-          </button>
 
           {/* Color Selection */}
           <div>
@@ -244,9 +274,11 @@ const ProductDetail = () => {
         </div>
       </div>
 
+
       <div className="max-w-[1280px] mx-auto p-6 md:p-10">
         {/* Review comments */}
               <Reviews productId={product.id} />
+
       </div>
     </>
   );
