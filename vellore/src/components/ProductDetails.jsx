@@ -244,7 +244,7 @@ const ProductDetail = () => {
         </div>
       </div>
 
-      <div>
+      <div className="max-w-[1280px] mx-auto p-6 md:p-10">
         {/* Review comments */}
               <Reviews productId={product.id} />
       </div>
