@@ -146,7 +146,6 @@ const ProductDetail = () => {
           <div className="text-lg font-content text-primary">
             ₹{product?.price?.toLocaleString("en-IN")}
           </div>
-          {console.log(product)}
           {product?.averageRating > 0 && (
             <div className="text-sm text-gray-600 font-bold">
               Rating: {product.averageRating} ({product.reviewCount} reviews)
@@ -247,7 +246,7 @@ const ProductDetail = () => {
 
       <div>
         {/* Review comments */}
-              <Reviews productId={product._id} />
+              <Reviews productId={product.id} />
       </div>
     </>
   );
