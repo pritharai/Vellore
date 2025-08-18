@@ -192,9 +192,13 @@ const ProfileDetails = ({ user }) => {
     country: "",
   });
 
-  // Delete popup state
+  // Popup states
   const [showConfirm, setShowConfirm] = useState(false);
-  const [selectedAddressId, setSelectedAddressId] = useState(null);
+  const [popupConfig, setPopupConfig] = useState({
+    title: "",
+    message: "",
+    onConfirm: null,
+  });
 
   // Fetch addresses
   const { data: addresses, isLoading: addressesLoading } = useQuery({
@@ -247,8 +251,6 @@ const ProfileDetails = ({ user }) => {
     onSuccess: () => {
       toast.success("Address deleted successfully");
       queryClient.invalidateQueries({ queryKey: ["userAddresses"] });
-      setShowConfirm(false);
-      setSelectedAddressId(null);
     },
     onError: (err) => toast.error(err.message),
   });
@@ -261,7 +263,26 @@ const ProfileDetails = ({ user }) => {
 
   const handleProfileSubmit = (e) => {
     e.preventDefault();
-    updateProfileMutation.mutate(formData);
+    setPopupConfig({
+      title: "Save Profile Changes",
+      message: "Are you sure you want to update your profile?",
+      onConfirm: () => updateProfileMutation.mutate(formData),
+    });
+    setShowConfirm(true);
+  };
+
+  const handleProfileCancel = () => {
+    setFormData({
+      name: user?.name || "",
+      phone: user?.phone || "",
+    });
+  };
+
+  // Address cancel handler
+  const handleAddressCancel = (id) => {
+    const originalAddress = addresses.find((addr) => addr._id === id);
+    setAddressForm(originalAddress || {});
+    setEditingAddress(null);
   };
 
   const handleAddressChange = (e) => {
@@ -271,7 +292,13 @@ const ProfileDetails = ({ user }) => {
 
   const handleAddressSubmit = (e) => {
     e.preventDefault();
-    updateAddressMutation.mutate({ id: editingAddress, data: addressForm });
+    setPopupConfig({
+      title: "Update Address",
+      message: "Are you sure you want to update this address?",
+      onConfirm: () =>
+        updateAddressMutation.mutate({ id: editingAddress, data: addressForm }),
+    });
+    setShowConfirm(true);
   };
 
   const handleNewAddressChange = (e) => {
@@ -285,14 +312,12 @@ const ProfileDetails = ({ user }) => {
   };
 
   const handleDeleteClick = (id) => {
-    setSelectedAddressId(id);
+    setPopupConfig({
+      title: "Delete Address",
+      message: "Are you sure you want to delete this address?",
+      onConfirm: () => deleteAddressMutation.mutate(id),
+    });
     setShowConfirm(true);
-  };
-
-  const confirmDelete = () => {
-    if (selectedAddressId) {
-      deleteAddressMutation.mutate(selectedAddressId);
-    }
   };
 
   return (
@@ -340,6 +365,13 @@ const ProfileDetails = ({ user }) => {
             >
               {updateProfileMutation.isPending ? "Saving..." : "Save Changes"}
             </button>
+            <button
+              type="button"
+              className="bg-gray-300 px-4 py-2 rounded ml-2"
+              onClick={handleProfileCancel}
+            >
+              Cancel
+            </button>
           </form>
 
           {/* Address Section */}
@@ -365,7 +397,15 @@ const ProfileDetails = ({ user }) => {
                   {editingAddress === addr._id ? (
                     // Address Edit Form
                     <form onSubmit={handleAddressSubmit} className="space-y-2">
-                      {["houseNumber", "street", "colony", "city", "state", "postalCode", "country"].map((field) => (
+                      {[
+                        "houseNumber",
+                        "street",
+                        "colony",
+                        "city",
+                        "state",
+                        "postalCode",
+                        "country",
+                      ].map((field) => (
                         <input
                           key={field}
                           type="text"
@@ -382,7 +422,9 @@ const ProfileDetails = ({ user }) => {
                           disabled={updateAddressMutation.isPending}
                           className="bg-primary text-white px-4 py-2 rounded"
                         >
-                          {updateAddressMutation.isPending ? "Saving..." : "Save"}
+                          {updateAddressMutation.isPending
+                            ? "Saving..."
+                            : "Save"}
                         </button>
                         <button
                           type="button"
@@ -437,7 +479,15 @@ const ProfileDetails = ({ user }) => {
               <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg relative">
                 <h3 className="text-lg font-semibold mb-4">Add New Address</h3>
                 <form onSubmit={handleNewAddressSubmit} className="space-y-3">
-                  {["houseNumber", "street", "colony", "city", "state", "postalCode", "country"].map((field) => (
+                  {[
+                    "houseNumber",
+                    "street",
+                    "colony",
+                    "city",
+                    "state",
+                    "postalCode",
+                    "country",
+                  ].map((field) => (
                     <input
                       key={field}
                       type="text"
@@ -469,12 +519,15 @@ const ProfileDetails = ({ user }) => {
             </div>
           )}
 
-          {/* ✅ Delete Confirmation Popup */}
+          {/* ✅ Reusable Confirmation Popup */}
           <ConfirmationPopup
             isOpen={showConfirm}
-            title="Delete Address"
-            message="Are you sure you want to delete this address?"
-            onConfirm={confirmDelete}
+            title={popupConfig.title}
+            message={popupConfig.message}
+            onConfirm={() => {
+              popupConfig.onConfirm?.();
+              setShowConfirm(false);
+            }}
             onCancel={() => setShowConfirm(false)}
           />
         </>
