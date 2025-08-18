@@ -5,11 +5,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   updateUserProfile,
   allUserAddresses,
-  updateAddress, 
-  addAddress, 
-  deleteAddress, 
-} from "../services/userService"; 
+  updateAddress,
+  addAddress,
+  deleteAddress,
+} from "../services/userService";
 import { toast } from "react-toastify";
+import ConfirmationPopup from "../components/ConfirmationPopup";
 
 import {
   FaBoxOpen,
@@ -24,6 +25,7 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import { setUser } from "../redux/authSlice";
 import { useDispatch } from "react-redux";
+// import ConfirmationPopup from "../components/ConfirmationPopup";
 
 const MyAccount = () => {
   const [activeTab, setActiveTab] = useState("orders");
@@ -176,11 +178,9 @@ const ProfileDetails = ({ user }) => {
     phone: user?.phone || "",
   });
 
-  // Edit state
+  // Address states
   const [editingAddress, setEditingAddress] = useState(null);
   const [addressForm, setAddressForm] = useState({});
-
-  // Add state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newAddressForm, setNewAddressForm] = useState({
     houseNumber: "",
@@ -188,9 +188,13 @@ const ProfileDetails = ({ user }) => {
     colony: "",
     city: "",
     state: "",
-    zipCode: "",
+    postalCode: "",
     country: "",
   });
+
+  // Delete popup state
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
 
   // Fetch addresses
   const { data: addresses, isLoading: addressesLoading } = useQuery({
@@ -198,7 +202,7 @@ const ProfileDetails = ({ user }) => {
     queryFn: allUserAddresses,
   });
 
-  // Profile update
+  // Mutations
   const updateProfileMutation = useMutation({
     mutationFn: updateUserProfile,
     onSuccess: (data) => {
@@ -209,7 +213,6 @@ const ProfileDetails = ({ user }) => {
     onError: (err) => toast.error(err.message),
   });
 
-  // Update address
   const updateAddressMutation = useMutation({
     mutationFn: ({ id, data }) => updateAddress(id, data),
     onSuccess: () => {
@@ -220,7 +223,6 @@ const ProfileDetails = ({ user }) => {
     onError: (err) => toast.error(err.message),
   });
 
-  // Add address
   const addAddressMutation = useMutation({
     mutationFn: addAddress,
     onSuccess: () => {
@@ -231,11 +233,22 @@ const ProfileDetails = ({ user }) => {
         colony: "",
         city: "",
         state: "",
-        zipCode: "",
+        postalCode: "",
         country: "",
       });
       setIsModalOpen(false);
       queryClient.invalidateQueries({ queryKey: ["userAddresses"] });
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  const deleteAddressMutation = useMutation({
+    mutationFn: deleteAddress,
+    onSuccess: () => {
+      toast.success("Address deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["userAddresses"] });
+      setShowConfirm(false);
+      setSelectedAddressId(null);
     },
     onError: (err) => toast.error(err.message),
   });
@@ -269,6 +282,17 @@ const ProfileDetails = ({ user }) => {
   const handleNewAddressSubmit = (e) => {
     e.preventDefault();
     addAddressMutation.mutate(newAddressForm);
+  };
+
+  const handleDeleteClick = (id) => {
+    setSelectedAddressId(id);
+    setShowConfirm(true);
+  };
+
+  const confirmDelete = () => {
+    if (selectedAddressId) {
+      deleteAddressMutation.mutate(selectedAddressId);
+    }
   };
 
   return (
@@ -339,73 +363,26 @@ const ProfileDetails = ({ user }) => {
                   className="border rounded-lg p-4 shadow-sm relative"
                 >
                   {editingAddress === addr._id ? (
+                    // Address Edit Form
                     <form onSubmit={handleAddressSubmit} className="space-y-2">
-                      <input
-                        type="text"
-                        name="houseNumber"
-                        placeholder="House Number"
-                        value={addressForm.houseNumber || ""}
-                        onChange={handleAddressChange}
-                        className="w-full border rounded p-2"
-                      />
-                      <input
-                        type="text"
-                        name="street"
-                        placeholder="Street"
-                        value={addressForm.street || ""}
-                        onChange={handleAddressChange}
-                        className="w-full border rounded p-2"
-                      />
-                      <input
-                        type="text"
-                        name="colony"
-                        placeholder="Colony"
-                        value={addressForm.colony || ""}
-                        onChange={handleAddressChange}
-                        className="w-full border rounded p-2"
-                      />
-                      <input
-                        type="text"
-                        name="city"
-                        placeholder="City"
-                        value={addressForm.city || ""}
-                        onChange={handleAddressChange}
-                        className="w-full border rounded p-2"
-                      />
-                      <input
-                        type="text"
-                        name="state"
-                        placeholder="State"
-                        value={addressForm.state || ""}
-                        onChange={handleAddressChange}
-                        className="w-full border rounded p-2"
-                      />
-                      <input
-                        type="text"
-                        name="zipCode"
-                        placeholder="Postal Code"
-                        value={addressForm.zipCode || ""}
-                        onChange={handleAddressChange}
-                        className="w-full border rounded p-2"
-                      />
-                      <input
-                        type="text"
-                        name="country"
-                        placeholder="Country"
-                        value={addressForm.country || ""}
-                        onChange={handleAddressChange}
-                        className="w-full border rounded p-2"
-                      />
-
+                      {["houseNumber", "street", "colony", "city", "state", "postalCode", "country"].map((field) => (
+                        <input
+                          key={field}
+                          type="text"
+                          name={field}
+                          placeholder={field.replace(/([A-Z])/g, " $1")}
+                          value={addressForm[field] || ""}
+                          onChange={handleAddressChange}
+                          className="w-full border rounded p-2"
+                        />
+                      ))}
                       <div className="flex gap-2">
                         <button
                           type="submit"
                           disabled={updateAddressMutation.isPending}
                           className="bg-primary text-white px-4 py-2 rounded"
                         >
-                          {updateAddressMutation.isPending
-                            ? "Saving..."
-                            : "Save"}
+                          {updateAddressMutation.isPending ? "Saving..." : "Save"}
                         </button>
                         <button
                           type="button"
@@ -419,19 +396,31 @@ const ProfileDetails = ({ user }) => {
                   ) : (
                     <>
                       <p className="font-medium">{addr.title || "Address"}</p>
-                      <p>{addr.houseNumber}, {addr.street}, {addr.colony}</p>
                       <p>
-                        {addr.city}, {addr.state} - {addr.zipCode}
+                        {addr.houseNumber}, {addr.street}, {addr.colony}
+                      </p>
+                      <p>
+                        {addr.city}, {addr.state} - {addr.postalCode}
                       </p>
                       <p>{addr.country}</p>
+
+                      {/* Edit Button */}
                       <button
-                        className="absolute top-2 right-2 text-sm text-primary"
+                        className="absolute top-2 right-20 text-sm text-primary"
                         onClick={() => {
                           setEditingAddress(addr._id);
                           setAddressForm(addr);
                         }}
                       >
                         Edit
+                      </button>
+
+                      {/* Delete Button */}
+                      <button
+                        className="absolute top-2 right-2 text-sm text-red-500"
+                        onClick={() => handleDeleteClick(addr._id)}
+                      >
+                        Delete
                       </button>
                     </>
                   )}
@@ -442,69 +431,23 @@ const ProfileDetails = ({ user }) => {
             <p className="text-gray-600 mb-4">No addresses found.</p>
           )}
 
-          {/* Modal */}
+          {/* Add Address Modal */}
           {isModalOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
               <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg relative">
                 <h3 className="text-lg font-semibold mb-4">Add New Address</h3>
                 <form onSubmit={handleNewAddressSubmit} className="space-y-3">
-                  <input
-                    type="text"
-                    name="houseNumber"
-                    placeholder="House Number"
-                    value={newAddressForm.houseNumber}
-                    onChange={handleNewAddressChange}
-                    className="w-full border rounded p-2"
-                  />
-                  <input
-                    type="text"
-                    name="street"
-                    placeholder="Street"
-                    value={newAddressForm.street}
-                    onChange={handleNewAddressChange}
-                    className="w-full border rounded p-2"
-                  />
-                  <input
-                    type="text"
-                    name="colony"
-                    placeholder="Colony"
-                    value={newAddressForm.colony}
-                    onChange={handleNewAddressChange}
-                    className="w-full border rounded p-2"
-                  />
-                  <input
-                    type="text"
-                    name="city"
-                    placeholder="City"
-                    value={newAddressForm.city}
-                    onChange={handleNewAddressChange}
-                    className="w-full border rounded p-2"
-                  />
-                  <input
-                    type="text"
-                    name="state"
-                    placeholder="State"
-                    value={newAddressForm.state}
-                    onChange={handleNewAddressChange}
-                    className="w-full border rounded p-2"
-                  />
-                  <input
-                    type="text"
-                    name="zipCode"
-                    placeholder="Postal Code"
-                    value={newAddressForm.zipCode}
-                    onChange={handleNewAddressChange}
-                    className="w-full border rounded p-2"
-                  />
-                  <input
-                    type="text"
-                    name="country"
-                    placeholder="Country"
-                    value={newAddressForm.country}
-                    onChange={handleNewAddressChange}
-                    className="w-full border rounded p-2"
-                  />
-
+                  {["houseNumber", "street", "colony", "city", "state", "postalCode", "country"].map((field) => (
+                    <input
+                      key={field}
+                      type="text"
+                      name={field}
+                      placeholder={field.replace(/([A-Z])/g, " $1")}
+                      value={newAddressForm[field]}
+                      onChange={handleNewAddressChange}
+                      className="w-full border rounded p-2"
+                    />
+                  ))}
                   <div className="flex justify-end gap-2 mt-4">
                     <button
                       type="button"
@@ -525,6 +468,15 @@ const ProfileDetails = ({ user }) => {
               </div>
             </div>
           )}
+
+          {/* ✅ Delete Confirmation Popup */}
+          <ConfirmationPopup
+            isOpen={showConfirm}
+            title="Delete Address"
+            message="Are you sure you want to delete this address?"
+            onConfirm={confirmDelete}
+            onCancel={() => setShowConfirm(false)}
+          />
         </>
       ) : (
         <p className="text-gray-600">Loading user data...</p>
@@ -532,7 +484,6 @@ const ProfileDetails = ({ user }) => {
     </div>
   );
 };
-
 
 // Contact Support
 const ContactSupport = () => (
