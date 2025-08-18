@@ -31,10 +31,10 @@ const Wishlist = () => {
                         <h3 className="text-xl font-medium">{item.name}</h3>
                         <p className="text-lg font-semibold text-primary">{item.price}</p>
                         <div className="flex gap-3 mt-4">
-                            <button className="px-4 py-2 border-2 border-primary text-primary rounded-md hover:bg-primary-light hover:text-white transition">
+                            <button className="px-4 py-2 border-2 border-primary text-primary rounded-md hover:bg-primary hover:cursor-pointer hover:text-white transition">
                                 Add to cart
                             </button>
-                            <button className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-hover transition">
+                            <button className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-hover transition hover:cursor-pointer">
                                 Remove
                             </button>
                         </div>

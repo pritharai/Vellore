@@ -125,6 +125,7 @@ const VerifyPage = () => {
           </button>
         </form>
 
+
         <div className="text-center mt-4">
           {timer > 0 ? (
             <p className="text-gray-500">
@@ -140,6 +141,7 @@ const VerifyPage = () => {
             </button>
           )}
         </div>
+
       </div>
     </div>
   );

@@ -80,10 +80,10 @@ const AdminDashboard = () => {
                       {u.status}
                     </td>
                     <td className="border-b p-3 text-center">
-                      <button className="bg-yellow-400 px-3 py-1 rounded hover:bg-yellow-500 mr-2 transition">
+                      <button className="bg-primary px-3 py-1 rounded hover:bg-primary-hover mr-2 transition hover:cursor-pointer">
                         Edit
                       </button>
-                      <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition">
+                      <button className="bg-primary text-white px-3 py-1 rounded hover:bg-primary-hover transition hover:cursor-pointer">
                         Delete
                       </button>
                     </td>

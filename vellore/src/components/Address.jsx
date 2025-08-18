@@ -119,7 +119,7 @@ const AddAddress = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary text-white p-3 rounded-lg hover:bg-primary-hover transition disabled:opacity-50"
+            className="w-full bg-primary text-white p-3 rounded-lg hover:bg-primary-hover transition disabled:opacity-50 hover:cursor-pointer "
           >
             {loading ? "Saving..." : "Save Address"}
           </button>

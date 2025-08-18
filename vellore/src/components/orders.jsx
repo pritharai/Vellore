@@ -131,13 +131,13 @@ const AdminOrders = () => {
                     <td className="border p-3 space-y-2">
                       <button
                         onClick={() => alert(JSON.stringify(order, null, 2))}
-                        className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 w-full"
+                        className="px-3 py-1 bg-primary text-white rounded hover:bg-primary-hover hover:cursor-pointer w-full"
                       >
                         View Details
                       </button>
                       <button
                         onClick={() => toggleUserProducts(order.userId)}
-                        className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 w-full"
+                        className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 hover:cursor-pointer w-full"
                       >
                         {expandedUserId === order.userId
                           ? "Hide All Purchases"
