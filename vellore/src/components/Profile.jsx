@@ -67,7 +67,7 @@ const UserProfilePage = () => {
 
         <button
           onClick={handleUpdateProfile}
-          className="mt-4 px-4 py-2 bg-primary text-white rounded"
+          className="mt-4 px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover transition hover:cursor-pointer"
         >
           Update Profile
         </button>
@@ -78,7 +78,7 @@ const UserProfilePage = () => {
         <h2 className="text-xl font-semibold mb-4">Change Password</h2>
         <button
           onClick={handleChangePassword}
-          className="px-4 py-2 bg-primary text-white rounded"
+          className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover transition hover:cursor-pointer"
         >
           Change Password
         </button>
@@ -93,7 +93,7 @@ const UserProfilePage = () => {
             {isLoggedIn && (
               <button
                 onClick={handleAddAddress}
-                className="bg-primary text-white px-3 py-1 rounded mt-3"
+                className="bg-primary text-white px-3 py-1 rounded mt-3 hover:bg-primary-hover transition hover:cursor-pointer"
               >
                 Add Address
               </button>
@@ -115,7 +115,7 @@ const UserProfilePage = () => {
               </div>
               <button
                 onClick={() => handleDeleteAddress(addr._id || addr.id)}
-                className="bg-primary text-white px-3 py-1 rounded"
+                className="bg-primary text-white px-3 py-1 rounded hover:bg-primary-hover transition hover:cursor-pointer"
               >
                 Delete
               </button>

@@ -53,7 +53,7 @@ const FAQs = () => {
             <div key={index} className="py-4">
               <button
                 onClick={() => toggleFAQ(index)}
-                className="w-full flex justify-between items-center text-left"
+                className="w-full flex justify-between items-center text-left hover:cursor-pointer"
               >
                 <span className="text-lg font-medium text-gray-800">
                   {faq.question}

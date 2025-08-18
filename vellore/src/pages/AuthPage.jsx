@@ -113,7 +113,7 @@ const AuthPage = () => {
   {/* Submit Button */}
   <button
     type="submit"
-    className="w-full bg-primary text-white py-3 rounded-full hover:bg-primary-hover transition duration-300"
+    className="w-full bg-primary text-white py-3 rounded-full hover:bg-primary-hover transition duration-300 hover:cursor-pointer"
   >
     {isLogin ? "Login" : "Sign Up"}
   </button>
@@ -139,7 +139,7 @@ const AuthPage = () => {
                 Don’t have an account?{" "}
                 <button
                   onClick={() => setIsLogin(false)}
-                  className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent font-medium hover:underline transition-all"
+                  className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent font-medium hover:underline transition-all hover:cursor-pointer"
                 >
                   Sign Up
                 </button>
@@ -149,7 +149,7 @@ const AuthPage = () => {
                 Already have an account?{" "}
                 <button
                   onClick={() => setIsLogin(true)}
-                  className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hover:underline font-medium transition-all"
+                  className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hover:underline font-medium transition-all hover:cursor-pointer"
                 >
                   Login
                 </button>
@@ -161,7 +161,7 @@ const AuthPage = () => {
           <div className="mt-10 text-center">
             <button
               onClick={() => navigate("/")}
-              className="text-sm text-primary underline hover:text-tertiary transition hover:cursor-pointer"
+              className="text-sm text-primary underline hover:text-white transition hover:cursor-pointer"
             >
               ← Back to Shop
             </button>

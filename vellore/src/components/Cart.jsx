@@ -113,13 +113,13 @@ const Cart = () => {
             <div className="flex gap-3 mt-4">
               <button
                 onClick={() => removeItem(item.id)}
-                className="px-4 py-2 border-2 border-primary text-primary rounded-md hover:bg-primary-light hover:text-white transition"
+                className="px-4 py-2 border-2 border-primary text-primary rounded-md hover:bg-primary-light hover:text-white transition hover:cursor-pointer"
               >
                 Remove
               </button>
               <button
                 onClick={() => removeItem(item.id)}
-                className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-hover hover:text-white transition"
+                className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-hover hover:text-white transition hover:cursor-pointer" 
               >
                 Add to Wishlist
               </button>
@@ -137,7 +137,7 @@ const Cart = () => {
           <div className="text-right mt-4">
             <button
               onClick={handleBuySelected}
-              className="px-6 py-3 bg-primary text-white rounded-md hover:bg-primary-hover transition"
+              className="px-6 py-3 bg-primary text-white rounded-md hover:bg-primary-hover transition hover:cursor-pointer"
             >
               Buy Selected Items
             </button>

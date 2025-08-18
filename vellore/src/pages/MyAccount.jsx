@@ -36,7 +36,7 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("orders")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition ${
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
                   activeTab === "orders"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
@@ -48,7 +48,7 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("history")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition ${
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition  hover:cursor-pointer ${
                   activeTab === "history"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
@@ -60,7 +60,7 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("feedback")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition ${
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
                   activeTab === "feedback"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
@@ -72,7 +72,7 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("profile")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition ${
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
                   activeTab === "profile"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
@@ -84,7 +84,7 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("support")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition ${
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
                   activeTab === "support"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
@@ -99,7 +99,7 @@ const MyAccount = () => {
           <div className="pt-6 border-t mt-6">
             <button
               onClick={handleLogout}
-              className="flex items-center gap-3 w-full p-3 rounded-lg text-red-600 hover:bg-red-100 transition"
+              className="flex items-center gap-3 w-full p-3 rounded-lg text-primary hover:bg-red-100 transition hover:cursor-pointer"
             >
               <FaSignOutAlt /> <span>Logout</span>
             </button>

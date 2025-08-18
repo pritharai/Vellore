@@ -193,7 +193,7 @@ const ConfirmOrder = () => {
               ${
                 loading
                   ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-primary hover:bg-primary-hover shadow-md"
+                  : "bg-primary hover:bg-primary-hover hover:cursor-pointer shadow-md"
               }`}
           >
             {loading ? (
@@ -218,7 +218,7 @@ const ConfirmOrder = () => {
             </p>
             <button
               onClick={() => setShowPopup(false)}
-              className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-hover transition"
+              className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-hover transition hover:cursor-pointer"
             >
               Okay
             </button>

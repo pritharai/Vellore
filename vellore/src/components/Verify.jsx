@@ -64,7 +64,7 @@ const VerifyPage = () => {
 
         <button
           onClick={handleResend}
-          className="text-blue-500 mt-4 block text-center"
+          className="text-primary mt-4 block text-center hover:underline hover:cursor-pointer"
         >
           Resend OTP
         </button>

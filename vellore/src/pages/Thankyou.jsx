@@ -72,13 +72,13 @@ const ThankYou = () => {
         <div className="mt-8 flex justify-center gap-4">
           <Link
             to="/"
-            className="px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-hover transition"
+            className="px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-hover transition hover:cursor-pointer"
           >
             Continue Shopping
           </Link>
           <Link
             to="/my-account?tab=history"
-            className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-100 transition"
+            className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-100 transition hover:cursor-pointer"
           >
             View All Orders
           </Link>

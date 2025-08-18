@@ -85,7 +85,7 @@ const ProductCard = ({ product }) => {
               </h2>
               <p className="text-gray-700">{product.story}</p>
               <button
-                className="mt-4 px-4 py-2 bg-primary text-white rounded"
+                className="mt-4 px-4 py-2 bg-primary text-white rounded hover:bg-primary-light transition hover:cursor-pointer"
                 onClick={() => setShowStory(false)}
               >
                 Close
