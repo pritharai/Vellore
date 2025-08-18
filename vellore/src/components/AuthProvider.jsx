@@ -1,18 +1,32 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-import { useSelector } from "react-redux";
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setUser, clearUser, setLoading } from '../redux/authSlice';
+import { getProfile } from '../services/userService';
 
 const AuthProvider = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth();
-  const { user } = useSelector((state) => state.auth);
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isAuthenticated && user && user.isVerified === false && !isLoading) {
-      navigate("/verify", { state: { email: user.email } });
-    }
-  }, [isAuthenticated, user, isLoading, navigate]);
+    const loadUser = async () => {
+      dispatch(setLoading(true));
+
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        dispatch(setUser(JSON.parse(storedUser)));
+      }
+
+      try {
+        const user = await getProfile();
+        dispatch(setUser(user));
+        localStorage.setItem('user', JSON.stringify(user));
+      } catch (err) {
+        localStorage.removeItem('user');
+        dispatch(clearUser());
+      }
+    };
+
+    loadUser();
+  }, [dispatch]);
 
   return children;
 };

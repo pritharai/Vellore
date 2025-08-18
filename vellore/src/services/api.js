@@ -26,8 +26,11 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       try {
         const user = await refreshAccessToken();
-        store.dispatch(setUser(user.user))
+        store.dispatch(setUser(user))
+        return api(originalRequest);
       } catch (error) {
+        localStorage.removeItem('user');
+        store.dispatch(clearUser());
         return Promise.reject(error);
       }
     }
