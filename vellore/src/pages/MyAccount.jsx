@@ -6,6 +6,7 @@ import {
   updateUserProfile,
   allUserAddresses,
   updateAddress,
+  changePassword,
   addAddress,
   deleteAddress,
 } from "../services/userService";
@@ -178,6 +179,12 @@ const ProfileDetails = ({ user }) => {
     phone: user?.phone || "",
   });
 
+    const [showPasswordFields, setShowPasswordFields] = useState(false);
+  const [passwordData, setPasswordData] = useState({
+    oldPassword: "",
+    newPassword: "",
+  });
+
   // Address states
   const [editingAddress, setEditingAddress] = useState(null);
   const [addressForm, setAddressForm] = useState({});
@@ -209,6 +216,16 @@ const ProfileDetails = ({ user }) => {
       dispatch(setUser(data.user));
       localStorage.setItem("user", JSON.stringify(data.user));
       toast.success("Profile updated successfully");
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+    const changePasswordMutation = useMutation({
+    mutationFn: changePassword,
+    onSuccess: () => {
+      toast.success("Password changed successfully");
+      setPasswordData({ oldPassword: "", newPassword: "" });
+      setShowPasswordFields(false);
     },
     onError: (err) => toast.error(err.message),
   });
@@ -295,6 +312,16 @@ const ProfileDetails = ({ user }) => {
     }
   };
 
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setPasswordData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    changePasswordMutation.mutate(passwordData);
+  };
+
   return (
     <div>
       <h2 className="text-xl font-semibold mb-4">Update Profile</h2>
@@ -336,11 +363,59 @@ const ProfileDetails = ({ user }) => {
             <button
               type="submit"
               disabled={updateProfileMutation.isPending}
-              className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition disabled:opacity-50"
+              className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition disabled:opacity-50 hover:cursor-pointer"
             >
               {updateProfileMutation.isPending ? "Saving..." : "Save Changes"}
             </button>
           </form>
+
+
+           {/* Password Section */}
+          <div className="mb-6">
+            {!showPasswordFields ? (
+              <button
+                onClick={() => setShowPasswordFields(true)}
+                className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-hover transition hover:cursor-pointer"
+              >
+                Change Password
+              </button>
+            ) : (
+              <form className="space-y-3" onSubmit={handlePasswordSubmit}>
+                <input
+                  type="password"
+                  name="oldPassword"
+                  placeholder="Current Password"
+                  value={passwordData.oldPassword}
+                  onChange={handlePasswordChange}
+                  className="w-full border rounded p-3"
+                />
+                <input
+                  type="password"
+                  name="newPassword"
+                  placeholder="New Password"
+                  value={passwordData.newPassword}
+                  onChange={handlePasswordChange}
+                  className="w-full border rounded p-3"
+                />
+                <div className="flex gap-2">
+                  <button
+                    type="submit"
+                    disabled={changePasswordMutation.isPending}
+                    className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition disabled:opacity-50"
+                  >
+                    {changePasswordMutation.isPending ? "Updating..." : "Update Password"}
+                  </button>
+                  <button
+                    type="button"
+                    className="bg-gray-300 px-4 py-2 rounded-lg"
+                    onClick={() => setShowPasswordFields(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
 
           {/* Address Section */}
           <div className="flex items-center justify-between mb-4">
