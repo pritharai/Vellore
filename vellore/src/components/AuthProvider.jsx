@@ -9,7 +9,7 @@ const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated && user && !user.isVerified && !isLoading) {
+    if (isAuthenticated && user && user.isVerified === false && !isLoading) {
       navigate("/verify", { state: { email: user.email } });
     }
   }, [isAuthenticated, user, isLoading, navigate]);

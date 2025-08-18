@@ -21,11 +21,11 @@ const AuthPage = () => {
 
   const [formErrors, setFormErrors] = useState({});
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/");
-    }
-  }, [isAuthenticated, navigate]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     navigate("/");
+  //   }
+  // }, [isAuthenticated, navigate]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -52,7 +52,14 @@ const AuthPage = () => {
     if (!validateForm()) return;
 
     if (isLogin) {
-      login({ email: formData.email, password: formData.password });
+      login(
+        { email: formData.email, password: formData.password },
+        {
+          onSuccess: () => {
+            navigate("/");
+          },
+        }
+      );
     } else {
       register(formData, {
         onSuccess: () => {
@@ -60,6 +67,7 @@ const AuthPage = () => {
         },
       });
     }
+
   };
 
   return (

@@ -1,8 +1,8 @@
 import api from "./api";
 
-export const loginUser = async (paramData) => {
+export const loginUser = async (data) => {
   try {
-    const response = await api.post("/user/login", paramData);
+    const response = await api.post("/user/login", data);
     return response.data.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || "Login failed");

@@ -1,8 +1,19 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useDispatch, useSelector } from 'react-redux';
-import { loginUser, logout, refreshAccessToken, getProfile, registerUser } from '../services/userService';
-import { setUser, setLoading, setError, logout as logoutAction } from '../redux/authSlice';
-import { toast } from 'react-toastify';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  loginUser,
+  logout,
+  refreshAccessToken,
+  getProfile,
+  registerUser,
+} from "../services/userService";
+import {
+  setUser,
+  setLoading,
+  setError,
+  logout as logoutAction,
+} from "../redux/authSlice";
+import { toast } from "react-toastify";
 
 export const useAuth = () => {
   const dispatch = useDispatch();
@@ -10,7 +21,7 @@ export const useAuth = () => {
   const { isAuthenticated, user, error } = useSelector((state) => state.auth);
 
   const sessionQuery = useQuery({
-    queryKey: ['session'],
+    queryKey: ["session"],
     queryFn: async () => {
       const refreshData = await refreshAccessToken();
       const profileData = await getProfile();
@@ -35,12 +46,13 @@ export const useAuth = () => {
     },
     onSuccess: (data) => {
       dispatch(setUser(data.user));
-      queryClient.invalidateQueries(['session']);
+      queryClient.invalidateQueries(["session"]);
       dispatch(setLoading(false));
-      toast.success('Logged in successfully');
+      toast.success("Logged in successfully");
     },
     onError: (err) => {
       dispatch(setError(err.message));
+      dispatch(logoutAction());
       dispatch(setLoading(false));
       toast.error(err.message);
     },
@@ -55,7 +67,7 @@ export const useAuth = () => {
     onSuccess: (data) => {
       dispatch(setUser(data.user));
       dispatch(setLoading(false));
-      toast.success('Account created successfully');
+      toast.success("Account created successfully");
     },
     onError: (err) => {
       dispatch(setError(err.message));
@@ -69,8 +81,8 @@ export const useAuth = () => {
     mutationFn: logout,
     onSuccess: () => {
       dispatch(logoutAction());
-      queryClient.removeQueries(['session']);
-      toast.success('Logged out successfully');
+      queryClient.removeQueries(["session"]);
+      toast.success("Logged out successfully");
     },
     onError: (err) => {
       dispatch(setError(err.message));
@@ -81,7 +93,10 @@ export const useAuth = () => {
   return {
     user,
     isAuthenticated,
-    isPending: sessionQuery.isPending || loginMutation.isPending || registerMutation.isPending,
+    isPending:
+      sessionQuery.isPending ||
+      loginMutation.isPending ||
+      registerMutation.isPending,
     isLoggingIn: loginMutation.isPending || registerMutation.isPending,
     isLoggingOut: logoutMutation.isPending,
     error,
