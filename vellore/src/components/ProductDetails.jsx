@@ -235,9 +235,11 @@ const ProductDetail = () => {
             </div>
           )}
 
+          
+
           {/* Size Selection */}
           <div>
-            <div className="text-sm mb-2 font-medium">Size</div>
+            <div className="text-sm mb-2 font-medium underline hover:cursor-pointer" onClick={() => setShowSizeChart(true)} >Size</div>
             <div className="flex flex-wrap gap-3">
               {product?.sizes?.map((size) => {
                 const isAvailable = selectedVariant?.quantity[size] > 0;
@@ -247,10 +249,10 @@ const ProductDetail = () => {
                     onClick={() => isAvailable && selectSize(size)}
                     disabled={!isAvailable}
                     className={`px-4 py-2 border hover:cursor-pointer rounded-md text-sm font-medium ${selectedSize === size
-                        ? "bg-black text-white border-black"
-                        : isAvailable
-                          ? "bg-white border-gray-400 hover:bg-gray-100"
-                          : "bg-gray-200 border-gray-400 cursor-not-allowed"
+                      ? "bg-black text-white border-black"
+                      : isAvailable
+                        ? "bg-white border-gray-400 hover:bg-gray-100"
+                        : "bg-gray-200 border-gray-400 cursor-not-allowed"
                       }`}
                   >
                     {size}
