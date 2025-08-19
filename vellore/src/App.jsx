@@ -26,7 +26,6 @@ import ThankYou from "./pages/Thankyou";
 import AdminDashboard from "./components/AdminDashboard";
 import AdminOrders from "./components/orders";
 import UserProfilePage from "./components/Profile";
-import AddAddress from "./components/Address";
 import Search from "./components/Search";
 import PageNotFound from "./pages/PageNotFound";
 import { useAuth } from "./hooks/useAuth";
@@ -113,6 +112,7 @@ const App = () => {
               }
             />
             <Route
+
               path="/privacy"
               element={
                 <>
@@ -134,6 +134,18 @@ const App = () => {
                 </>
               }
             />
+
+                path="/search"
+                element={
+                  <>
+                    <Navbar />
+                    <Search />
+                    <InstagramButton />
+                    <Footer />
+                  </>
+                }
+              />
+
 
             {/* Protected Routes (Authenticated Users) */}
             <Route element={<ProtectedRoute />}>
@@ -198,28 +210,6 @@ const App = () => {
                   <>
                     <Navbar />
                     <UserProfilePage />
-                    <InstagramButton />
-                    <Footer />
-                  </>
-                }
-              />
-              <Route
-                path="/address"
-                element={
-                  <>
-                    <Navbar />
-                    <AddAddress />
-                    <InstagramButton />
-                    <Footer />
-                  </>
-                }
-              />
-              <Route
-                path="/search"
-                element={
-                  <>
-                    <Navbar />
-                    <Search />
                     <InstagramButton />
                     <Footer />
                   </>
