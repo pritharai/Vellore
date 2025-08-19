@@ -1,15 +1,23 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useParams, useNavigate } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { getProductById } from "../services/productService";
 import { getVariantImages } from "../services/variantImageService";
 import { addToWishlist } from "../services/wishlistService";
+import { addToCart } from "../services/cartService";
 import { FaChevronLeft, FaChevronRight, FaHeart } from "react-icons/fa";
 import Reviews from "./Reviews";
+import { useAuth } from "../hooks/useAuth";
+import { useDispatch } from "react-redux";
+import { setCart } from "../redux/cartSlice";
 
 const ProductDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const dispatch = useDispatch();
+  const { isAuthenticated } = useAuth();
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
@@ -45,6 +53,19 @@ const ProductDetail = () => {
     },
   });
 
+  // Add to cart mutation
+  const addToCartMutation = useMutation({
+    mutationFn: addToCart,
+    onSuccess: (data) => {
+      toast.success(data.message || "Item added to cart successfully");
+      queryClient.invalidateQueries(['cart']);
+      dispatch(setCart(data));
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+
   // Set default color
   useEffect(() => {
     if (product?.colors?.length > 0 && !selectedColor) {
@@ -54,6 +75,11 @@ const ProductDetail = () => {
   }, [product]);
 
   const handleAddToWishlist = () => {
+    if (!isAuthenticated) {
+      toast.error("Please log in to add to cart");
+      setTimeout(() => navigate("/auth"), 2000);
+      return;
+    }
     if (!selectedSize) {
       toast.error("Please select a size first");
       return;
@@ -66,6 +92,27 @@ const ProductDetail = () => {
     wishlistMutation.mutate({
       variantId: selectedVariant._id,
       size: selectedSize,
+    });
+  };
+
+  const handleAddToCart = () => {
+    if (!isAuthenticated) {
+      toast.error("Please log in to add to cart");
+      setTimeout(() => navigate("/auth"), 2000);
+      return;
+    }
+    if (!selectedSize) {
+      toast.error("Please select a size");
+      return;
+    }
+    if (!selectedVariant?._id) {
+      toast.error("Please select a color/variant");
+      return;
+    }
+    addToCartMutation.mutate({
+      variantId: selectedVariant._id,
+      size: selectedSize,
+      quantity,
     });
   };
 
@@ -156,9 +203,8 @@ const ProductDetail = () => {
                 key={index}
                 src={img}
                 alt={`Thumbnail ${index + 1}`}
-                className={`w-16 h-16 object-cover rounded-md cursor-pointer border-2 ${
-                  currentImageIndex === index ? "border-primary" : "border-transparent"
-                }`}
+                className={`w-16 h-16 object-cover rounded-md cursor-pointer border-2 ${currentImageIndex === index ? "border-primary" : "border-transparent"
+                  }`}
                 onClick={() => setCurrentImageIndex(index)}
               />
             ))}
@@ -200,13 +246,12 @@ const ProductDetail = () => {
                     key={size}
                     onClick={() => isAvailable && selectSize(size)}
                     disabled={!isAvailable}
-                    className={`px-4 py-2 border hover:cursor-pointer rounded-md text-sm font-medium ${
-                      selectedSize === size
+                    className={`px-4 py-2 border hover:cursor-pointer rounded-md text-sm font-medium ${selectedSize === size
                         ? "bg-black text-white border-black"
                         : isAvailable
-                        ? "bg-white border-gray-400 hover:bg-gray-100"
-                        : "bg-gray-200 border-gray-400 cursor-not-allowed"
-                    }`}
+                          ? "bg-white border-gray-400 hover:bg-gray-100"
+                          : "bg-gray-200 border-gray-400 cursor-not-allowed"
+                      }`}
                   >
                     {size}
                   </button>
@@ -223,9 +268,8 @@ const ProductDetail = () => {
                 <button
                   key={color.name}
                   onClick={() => selectColor(color)}
-                  className={`w-8 h-8 rounded-full hover:cursor-pointer hover:scale-105 transition ${
-                    selectedColor?.name === color.name ? "ring-2 ring-black" : ""
-                  }`}
+                  className={`w-8 h-8 rounded-full hover:cursor-pointer hover:scale-105 transition ${selectedColor?.name === color.name ? "ring-2 ring-black" : ""
+                    }`}
                   style={{ backgroundColor: color.hex }}
                 ></button>
               ))}
@@ -259,8 +303,13 @@ const ProductDetail = () => {
 
           {/* Action Buttons */}
           <div className="flex flex-col mt-10 gap-3">
-            <button className="w-full py-3 border hover:cursor-pointer border-primary text-primary hover:bg-primary-light hover:text-white transition">
-              Add to cart
+            <button
+              onClick={handleAddToCart}
+              disabled={addToCartMutation.isPending}
+              className={`w-full py-3 border border-primary text-primary hover:bg-primary-light hover:text-white transition ${addToCartMutation.isPending ? 'opacity-60 cursor-not-allowed' : ''
+                }`}
+            >
+              {addToCartMutation.isPending ? 'Adding...' : 'Add to cart'}
             </button>
             <button className="w-full py-3 bg-primary hover:cursor-pointer text-white hover:bg-primary-hover transition">
               Buy now
@@ -277,7 +326,7 @@ const ProductDetail = () => {
 
       <div className="max-w-[1280px] mx-auto p-6 md:p-10">
         {/* Review comments */}
-              <Reviews productId={product.id} />
+        <Reviews productId={product.id} />
 
       </div>
     </>
