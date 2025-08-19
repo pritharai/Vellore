@@ -27,7 +27,17 @@ const Footer = () => {
             </li>
             <li>
               <Link to="/shipping" className="hover:text-primary-light transition">
-                Shipping & Returns
+                Shipping Policy
+              </Link>
+            </li>
+            <li>
+              <Link to="/privacy" className="hover:text-primary-light transition">
+                Privacy Policy
+              </Link>
+            </li>
+            <li>
+              <Link to="/refund" className="hover:text-primary-light transition">
+                Return & Refund Policy
               </Link>
             </li>
             <li>
