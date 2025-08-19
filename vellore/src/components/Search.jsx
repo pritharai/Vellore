@@ -1,33 +1,38 @@
-// src/pages/Search.jsx
 import React, { useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { getVariants } from "../services/variantService";
 
 const Search = () => {
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleSearch = async (e) => {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["variants", searchQuery],
+    queryFn: () => getVariants({ search: searchQuery }),
+    enabled: !!searchQuery.trim(),
+    retry: false,
+  });
+
+  const handleSearch = (e) => {
     e.preventDefault();
-    if (!query.trim()) return;
-    setLoading(true);
-
-    try {
-      // Replace with your API endpoint
-      const res = await axios.get(`/api/search?query=${encodeURIComponent(query)}`);
-      setResults(res.data || []);
-    } catch (err) {
-      console.error("Search error:", err);
-    } finally {
-      setLoading(false);
+    if (!query.trim()) {
+      toast.error("Please enter a search query");
+      return;
     }
+    setSearchQuery(query);
+  };
+
+  const goToProduct = (productId) => {
+    navigate(`/product/${productId}`);
   };
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-54 h-full">
       <h2 className="text-2xl font-semibold mb-4">Search</h2>
 
-      {/* Search Form */}
       <form onSubmit={handleSearch} className="flex mb-6">
         <input
           type="text"
@@ -44,19 +49,41 @@ const Search = () => {
         </button>
       </form>
 
-      {/* Results */}
-      {loading && <p>Loading...</p>}
+      {isLoading && <p>Loading...</p>}
 
-      {!loading && results.length === 0 && query && (
-        <p className="text-gray-500">No results found for "{query}".</p>
+      {isError && (
+        <p className="text-red-500">
+          {error.message || "Failed to load search results"}
+        </p>
       )}
 
-      {!loading && results.length > 0 && (
+      {!isLoading && !isError && searchQuery && data?.variants?.length === 0 && (
+        <p className="text-gray-500">No results found for "{searchQuery}".</p>
+      )}
+
+      {!isLoading && !isError && data?.variants?.length > 0 && (
         <ul className="space-y-4">
-          {results.map((item, index) => (
-            <li key={index} className="border p-4 rounded shadow-sm">
-              <h3 className="font-semibold text-lg">{item.title}</h3>
-              <p className="text-gray-600">{item.description}</p>
+          {data.variants.map((variant) => (
+            <li
+              key={variant._id}
+              className="border p-4 rounded shadow-sm cursor-pointer hover:bg-gray-50 transition"
+              onClick={() => goToProduct(variant.product._id)}
+            >
+              <div className="flex gap-4">
+                <img
+                  src={variant.image.url}
+                  alt={variant.product.name}
+                  className="w-24 h-24 object-cover rounded"
+                />
+                <div>
+                  <h3 className="font-semibold text-lg">{variant.product.name}</h3>
+                  <p className="text-gray-600">{variant.product.description}</p>
+                  <p className="text-sm text-gray-600">Color: {variant.color.name}</p>
+                  <p className="text-lg font-semibold text-primary">
+                    ₹{variant.price.toLocaleString('en-IN')}
+                  </p>
+                </div>
+              </div>
             </li>
           ))}
         </ul>

@@ -42,6 +42,13 @@ const ProductDetail = () => {
     enabled: !!selectedVariant?._id,
   });
 
+  // Calculate stock
+  const stock = selectedVariant
+    ? selectedSize
+      ? selectedVariant.quantity[selectedSize] || 0
+      : Object.values(selectedVariant.quantity).reduce((sum, qty) => sum + qty, 0)
+    : 0;
+
   // Wishlist Mutation
   const wishlistMutation = useMutation({
     mutationFn: addToWishlist,
@@ -76,7 +83,7 @@ const ProductDetail = () => {
 
   const handleAddToWishlist = () => {
     if (!isAuthenticated) {
-      toast.error("Please log in to add to cart");
+      toast.error("Please log in to add to wishlist");
       setTimeout(() => navigate("/auth"), 2000);
       return;
     }
@@ -109,10 +116,45 @@ const ProductDetail = () => {
       toast.error("Please select a color/variant");
       return;
     }
+    if (stock === 0) {
+      toast.error("This item is out of stock");
+      return;
+    }
     addToCartMutation.mutate({
       variantId: selectedVariant._id,
       size: selectedSize,
       quantity,
+    });
+  };
+
+  const handleBuyNow = () => {
+    if (!isAuthenticated) {
+      toast.error("Please log in to buy");
+      setTimeout(() => navigate("/auth"), 2000);
+      return;
+    }
+    if (!selectedSize) {
+      toast.error("Please select a size");
+      return;
+    }
+    if (!selectedVariant?._id) {
+      toast.error("Please select a color/variant");
+      return;
+    }
+    if (stock === 0) {
+      toast.error("This item is out of stock");
+      return;
+    }
+    navigate('/confirm-order', {
+      state: {
+        products: [{
+          variantId: selectedVariant._id,
+          size: selectedSize,
+          quantity,
+          variant: selectedVariant,
+          product: { name: product.name, description: product.description }
+        }]
+      }
     });
   };
 
@@ -235,11 +277,17 @@ const ProductDetail = () => {
             </div>
           )}
 
-          
-
           {/* Size Selection */}
           <div>
-            <div className="text-sm mb-2 font-medium underline hover:cursor-pointer" onClick={() => setShowSizeChart(true)} >Size</div>
+            <div className="flex items-center gap-4">
+              <div
+                className="text-sm mb-2 font-medium underline hover:cursor-pointer"
+                onClick={() => setShowSizeChart(true)}
+              >
+                Size
+              </div>
+
+            </div>
             <div className="flex flex-wrap gap-3">
               {product?.sizes?.map((size) => {
                 const isAvailable = selectedVariant?.quantity[size] > 0;
@@ -252,7 +300,7 @@ const ProductDetail = () => {
                       ? "bg-black text-white border-black"
                       : isAvailable
                         ? "bg-white border-gray-400 hover:bg-gray-100"
-                        : "bg-gray-200 border-gray-400 cursor-not-allowed"
+                        : "bg-gray-200 border-gray-400 cursor-not-allowed opacity-60"
                       }`}
                   >
                     {size}
@@ -262,6 +310,12 @@ const ProductDetail = () => {
             </div>
           </div>
 
+          <div className="text-sm font-medium">
+            {stock > 0
+              ? `Stock: ${stock} ${selectedSize ? `(${selectedSize})` : "(All Sizes)"}`
+              : "Out of Stock"}
+          </div>
+          
           {/* Color Selection */}
           <div>
             <div className="text-sm font-medium mb-2">Color</div>
@@ -285,6 +339,7 @@ const ProductDetail = () => {
               <button
                 onClick={() => changeQty(-1)}
                 className="px-4 py-2 text-lg hover:cursor-pointer font-bold bg-white hover:bg-gray-100"
+                disabled={quantity <= 1}
               >
                 −
               </button>
@@ -297,6 +352,7 @@ const ProductDetail = () => {
               <button
                 onClick={() => changeQty(1)}
                 className="px-4 py-2 text-lg hover:cursor-pointer font-bold bg-white hover:bg-gray-100"
+                disabled={stock > 0 && quantity >= stock}
               >
                 +
               </button>
@@ -307,13 +363,18 @@ const ProductDetail = () => {
           <div className="flex flex-col mt-10 gap-3">
             <button
               onClick={handleAddToCart}
-              disabled={addToCartMutation.isPending}
-              className={`w-full py-3 border border-primary text-primary hover:bg-primary-light hover:text-white transition ${addToCartMutation.isPending ? 'opacity-60 cursor-not-allowed' : ''
+              disabled={addToCartMutation.isPending || stock === 0}
+              className={`w-full py-3 border border-primary text-primary hover:bg-primary-light hover:text-white transition ${addToCartMutation.isPending || stock === 0 ? 'opacity-60 cursor-not-allowed' : ''
                 }`}
             >
               {addToCartMutation.isPending ? 'Adding...' : 'Add to cart'}
             </button>
-            <button className="w-full py-3 bg-primary hover:cursor-pointer text-white hover:bg-primary-hover transition">
+            <button
+              onClick={handleBuyNow}
+              disabled={stock === 0}
+              className={`w-full py-3 bg-primary hover:cursor-pointer text-white hover:bg-primary-hover transition ${stock === 0 ? 'opacity-60 cursor-not-allowed' : ''
+                }`}
+            >
               Buy now
             </button>
           </div>
@@ -325,11 +386,9 @@ const ProductDetail = () => {
         </div>
       </div>
 
-
       <div className="max-w-[1280px] mx-auto p-6 md:p-10">
         {/* Review comments */}
         <Reviews productId={product.id} />
-
       </div>
     </>
   );
