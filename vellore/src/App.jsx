@@ -29,6 +29,8 @@ import UserProfilePage from "./components/Profile";
 import Search from "./components/Search";
 import PageNotFound from "./pages/PageNotFound";
 import { useAuth } from "./hooks/useAuth";
+import Privacy from "./components/Privacy";
+import Refund from "./components/Refund";
 
 const App = () => {
   return (
@@ -110,6 +112,29 @@ const App = () => {
               }
             />
             <Route
+
+              path="/privacy"
+              element={
+                <>
+                  <Navbar />
+                  <Privacy />
+                  <InstagramButton />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/refund"
+              element={
+                <>
+                  <Navbar />
+                  <Refund />
+                  <InstagramButton />
+                  <Footer />
+                </>
+              }
+            />
+
                 path="/search"
                 element={
                   <>
@@ -120,6 +145,7 @@ const App = () => {
                   </>
                 }
               />
+
 
             {/* Protected Routes (Authenticated Users) */}
             <Route element={<ProtectedRoute />}>
