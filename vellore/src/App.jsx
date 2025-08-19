@@ -134,7 +134,7 @@ const App = () => {
                 </>
               }
             />
-
+                <Route
                 path="/search"
                 element={
                   <>
