@@ -1,5 +1,3 @@
-import React from "react";
-
 const ConfirmationPopup = ({ 
   isOpen, 
   title = "Are you sure?", 
@@ -10,7 +8,7 @@ const ConfirmationPopup = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 bg-blur z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-96">
         {/* Title */}
         <h2 className="text-lg font-semibold mb-2">{title}</h2>

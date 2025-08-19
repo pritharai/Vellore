@@ -1,23 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getWishlist, removeFromWishlist, clearWishlist } from "../services/wishlistService";
 import { toast } from "react-toastify";
+import { getWishlist, removeFromWishlist, clearWishlist } from "../services/wishlistService";
+import { useAuth } from "../hooks/useAuth";
+import ConfirmationPopup from "./ConfirmationPopup";
 
 const Wishlist = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const [removingId, setRemovingId] = useState(null);
+  const [isClearWishlistPopupOpen, setIsClearWishlistPopupOpen] = useState(false);
 
   const { data: wishlist, isLoading, isError } = useQuery({
     queryKey: ["wishlist"],
     queryFn: getWishlist,
+    enabled: isAuthenticated,
   });
 
   const removeMutation = useMutation({
     mutationFn: removeFromWishlist,
+    onMutate: (id) => {
+      setRemovingId(id);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(["wishlist"]);
       toast.success("Item removed from wishlist");
     },
     onError: (err) => toast.error(err.message),
+    onSettled: () => {
+      setRemovingId(null);
+    },
   });
 
   const clearMutation = useMutation({
@@ -25,9 +39,19 @@ const Wishlist = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(["wishlist"]);
       toast.info("Wishlist cleared");
+      setIsClearWishlistPopupOpen(false);
     },
-    onError: (err) => toast.error(err.message),
+    onError: (err) => {
+      toast.error(err.message);
+      setIsClearWishlistPopupOpen(false);
+    },
   });
+
+  if (!isAuthenticated) {
+    toast.error("Please log in to view your wishlist");
+    setTimeout(() => navigate("/auth"), 2000);
+    return null;
+  }
 
   if (isLoading) return <p className="text-center mt-10">Loading wishlist...</p>;
   if (isError) return <p className="text-center mt-10 text-red-500">Failed to load wishlist.</p>;
@@ -38,7 +62,7 @@ const Wishlist = () => {
         <h2 className="text-2xl font-semibold">Your Wishlist</h2>
         {wishlist?.length > 0 && (
           <button
-            onClick={() => clearMutation.mutate()}
+            onClick={() => setIsClearWishlistPopupOpen(true)}
             disabled={clearMutation.isPending}
             className="px-4 py-2 bg-red-500 cursor-pointer text-white rounded-md hover:bg-red-600 transition"
           >
@@ -69,10 +93,7 @@ const Wishlist = () => {
               <h3 className="text-xl font-medium">{item.variant.product.name}</h3>
               <p className="text-gray-600">{item.variant.product.description}</p>
               <p className="text-sm">
-                Color:{" "}
-                <span>
-                  {item.variant.color.name}
-                </span>
+                Color: <span>{item.variant.color.name}</span>
               </p>
               <p className="text-sm">Size: {item.size}</p>
               <p className="text-lg font-semibold text-primary">₹{item.variant.price}</p>
@@ -83,16 +104,26 @@ const Wishlist = () => {
                 </button>
                 <button
                   onClick={() => removeMutation.mutate(item._id)}
-                  disabled={removeMutation.isPending}
-                  className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-hover transition hover:cursor-pointer"
+                  disabled={removingId === item._id}
+                  className={`px-4 py-2 rounded-md transition hover:cursor-pointer
+                    ${removingId === item._id ? 'bg-primary text-white opacity-60 cursor-not-allowed' : 'bg-primary text-white hover:bg-primary-hover'}
+                  `}
                 >
-                  {removeMutation.isPending ? "Removing..." : "Remove"}
+                  {removingId === item._id ? "Removing..." : "Remove"}
                 </button>
               </div>
             </div>
           </div>
         ))
       )}
+
+      <ConfirmationPopup
+        isOpen={isClearWishlistPopupOpen}
+        title="Clear Wishlist"
+        message="Are you sure you want to clear all items from your wishlist?"
+        onConfirm={() => clearMutation.mutate()}
+        onCancel={() => setIsClearWishlistPopupOpen(false)}
+      />
     </div>
   );
 };

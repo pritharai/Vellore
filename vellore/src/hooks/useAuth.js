@@ -48,6 +48,5 @@ export const useAuth = () => {
     error: loginMutation.error || registerMutation.error,
     isAuthenticated,
     logout: handleLogout,
-    // Add more mutations as needed
   };
 };
