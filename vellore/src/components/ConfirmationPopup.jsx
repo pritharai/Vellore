@@ -1,9 +1,14 @@
+
+
+
 const ConfirmationPopup = ({ 
   isOpen, 
   title = "Are you sure?", 
   message = "Do you really want to perform this action?", 
   onConfirm, 
-  onCancel 
+  onCancel,
+  confirmButtonText = "Confirm",
+  confirmButtonDisabled = false
 }) => {
   if (!isOpen) return null;
 
@@ -25,10 +30,11 @@ const ConfirmationPopup = ({
             Cancel
           </button>
           <button
-            className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600"
+            className={`px-4 py-2 rounded-md text-white ${confirmButtonDisabled ? "bg-red-300 cursor-not-allowed" : "bg-red-500 hover:bg-red-600"}`}
             onClick={onConfirm}
+            disabled={confirmButtonDisabled}
           >
-            Confirm
+            {confirmButtonText}
           </button>
         </div>
       </div>
