@@ -1,46 +1,109 @@
-// src/pages/ConfirmOrder.jsx
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 import { FaSpinner } from "react-icons/fa";
 import { motion } from "framer-motion";
-
-const product = {
-  id: 1,
-  name: "Soft Hoodie",
-  price: 2500,
-  size: "S",
-  image: "/images/product3.jpg",
-  quantity: 1,
-};
+import { createOrder } from "../services/orderService";
+import { allUserAddresses } from "../services/userService";
+import { useAuth } from "../hooks/useAuth";
 
 const ConfirmOrder = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const { isAuthenticated } = useAuth();
+  const products = state?.products || [];
 
-  const [loading, setLoading] = useState(false);
-  const [address, setAddress] = useState("");
+  const [addressOption, setAddressOption] = useState("new");
+  const [addressId, setAddressId] = useState("");
+  const [shippingAddress, setShippingAddress] = useState({
+    houseNumber: "",
+    street: "",
+    colony: "",
+    city: "",
+    state: "",
+    country: "",
+    postalCode: "",
+  });
   const [contact, setContact] = useState("");
-  const [promo, setPromo] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("online");
+  const [shippingCharge, setShippingCharge] = useState(400); // Default Express
   const [showPopup, setShowPopup] = useState(false);
+  const codCharge = paymentMethod === "cod" ? 50 : 0;
 
-  // new states
-  const [paymentMethod, setPaymentMethod] = useState("card");
-  const [shippingCharge, setShippingCharge] = useState(400); // default Express
-  const codCharge = paymentMethod === "cod" ? 50 : 0; // e.g. ₹50 extra for COD
+  const { data: addresses, isLoading: addressesLoading } = useQuery({
+    queryKey: ["addresses"],
+    queryFn: allUserAddresses,
+    enabled: isAuthenticated,
+  });
+
+  const createOrderMutation = useMutation({
+    mutationFn: createOrder,
+    onSuccess: (data) => {
+      toast.success("Order created successfully");
+      if (data.razorpayOrder) {
+        navigate("/payment", { state: { order: data.order, razorpayOrder: data.razorpayOrder } });
+      } else {
+        navigate("/thank-you", { state: { order: data.order } });
+      }
+    },
+    onError: (err) => {
+      toast.error(err.message || "Failed to create order");
+    },
+  });
 
   const handleConfirm = () => {
-    if (!address.trim() || !contact.trim()) {
+    if (!isAuthenticated) {
+      toast.error("Please log in to place an order");
+      setTimeout(() => navigate("/auth"), 2000);
+      return;
+    }
+
+    if (addressOption === "new") {
+      const { houseNumber, street, colony, city, state, country, postalCode } = shippingAddress;
+      if (!houseNumber || !street || !colony || !city || !state || !country || !postalCode || !contact) {
+        setShowPopup(true);
+        return;
+      }
+    } else if (addressOption === "saved" && !addressId) {
       setShowPopup(true);
       return;
     }
 
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      navigate("/thank-you");
-    }, 2000);
+    const itemIds = products.map((item) => item._id).filter(Boolean);
+    const items = products
+      .filter((item) => !item._id)
+      .map((item) => ({
+        variant: item.variantId || item.variant._id,
+        size: item.size,
+        quantity: item.quantity,
+      }));
+
+    createOrderMutation.mutate({
+      itemIds: itemIds.length > 0 ? itemIds : undefined,
+      addressId: addressOption === "saved" ? addressId : undefined,
+      paymentMethod: paymentMethod === "card" ? "online" : "cod",
+      shippingAddress: addressOption === "new" ? shippingAddress : undefined,
+    });
   };
 
-  const total = product.price + shippingCharge + codCharge;
+  const handleAddressChange = (field, value) => {
+    setShippingAddress((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const subtotal = products.reduce(
+    (sum, item) => sum + (item.variant?.price || item.price) * item.quantity,
+    0
+  );
+  const total = subtotal + shippingCharge + codCharge;
+
+  if (!products.length) {
+    return (
+      <div className="min-h-screen bg-white px-6 lg:px-20 lg:py-54 text-center">
+        <p>No items to order</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white px-6 lg:px-20 lg:py-54">
@@ -71,16 +134,97 @@ const ConfirmOrder = () => {
               placeholder="Phone number"
               className="w-full border-b rounded-lg p-3 text-sm focus:ring-2 focus:ring-black outline-none"
             />
-            <textarea
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              rows={3}
-              placeholder="Delivery address"
-              className="w-full border-b rounded-lg p-3 text-sm focus:ring-2 focus:ring-black outline-none"
-            />
+            <div className="flex gap-4 mb-4">
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="addressOption"
+                  value="new"
+                  checked={addressOption === "new"}
+                  onChange={() => setAddressOption("new")}
+                />
+                New Address
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="addressOption"
+                  value="saved"
+                  checked={addressOption === "saved"}
+                  onChange={() => setAddressOption("saved")}
+                />
+                Saved Address
+              </label>
+            </div>
+            {addressOption === "new" ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input
+                  type="text"
+                  placeholder="House Number"
+                  value={shippingAddress.houseNumber}
+                  onChange={(e) => handleAddressChange("houseNumber", e.target.value)}
+                  className="border-b rounded-lg p-3 text-sm focus:ring-1 focus:ring-black outline-none"
+                />
+                <input
+                  type="text"
+                  placeholder="Street"
+                  value={shippingAddress.street}
+                  onChange={(e) => handleAddressChange("street", e.target.value)}
+                  className="border-b rounded-lg p-3 text-sm focus:ring-1 focus:ring-black outline-none"
+                />
+                <input
+                  type="text"
+                  placeholder="Colony"
+                  value={shippingAddress.colony}
+                  onChange={(e) => handleAddressChange("colony", e.target.value)}
+                  className="border-b rounded-lg p-3 text-sm focus:ring-1 focus:ring-black outline-none"
+                />
+                <input
+                  type="text"
+                  placeholder="City"
+                  value={shippingAddress.city}
+                  onChange={(e) => handleAddressChange("city", e.target.value)}
+                  className="border-b rounded-lg p-3 text-sm focus:ring-1 focus:ring-black outline-none"
+                />
+                <input
+                  type="text"
+                  placeholder="State"
+                  value={shippingAddress.state}
+                  onChange={(e) => handleAddressChange("state", e.target.value)}
+                  className="border-b rounded-lg p-3 text-sm focus:ring-1 focus:ring-black outline-none"
+                />
+                <input
+                  type="text"
+                  placeholder="Country"
+                  value={shippingAddress.country}
+                  onChange={(e) => handleAddressChange("country", e.target.value)}
+                  className="border-b rounded-lg p-3 text-sm focus:ring-1 focus:ring-black outline-none"
+                />
+                <input
+                  type="text"
+                  placeholder="Postal Code"
+                  value={shippingAddress.postalCode}
+                  onChange={(e) => handleAddressChange("postalCode", e.target.value)}
+                  className="border-b rounded-lg p-3 text-sm focus:ring-1 focus:ring-black outline-none"
+                />
+              </div>
+            ) : (
+              <select
+                value={addressId}
+                onChange={(e) => setAddressId(e.target.value)}
+                className="w-full border-b rounded-lg p-3 text-sm focus:ring-2 focus:ring-black outline-none"
+                disabled={addressesLoading || !addresses?.length}
+              >
+                <option value="">Select a saved address</option>
+                {addresses?.map((addr) => (
+                  <option key={addr._id} value={addr._id}>
+                    {`${addr.houseNumber}, ${addr.street}, ${addr.colony}, ${addr.city}, ${addr.state}, ${addr.country} - ${addr.postalCode}`}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
 
-          {/* Shipping Services */}
           <div className="bg-white rounded-xl shadow-sm p-6 space-y-4">
             <h2 className="text-xl font-semibold text-gray-800">
               Shipping Services
@@ -109,7 +253,6 @@ const ConfirmOrder = () => {
             </div>
           </div>
 
-          {/* Payment Method */}
           <div className="bg-white rounded-xl shadow-sm p-6 space-y-4">
             <h2 className="text-xl font-semibold text-gray-800">
               Payment Method
@@ -149,38 +292,43 @@ const ConfirmOrder = () => {
           <h2 className="text-xl font-semibold text-gray-800">Summary</h2>
 
           {/* Product Display */}
-          <div className="flex gap-4 border-b pb-4">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-24 h-24 rounded-lg object-cover"
-            />
-            <div className="flex-1">
-              <h3 className="font-medium">{product.name}</h3>
-              <p className="text-gray-500 text-sm">Size: {product.size}</p>
-              <p className="text-gray-600 font-semibold">₹{product.price}</p>
+          {products.map((item, index) => (
+            <div key={index} className="flex gap-4 border-b pb-4">
+              <img
+                src={item.variant?.image.url || item.image}
+                alt={item.variant?.product.name || item.product?.name}
+                className="w-24 h-24 rounded-lg object-cover"
+              />
+              <div className="flex-1">
+                <h3 className="font-medium">{item.variant?.product.name || item.product?.name}</h3>
+                <p className="text-gray-500 text-sm">Size: {item.size}</p>
+                <p className="text-gray-500 text-sm">Quantity: {item.quantity}</p>
+                <p className="text-gray-600 font-semibold">
+                  ₹{(item.variant?.price || item.price).toLocaleString("en-IN")}
+                </p>
+              </div>
             </div>
-          </div>
+          ))}
 
           {/* Breakdown */}
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span>Subtotal</span>
-              <span>₹{product.price}</span>
+              <span>₹{subtotal.toLocaleString("en-IN")}</span>
             </div>
             <div className="flex justify-between">
               <span>Delivery</span>
-              <span>₹{shippingCharge}</span>
+              <span>₹{shippingCharge.toLocaleString("en-IN")}</span>
             </div>
             {codCharge > 0 && (
               <div className="flex justify-between">
                 <span>COD Charges</span>
-                <span>₹{codCharge}</span>
+                <span>₹{codCharge.toLocaleString("en-IN")}</span>
               </div>
             )}
             <div className="flex justify-between font-bold text-lg pt-2 border-t">
               <span>Total</span>
-              <span>₹{total}</span>
+              <span>₹{total.toLocaleString("en-IN")}</span>
             </div>
           </div>
 
@@ -188,15 +336,15 @@ const ConfirmOrder = () => {
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={handleConfirm}
-            disabled={loading}
+            disabled={createOrderMutation.isPending}
             className={`w-full flex items-center justify-center gap-2 px-6 py-3 text-white font-semibold rounded-lg transition-all duration-300
               ${
-                loading
+                createOrderMutation.isPending
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-primary hover:bg-primary-hover hover:cursor-pointer shadow-md"
               }`}
           >
-            {loading ? (
+            {createOrderMutation.isPending ? (
               <>
                 <FaSpinner className="animate-spin" />
                 Placing Order...
@@ -208,13 +356,13 @@ const ConfirmOrder = () => {
         </div>
       </div>
 
-      {/* ✅ Popup Modal */}
+      {/* Popup Modal */}
       {showPopup && (
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/30 z-50">
           <div className="bg-white p-6 rounded-xl shadow-lg w-80 text-center">
             <h3 className="text-lg font-semibold mb-3">Missing Information</h3>
             <p className="text-gray-600 mb-4">
-              Please fill in your delivery address and contact number.
+              Please fill in all address fields and contact number, or select a saved address.
             </p>
             <button
               onClick={() => setShowPopup(false)}
@@ -230,4 +378,3 @@ const ConfirmOrder = () => {
 };
 
 export default ConfirmOrder;
-  
