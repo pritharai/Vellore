@@ -30,7 +30,7 @@ import PageNotFound from "./pages/PageNotFound";
 import { useAuth } from "./hooks/useAuth";
 import Privacy from "./components/Privacy";
 import Refund from "./components/Refund";
-import ConfirmOrder from "./pages/ConfirmOrder";
+import OrderConfirmation from "./pages/OrderConfirmation";
 
 const App = () => {
   return (
@@ -176,7 +176,7 @@ const App = () => {
                 element={
                   <>
                     <Navbar />
-                    <ConfirmOrder />
+                    <OrderConfirmation />
                     <InstagramButton />
                     <Footer />
                   </>

@@ -8,7 +8,7 @@ import { createOrder } from "../services/orderService";
 import { allUserAddresses } from "../services/userService";
 import { useAuth } from "../hooks/useAuth";
 
-const ConfirmOrder = () => {
+const OrderConfirmation = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { isAuthenticated } = useAuth();
@@ -374,4 +374,4 @@ const ConfirmOrder = () => {
   );
 };
 
-export default ConfirmOrder;
+export default OrderConfirmation;
