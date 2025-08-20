@@ -27,7 +27,6 @@ import AdminOrders from "./components/orders";
 import UserProfilePage from "./components/Profile";
 import Search from "./components/Search";
 import PageNotFound from "./pages/PageNotFound";
-import { useAuth } from "./hooks/useAuth";
 import Privacy from "./components/Privacy";
 import Refund from "./components/Refund";
 import OrderConfirmation from "./pages/OrderConfirmation";
@@ -220,7 +219,7 @@ const App = () => {
             {/* Admin Routes (Authenticated + Admin Role) */}
             <Route element={<AdminRoute />}>
               <Route
-                path="/admin/admin-dashboard"
+                path="/admin/dashboard"
                 element={
                   <>
                     <Navbar />
@@ -231,7 +230,7 @@ const App = () => {
                 }
               />
               <Route
-                path="/admin/orders"
+                path="/admin/products"
                 element={
                   <>
                     <Navbar />
@@ -243,12 +242,6 @@ const App = () => {
               />
             </Route>
 
-            <Route
-              path="/temp"
-              element={
-                <Temp/>
-              } 
-            />
 
             {/* Catch-all Route */}
             <Route
@@ -270,14 +263,3 @@ const App = () => {
 };
 
 export default App;
-
-const Temp = () =>{
-  const { isAuthenticated} = useAuth()
-  return(
-    <div>
-      {/* <pre>{JSON.stringify(user, null, 2)}</pre> */}
-      <h1>{isAuthenticated}</h1>
-      {console.log(isAuthenticated)}
-    </div>
-  )
-}

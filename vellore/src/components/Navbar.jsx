@@ -1,14 +1,15 @@
-
 import React, { useState, useEffect } from "react";
 import { FaPhone, FaSearch, FaHeart, FaShoppingCart, FaEllipsisV, FaUser } from "react-icons/fa";
 import { GiClothes } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showMore, setShowMore] = useState(false);
   const { isAuthenticated } = useAuth();
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,8 +21,9 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Determine account route based on authentication status
+  
   const accountRoute = isAuthenticated ? "/my-account" : "/auth";
+  const isAdmin = isAuthenticated && user?.role === "admin";
 
   return (
     <>
@@ -88,6 +90,20 @@ const Navbar = () => {
                 CONTACT
               </Link>
             </li>
+            {isAdmin && (
+              <>
+                <li>
+                  <Link to="/admin/dashboard" className="list-item relative px-2 py-1">
+                    ADMIN DASHBOARD
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/admin/products" className="list-item relative px-2 py-1">
+                    PRODUCT MANAGEMENT
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
 
           {isScrolled && (
@@ -149,6 +165,16 @@ const Navbar = () => {
               <Link to={accountRoute} className="hover:text-primary-hover transition-colors">
                 <FaUser className="inline mr-2" /> {isAuthenticated ? "My Account" : "Login / Sign Up"}
               </Link>
+              {isAdmin && (
+                <>
+                  <Link to="/admin/dashboard" className="hover:text-primary-hover transition-colors">
+                    Admin Dashboard
+                  </Link>
+                  <Link to="/admin/products" className="hover:text-primary-hover transition-colors">
+                    Product Management
+                  </Link>
+                </>
+              )}
             </div>
           )}
         </div>
