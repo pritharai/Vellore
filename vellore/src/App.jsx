@@ -21,7 +21,6 @@ import AboutPage from "./pages/AboutPage";
 import Contact from "./components/Contact";
 import ShippingPolicy from "./pages/ShippingPolicy";
 import MyAccount from "./pages/MyAccount";
-import ConfirmOrder from "./pages/ConfirmOrder";
 import ThankYou from "./pages/Thankyou";
 import AdminDashboard from "./components/AdminDashboard";
 import AdminOrders from "./components/orders";
@@ -31,6 +30,7 @@ import PageNotFound from "./pages/PageNotFound";
 import { useAuth } from "./hooks/useAuth";
 import Privacy from "./components/Privacy";
 import Refund from "./components/Refund";
+import ConfirmOrder from "./pages/ConfirmOrder";
 
 const App = () => {
   return (
