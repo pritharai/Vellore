@@ -14,6 +14,7 @@ import {
   getUserOrders,
   requestOrderCancellation,
 } from "../services/orderService";
+import { addFeedback, getAllFeedbacks } from "../services/feedbackService";
 import { toast } from "react-toastify";
 import ConfirmationPopup from "../components/ConfirmationPopup";
 import {
@@ -57,10 +58,11 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("orders")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${activeTab === "orders"
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
+                  activeTab === "orders"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
-                  }`}
+                }`}
               >
                 <FaBoxOpen /> <span>Track Orders</span>
               </button>
@@ -68,10 +70,11 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("history")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${activeTab === "history"
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
+                  activeTab === "history"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
-                  }`}
+                }`}
               >
                 <FaHistory /> <span>Order History</span>
               </button>
@@ -79,10 +82,11 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("feedback")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${activeTab === "feedback"
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
+                  activeTab === "feedback"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
-                  }`}
+                }`}
               >
                 <FaEdit /> <span>Give Feedback</span>
               </button>
@@ -90,10 +94,11 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("profile")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${activeTab === "profile"
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
+                  activeTab === "profile"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
-                  }`}
+                }`}
               >
                 <FaUser /> <span>Profile Details</span>
               </button>
@@ -101,10 +106,11 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("support")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${activeTab === "support"
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
+                  activeTab === "support"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
-                  }`}
+                }`}
               >
                 <FaHeadset /> <span>Contact Support</span>
               </button>
@@ -211,10 +217,11 @@ const TrackOrders = () => {
                   Order #{order._id}
                 </h3>
                 <span
-                  className={`text-sm capitalize px-3 py-1 rounded-full ${order.status === "pending" || order.status === "processing"
+                  className={`text-sm capitalize px-3 py-1 rounded-full ${
+                    order.status === "pending" || order.status === "processing"
                       ? "bg-yellow-100 text-yellow-700"
                       : "bg-green-100 text-green-700"
-                    }`}
+                  }`}
                 >
                   {order.status}
                 </span>
@@ -291,7 +298,7 @@ const TrackOrders = () => {
                 value={cancelReason}
                 onChange={(e) => setCancelReason(e.target.value)}
                 placeholder="Please provide a reason for cancellation"
-                className="w-full resize-none border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary"
                 rows={4}
               />
               <div className="flex justify-end gap-2">
@@ -359,14 +366,13 @@ const OrderHistory = () => {
                   Order #{order._id}
                 </h3>
                 <span
-                  className={`text-sm capitalize px-3 py-1 rounded-full ${order.status === "pending" || order.status === "processing"
+                  className={`text-sm capitalize px-3 py-1 rounded-full ${
+                    order.status === "pending" || order.status === "processing"
                       ? "bg-yellow-100 text-yellow-700"
-                      : order.status === "shipped"
-                        ? "bg-green-100 text-green-700"
-                        : order.status === "delivered"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-700"
-                    }`}
+                      : order.status === "shipped" || order.status === "delivered"
+                      ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-700"
+                  }`}
                 >
                   {order.status}
                 </span>
@@ -426,20 +432,53 @@ const OrderHistory = () => {
   );
 };
 
-// Feedback (Placeholder)
-const Feedback = () => (
-  <div>
-    <h2 className="text-xl font-semibold mb-4">Give Feedback</h2>
-    <textarea
-      placeholder="Write your feedback..."
-      className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary"
-      rows={5}
-    ></textarea>
-    <button className="mt-4 bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition">
-      Submit Feedback
-    </button>
-  </div>
-);
+// Feedback
+const Feedback = () => {
+  const queryClient = useQueryClient();
+  const [feedbackText, setFeedbackText] = useState("");
+
+  const addFeedbackMutation = useMutation({
+    mutationFn: addFeedback,
+    onSuccess: () => {
+      toast.success("Feedback submitted successfully");
+      setFeedbackText("");
+      queryClient.invalidateQueries({ queryKey: ["userFeedbacks"] });
+    },
+    onError: (err) => toast.error(err.message || "Failed to submit feedback"),
+  });
+
+  const handleFeedbackSubmit = (e) => {
+    e.preventDefault();
+    if (!feedbackText.trim()) {
+      toast.error("Feedback cannot be empty");
+      return;
+    }
+    addFeedbackMutation.mutate(feedbackText);
+  };
+
+  return (
+    <div>
+      <h2 className="text-xl font-semibold mb-4">Give Feedback</h2>
+      {/* Feedback Form */}
+      <form onSubmit={handleFeedbackSubmit} className="mb-6">
+        <textarea
+          value={feedbackText}
+          onChange={(e) => setFeedbackText(e.target.value)}
+          placeholder="Write your feedback..."
+          className="w-full border resize-none border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary"
+          rows={5}
+        ></textarea>
+        <button
+          type="submit"
+          disabled={addFeedbackMutation.isPending}
+          className="mt-4 bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition disabled:opacity-50"
+        >
+          {addFeedbackMutation.isPending ? "Submitting..." : "Submit Feedback"}
+        </button>
+      </form>
+    </div>
+  );
+};
 
 // Profile Details
 const ProfileDetails = ({ user }) => {
