@@ -1,17 +1,24 @@
-// pages/ThankYou.jsx
-import React, { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 
 const ThankYou = () => {
-  const location = useLocation();
-  const [orders, setOrders] = useState([]);
+  const { state } = useLocation();
+  const order = state?.order;
 
-  useEffect(() => {
-    const savedOrders = JSON.parse(localStorage.getItem("orders")) || [];
-    setOrders(savedOrders);
-  }, []);
+  // Format date
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-IN", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
 
-  const latestOrder = location.state?.order;
+  // Format address
+  const formatAddress = (address) => {
+    if (!address) return "N/A";
+    const { houseNumber, street, colony, city, state, country, postalCode } = address;
+    return `${houseNumber}, ${street}, ${colony}, ${city}, ${state}, ${country} - ${postalCode}`;
+  };
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-4 lg:py-54">
@@ -28,45 +35,52 @@ const ThankYou = () => {
         </p>
 
         {/* Latest Order Info */}
-        {latestOrder && (
-          <div className="mt-6 border rounded-lg p-4 bg-gray-50">
-            <p className="text-lg text-gray-700">
-              Your order for{" "}
-              <strong className="text-primary">{latestOrder.name}</strong> has
-              been placed successfully.
+        {order ? (
+          <div className="mt-6 border rounded-lg p-4 bg-gray-50 text-left">
+            <h2 className="text-lg font-semibold text-gray-700 mb-4">
+              Order Details
+            </h2>
+            <p className="text-sm text-gray-600">
+              <strong>Order ID:</strong> {order._id}
+            </p>
+            <p className="text-sm text-gray-600">
+              <strong>Payment Method:</strong>{" "}
+              {order.paymentMethod === "cod" ? "Cash on Delivery" : "Online"}
+            </p>
+            <p className="text-sm text-gray-600">
+              <strong>Expected Delivery:</strong>{" "}
+              {formatDate(order.expectedDelivery)}
+            </p>
+            <p className="text-sm text-gray-600">
+              <strong>Shipping Address:</strong> {formatAddress(order.shippingAddress)}
+            </p>
+            <div className="mt-4">
+              <h3 className="text-sm font-medium text-gray-700">Items:</h3>
+              <ul className="divide-y divide-gray-200 mt-2">
+                {order.items.map((item, index) => (
+                  <li key={index} className="py-2 flex justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-800">
+                        {item.variant?.product.name} ({item.variant?.color.name}, {item.size})
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        Quantity: {item.quantity}
+                      </p>
+                    </div>
+                    <span className="text-sm text-primary font-semibold">
+                      ₹{(item.price * item.quantity).toLocaleString("en-IN")}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <p className="text-sm font-semibold text-gray-700 mt-4">
+              <strong>Total Amount:</strong> ₹{order.totalAmount.toLocaleString("en-IN")}
             </p>
           </div>
+        ) : (
+          <p className="text-gray-500 mt-6">No order details available.</p>
         )}
-
-        {/* My Orders */}
-        <div className="mt-10 text-left">
-         
-            <h2 className="text-xl font-semibold text-gray-800 border-b pb-2 mb-4">
-            My Orders
-          </h2>
-          
-          
-          {orders.length > 0 ? (
-            <ul className="divide-y divide-gray-200">
-              {orders.map((order) => (
-                <li
-                  key={order.id}
-                  className="flex justify-between items-center py-3"
-                >
-                  <div>
-                    <p className="font-medium text-gray-800">{order.name}</p>
-                    <p className="text-sm text-gray-500">{order.date}</p>
-                  </div>
-                  <span className="text-primary font-semibold">
-                    ₹{order.price}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-gray-500">No previous orders found.</p>
-          )}
-        </div>
 
         {/* Buttons */}
         <div className="mt-8 flex justify-center gap-4">

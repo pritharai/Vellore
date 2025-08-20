@@ -127,36 +127,6 @@ const ProductDetail = () => {
     });
   };
 
-  const handleBuyNow = () => {
-    if (!isAuthenticated) {
-      toast.error("Please log in to buy");
-      setTimeout(() => navigate("/auth"), 2000);
-      return;
-    }
-    if (!selectedSize) {
-      toast.error("Please select a size");
-      return;
-    }
-    if (!selectedVariant?._id) {
-      toast.error("Please select a color/variant");
-      return;
-    }
-    if (stock === 0) {
-      toast.error("This item is out of stock");
-      return;
-    }
-    navigate('/confirm-order', {
-      state: {
-        products: [{
-          variantId: selectedVariant._id,
-          size: selectedSize,
-          quantity,
-          variant: selectedVariant,
-          product: { name: product.name, description: product.description }
-        }]
-      }
-    });
-  };
 
   const changeQty = (delta) => setQuantity((prev) => Math.max(1, prev + delta));
   const selectSize = (size) => setSelectedSize(size);
@@ -368,14 +338,6 @@ const ProductDetail = () => {
                 }`}
             >
               {addToCartMutation.isPending ? 'Adding...' : 'Add to cart'}
-            </button>
-            <button
-              onClick={handleBuyNow}
-              disabled={stock === 0}
-              className={`w-full py-3 bg-primary hover:cursor-pointer text-white hover:bg-primary-hover transition ${stock === 0 ? 'opacity-60 cursor-not-allowed' : ''
-                }`}
-            >
-              Buy now
             </button>
           </div>
 
