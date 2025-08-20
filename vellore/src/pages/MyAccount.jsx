@@ -10,9 +10,12 @@ import {
   addAddress,
   deleteAddress,
 } from "../services/userService";
+import {
+  getUserOrders,
+  requestOrderCancellation,
+} from "../services/orderService";
 import { toast } from "react-toastify";
 import ConfirmationPopup from "../components/ConfirmationPopup";
-
 import {
   FaBoxOpen,
   FaHistory,
@@ -26,7 +29,6 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import { setUser } from "../redux/authSlice";
 import { useDispatch } from "react-redux";
-// import ConfirmationPopup from "../components/ConfirmationPopup";
 
 const MyAccount = () => {
   const [activeTab, setActiveTab] = useState("orders");
@@ -55,11 +57,10 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("orders")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
-                  activeTab === "orders"
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${activeTab === "orders"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
-                }`}
+                  }`}
               >
                 <FaBoxOpen /> <span>Track Orders</span>
               </button>
@@ -67,11 +68,10 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("history")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
-                  activeTab === "history"
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${activeTab === "history"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
-                }`}
+                  }`}
               >
                 <FaHistory /> <span>Order History</span>
               </button>
@@ -79,11 +79,10 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("feedback")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
-                  activeTab === "feedback"
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${activeTab === "feedback"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
-                }`}
+                  }`}
               >
                 <FaEdit /> <span>Give Feedback</span>
               </button>
@@ -91,11 +90,10 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("profile")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
-                  activeTab === "profile"
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${activeTab === "profile"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
-                }`}
+                  }`}
               >
                 <FaUser /> <span>Profile Details</span>
               </button>
@@ -103,11 +101,10 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("support")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
-                  activeTab === "support"
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${activeTab === "support"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
-                }`}
+                  }`}
               >
                 <FaHeadset /> <span>Contact Support</span>
               </button>
@@ -138,21 +135,296 @@ const MyAccount = () => {
   );
 };
 
-// Track Orders (Placeholder)
-const TrackOrders = () => (
-  <div>
-    <h2 className="text-xl font-semibold mb-4">Track Your Orders</h2>
-    <p className="text-gray-600">You have no active orders right now.</p>
-  </div>
-);
+// Track Orders
+const TrackOrders = () => {
+  const queryClient = useQueryClient();
+  const [cancelOrderId, setCancelOrderId] = useState(null);
+  const [cancelReason, setCancelReason] = useState("");
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
-// Order History (Placeholder)
-const OrderHistory = () => (
-  <div>
-    <h2 className="text-xl font-semibold mb-4">Order History</h2>
-    <p className="text-gray-600">No past orders found.</p>
-  </div>
-);
+  const { data: orders, isLoading, error } = useQuery({
+    queryKey: ["userOrders"],
+    queryFn: getUserOrders,
+  });
+
+  const activeOrders = orders?.filter((order) =>
+    ["pending", "processing", "shipped"].includes(order.status)
+  );
+
+  const cancelOrderMutation = useMutation({
+    mutationFn: requestOrderCancellation,
+    onSuccess: () => {
+      toast.success("Cancellation request submitted");
+      setIsCancelModalOpen(false);
+      setCancelReason("");
+      setCancelOrderId(null);
+      queryClient.invalidateQueries({ queryKey: ["userOrders"] });
+    },
+    onError: (err) => toast.error(err.message || "Failed to request cancellation"),
+  });
+
+  const handleCancelClick = (orderId) => {
+    setCancelOrderId(orderId);
+    setIsCancelModalOpen(true);
+  };
+
+  const handleCancelSubmit = (e) => {
+    e.preventDefault();
+    if (!cancelReason.trim()) {
+      toast.error("Please provide a cancellation reason");
+      return;
+    }
+    cancelOrderMutation.mutate({ orderId: cancelOrderId, reason: cancelReason });
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-IN", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  const formatAddress = (address) => {
+    if (!address) return "N/A";
+    const { houseNumber, street, colony, city, state, country, postalCode } = address;
+    return `${houseNumber}, ${street}, ${colony}, ${city}, ${state}, ${country} - ${postalCode}`;
+  };
+
+  if (isLoading) {
+    return <p className="text-gray-600">Loading orders...</p>;
+  }
+
+  if (error) {
+    return <p className="text-red-500">Error loading orders: {error.message}</p>;
+  }
+
+  return (
+    <div>
+      <h2 className="text-xl font-semibold mb-4">Track Your Orders</h2>
+      {activeOrders?.length > 0 ? (
+        <div className="space-y-6">
+          {activeOrders.map((order) => (
+            <div key={order._id} className="border rounded-lg p-4 shadow-sm">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
+                <h3 className="text-lg font-medium text-wrap text-gray-800">
+                  Order #{order._id}
+                </h3>
+                <span
+                  className={`text-sm capitalize px-3 py-1 rounded-full ${order.status === "pending" || order.status === "processing"
+                      ? "bg-yellow-100 text-yellow-700"
+                      : "bg-green-100 text-green-700"
+                    }`}
+                >
+                  {order.status}
+                </span>
+              </div>
+              <p className="text-sm text-gray-600">
+                <strong>Placed On:</strong> {formatDate(order.createdAt)}
+              </p>
+              <p className="text-sm text-gray-600">
+                <strong>Expected Delivery:</strong>{" "}
+                {formatDate(order.expectedDelivery)}
+              </p>
+              <p className="text-sm text-gray-600">
+                <strong>Payment Method:</strong>{" "}
+                {order.paymentMethod === "cod" ? "Cash on Delivery" : "Online"}
+              </p>
+              <p className="text-sm text-gray-600">
+                <strong>Shipping Address:</strong>{" "}
+                {formatAddress(order.shippingAddress)}
+              </p>
+              {order.cancellationRequest.requested && (
+                <p className="text-sm text-red-600">
+                  <strong>Cancellation Requested:</strong>{" "}
+                  {order.cancellationRequest.reason}
+                </p>
+              )}
+              <div className="mt-4">
+                <h4 className="text-sm font-medium text-gray-700">Items:</h4>
+                <ul className="divide-y divide-gray-200 mt-2">
+                  {order.items.map((item, index) => (
+                    <li key={index} className="py-2 flex justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-800">
+                          {item.variant?.product.name} ({item.variant?.color.name}, {item.size})
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          Quantity: {item.quantity}
+                        </p>
+                      </div>
+                      <span className="text-sm text-primary font-semibold">
+                        ₹{(item.price * item.quantity).toLocaleString("en-IN")}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <p className="text-sm font-semibold text-gray-700 mt-4">
+                <strong>Total Amount:</strong>{" "}
+                ₹{order.totalAmount.toLocaleString("en-IN")}
+              </p>
+              {order.status !== "cancelled" &&
+                order.status !== "delivered" &&
+                !order.cancellationRequest.requested && (
+                  <button
+                    onClick={() => handleCancelClick(order._id)}
+                    className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition hover:cursor-pointer"
+                  >
+                    Cancel Order
+                  </button>
+                )}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-gray-600">You have no active orders right now.</p>
+      )}
+
+      {/* Cancellation Modal */}
+      {isCancelModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg">
+            <h3 className="text-lg font-semibold mb-4">Request Order Cancellation</h3>
+            <form onSubmit={handleCancelSubmit} className="space-y-3">
+              <textarea
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                placeholder="Please provide a reason for cancellation"
+                className="w-full resize-none border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                rows={4}
+              />
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsCancelModalOpen(false)}
+                  className="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={cancelOrderMutation.isPending}
+                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition disabled:opacity-50"
+                >
+                  {cancelOrderMutation.isPending ? "Submitting..." : "Submit Request"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Order History
+const OrderHistory = () => {
+  const { data: orders, isLoading, error } = useQuery({
+    queryKey: ["userOrders"],
+    queryFn: getUserOrders,
+  });
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-IN", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  const formatAddress = (address) => {
+    if (!address) return "N/A";
+    const { houseNumber, street, colony, city, state, country, postalCode } = address;
+    return `${houseNumber}, ${street}, ${colony}, ${city}, ${state}, ${country} - ${postalCode}`;
+  };
+
+  if (isLoading) {
+    return <p className="text-gray-600">Loading orders...</p>;
+  }
+
+  if (error) {
+    return <p className="text-red-500">Error loading orders: {error.message}</p>;
+  }
+
+  return (
+    <div>
+      <h2 className="text-xl font-semibold mb-4">Order History</h2>
+      {orders?.length > 0 ? (
+        <div className="space-y-6">
+          {orders.map((order) => (
+            <div key={order._id} className="border rounded-lg p-4 shadow-sm">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
+                <h3 className="text-lg font-medium text-wrap text-gray-800">
+                  Order #{order._id}
+                </h3>
+                <span
+                  className={`text-sm capitalize px-3 py-1 rounded-full ${order.status === "pending" || order.status === "processing"
+                      ? "bg-yellow-100 text-yellow-700"
+                      : order.status === "shipped"
+                        ? "bg-green-100 text-green-700"
+                        : order.status === "delivered"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-700"
+                    }`}
+                >
+                  {order.status}
+                </span>
+              </div>
+              <p className="text-sm text-gray-600">
+                <strong>Placed On:</strong> {formatDate(order.createdAt)}
+              </p>
+              <p className="text-sm text-gray-600">
+                <strong>Expected Delivery:</strong>{" "}
+                {formatDate(order.expectedDelivery)}
+              </p>
+              <p className="text-sm text-gray-600">
+                <strong>Payment Method:</strong>{" "}
+                {order.paymentMethod === "cod" ? "Cash on Delivery" : "Online"}
+              </p>
+              <p className="text-sm text-gray-600">
+                <strong>Shipping Address:</strong>{" "}
+                {formatAddress(order.shippingAddress)}
+              </p>
+              {order.cancellationRequest.requested && (
+                <p className="text-sm text-red-600">
+                  <strong>Cancellation Requested:</strong>{" "}
+                  {order.cancellationRequest.reason}
+                </p>
+              )}
+              <div className="mt-4">
+                <h4 className="text-sm font-medium text-gray-700">Items:</h4>
+                <ul className="divide-y divide-gray-200 mt-2">
+                  {order.items.map((item, index) => (
+                    <li key={index} className="py-2 flex justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-800">
+                          {item.variant?.product.name} ({item.variant?.color.name}, {item.size})
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          Quantity: {item.quantity}
+                        </p>
+                      </div>
+                      <span className="text-sm text-primary font-semibold">
+                        ₹{(item.price * item.quantity).toLocaleString("en-IN")}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <p className="text-sm font-semibold text-gray-700 mt-4">
+                <strong>Total Amount:</strong>{" "}
+                ₹{order.totalAmount.toLocaleString("en-IN")}
+              </p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-gray-600">No past orders found.</p>
+      )}
+    </div>
+  );
+};
 
 // Feedback (Placeholder)
 const Feedback = () => (
@@ -179,7 +451,7 @@ const ProfileDetails = ({ user }) => {
     phone: user?.phone || "",
   });
 
-    const [showPasswordFields, setShowPasswordFields] = useState(false);
+  const [showPasswordFields, setShowPasswordFields] = useState(false);
   const [passwordData, setPasswordData] = useState({
     oldPassword: "",
     newPassword: "",
@@ -220,7 +492,7 @@ const ProfileDetails = ({ user }) => {
     onError: (err) => toast.error(err.message),
   });
 
-    const changePasswordMutation = useMutation({
+  const changePasswordMutation = useMutation({
     mutationFn: changePassword,
     onSuccess: () => {
       toast.success("Password changed successfully");
@@ -369,8 +641,7 @@ const ProfileDetails = ({ user }) => {
             </button>
           </form>
 
-
-           {/* Password Section */}
+          {/* Password Section */}
           <div className="mb-6">
             {!showPasswordFields ? (
               <button
@@ -440,17 +711,19 @@ const ProfileDetails = ({ user }) => {
                   {editingAddress === addr._id ? (
                     // Address Edit Form
                     <form onSubmit={handleAddressSubmit} className="space-y-2">
-                      {["houseNumber", "street", "colony", "city", "state", "postalCode", "country"].map((field) => (
-                        <input
-                          key={field}
-                          type="text"
-                          name={field}
-                          placeholder={field.replace(/([A-Z])/g, " $1")}
-                          value={addressForm[field] || ""}
-                          onChange={handleAddressChange}
-                          className="w-full border rounded p-2"
-                        />
-                      ))}
+                      {["houseNumber", "street", "colony", "city", "state", "postalCode", "country"].map(
+                        (field) => (
+                          <input
+                            key={field}
+                            type="text"
+                            name={field}
+                            placeholder={field.replace(/([A-Z])/g, " $1")}
+                            value={addressForm[field] || ""}
+                            onChange={handleAddressChange}
+                            className="w-full border rounded p-2"
+                          />
+                        )
+                      )}
                       <div className="flex gap-2">
                         <button
                           type="submit"
@@ -512,17 +785,19 @@ const ProfileDetails = ({ user }) => {
               <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg relative">
                 <h3 className="text-lg font-semibold mb-4">Add New Address</h3>
                 <form onSubmit={handleNewAddressSubmit} className="space-y-3">
-                  {["houseNumber", "street", "colony", "city", "state", "postalCode", "country"].map((field) => (
-                    <input
-                      key={field}
-                      type="text"
-                      name={field}
-                      placeholder={field.replace(/([A-Z])/g, " $1")}
-                      value={newAddressForm[field]}
-                      onChange={handleNewAddressChange}
-                      className="w-full border rounded p-2"
-                    />
-                  ))}
+                  {["houseNumber", "street", "colony", "city", "state", "postalCode", "country"].map(
+                    (field) => (
+                      <input
+                        key={field}
+                        type="text"
+                        name={field}
+                        placeholder={field.replace(/([A-Z])/g, " $1")}
+                        value={newAddressForm[field]}
+                        onChange={handleNewAddressChange}
+                        className="w-full border rounded p-2"
+                      />
+                    )
+                  )}
                   <div className="flex justify-end gap-2 mt-4">
                     <button
                       type="button"
@@ -544,7 +819,7 @@ const ProfileDetails = ({ user }) => {
             </div>
           )}
 
-          {/* ✅ Delete Confirmation Popup */}
+          {/* Delete Confirmation Popup */}
           <ConfirmationPopup
             isOpen={showConfirm}
             title="Delete Address"

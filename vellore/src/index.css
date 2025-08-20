@@ -117,3 +117,6 @@ input[type=number] {
 input, textarea {
   caret-color: black; /* or any visible color */
 }
+button:hover{
+  cursor: pointer;
+}
