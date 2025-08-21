@@ -22,10 +22,10 @@ const StoryComponent = ({ storyData }) => {
         />
 
         {/* Black Overlay */}
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-sm"></div>
+        {/* <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-sm"></div> */}
 
         {/* Hover Buttons */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        {/* <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
           <div className="flex gap-6">
             <button className=" text-secondary hover:cursor-pointer p-4 rounded-full shadow-md hover:bg-primary transition-all duration-300 transform -translate-x-5 group-hover:translate-x-0">
               <FaHeart size={40} />
@@ -34,7 +34,7 @@ const StoryComponent = ({ storyData }) => {
               <FaShoppingCart size={40} />
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Description */}

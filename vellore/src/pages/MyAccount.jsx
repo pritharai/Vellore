@@ -290,7 +290,7 @@ const TrackOrders = () => {
 
       {/* Cancellation Modal */}
       {isCancelModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 backdrop-blur-sm  flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg">
             <h3 className="text-lg font-semibold mb-4">Request Order Cancellation</h3>
             <form onSubmit={handleCancelSubmit} className="space-y-3">
@@ -298,7 +298,7 @@ const TrackOrders = () => {
                 value={cancelReason}
                 onChange={(e) => setCancelReason(e.target.value)}
                 placeholder="Please provide a reason for cancellation"
-                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border border-gray-300 resize-none rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary"
                 rows={4}
               />
               <div className="flex justify-end gap-2">

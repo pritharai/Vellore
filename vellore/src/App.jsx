@@ -23,13 +23,13 @@ import ShippingPolicy from "./pages/ShippingPolicy";
 import MyAccount from "./pages/MyAccount";
 import ThankYou from "./pages/Thankyou";
 import AdminDashboard from "./components/AdminDashboard";
-import AdminOrders from "./components/orders";
 import UserProfilePage from "./components/Profile";
 import Search from "./components/Search";
 import PageNotFound from "./pages/PageNotFound";
 import Privacy from "./components/Privacy";
 import Refund from "./components/Refund";
 import OrderConfirmation from "./pages/OrderConfirmation";
+import ProductManagement from "./components/ProductManagement";
 
 const App = () => {
   return (
@@ -234,7 +234,7 @@ const App = () => {
                 element={
                   <>
                     <Navbar />
-                    <AdminOrders />
+                    <ProductManagement />
                     <InstagramButton />
                     <Footer />
                   </>
