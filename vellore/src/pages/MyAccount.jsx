@@ -514,6 +514,9 @@ const ProfileDetails = ({ user }) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
 
+  // Profile confirmation popup state
+  const [showProfileConfirm, setShowProfileConfirm] = useState(false);
+
   // Fetch addresses
   const { data: addresses, isLoading: addressesLoading } = useQuery({
     queryKey: ["userAddresses"],
@@ -589,7 +592,12 @@ const ProfileDetails = ({ user }) => {
 
   const handleProfileSubmit = (e) => {
     e.preventDefault();
+    setShowProfileConfirm(true); // Show confirmation popup instead of direct mutation
+  };
+
+  const confirmProfileUpdate = () => {
     updateProfileMutation.mutate(formData);
+    setShowProfileConfirm(false);
   };
 
   const handleAddressChange = (e) => {
@@ -866,6 +874,16 @@ const ProfileDetails = ({ user }) => {
             onConfirm={confirmDelete}
             onCancel={() => setShowConfirm(false)}
           />
+
+          {/* Profile Update Confirmation Popup */}
+          <ConfirmationPopup
+            isOpen={showProfileConfirm}
+            title="Confirm Profile Update"
+            message="Are you sure you want to save changes to your profile?"
+            onConfirm={confirmProfileUpdate}
+            onCancel={() => setShowProfileConfirm(false)}
+            confirmButtonText="Save"
+          />
         </>
       ) : (
         <p className="text-gray-600">Loading user data...</p>
@@ -873,6 +891,8 @@ const ProfileDetails = ({ user }) => {
     </div>
   );
 };
+
+
 
 // Contact Support
 const ContactSupport = () => (
