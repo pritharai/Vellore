@@ -21,9 +21,9 @@ const Footer = () => {
           <h3 className="text-lg font-semibold mb-4 text-primary">Support</h3>
           <ul className="space-y-2 text-primary-gradient text-sm">
             <li>
-              <a href="/contact" className="hover:text-primary-light transition">
+              <Link to="/contact" className="hover:text-primary-light transition">
                 Contact Us
-              </a>
+              </Link>
             </li>
             <li>
               <Link to="/shipping" className="hover:text-primary-light transition">
@@ -40,11 +40,11 @@ const Footer = () => {
                 Return & Refund Policy
               </Link>
             </li>
-            <li>
+            {/* <li>
               <a href="/faqs" className="hover:text-primary-light transition">
                 FAQs
               </a>
-            </li>
+            </li> */}
             {/* <li>
               <a href="#" className="hover:text-primary-light transition">
                 Privacy Policy
