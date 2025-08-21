@@ -31,7 +31,7 @@ const Products = () => {
 
 
   if (!data || !data.products || data.products.length === 0) {
-    return <div className="text-center py-20">No products available</div>;
+    return <div className="text-center py-20 md:mt-40">No products available</div>;
   }
   const productsForListing = data.products.map((product) => {
     const v = product.variant; // single variant or null
