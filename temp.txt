@@ -1,2 +1,0 @@
-bina local storage
-maintaining sessions with jwt cookies which are http-only and we have refresh-access tokens and userprofile method to get correct user. how can we persist user using these
