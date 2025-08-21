@@ -26,10 +26,16 @@ const OrderConfirmation = () => {
     postalCode: "",
   });
   const [contact, setContact] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("cod"); // Default to COD
-  const [shippingCharge, setShippingCharge] = useState(400); // Default Express
-  const [showPopup, setShowPopup] = useState(false);
-  const codCharge = paymentMethod === "cod" ? 50 : 0;
+  const [paymentMethod, setPaymentMethod] = useState("cod");
+
+  // Define shipping charges based on environment variables
+  const COD_CHARGES = Number(import.meta.env.VITE_COD_CHARGES) || 200;
+  const ONLINE_CHARGES = Number(import.meta.env.VITE_ONLINE_CHARGES) || 120;
+
+  // Set shipping charge based on payment method
+  const [shippingCharge, setShippingCharge] = useState(
+    paymentMethod === "cod" ? COD_CHARGES : ONLINE_CHARGES
+  );
 
   const { data: addresses, isLoading: addressesLoading } = useQuery({
     queryKey: ["addresses"],
@@ -55,7 +61,6 @@ const OrderConfirmation = () => {
       return;
     }
 
-    // Validate contact number: exactly 10 digits
     if (!/^\d{10}$/.test(contact)) {
       toast.error("Please enter a valid 10-digit contact number");
       return;
@@ -84,7 +89,7 @@ const OrderConfirmation = () => {
     createOrderMutation.mutate({
       itemIds: itemIds.length > 0 ? itemIds : undefined,
       addressId: addressOption === "saved" ? addressId : undefined,
-      paymentMethod: "cod",
+      paymentMethod,
       shippingAddress: addressOption === "new" ? shippingAddress : undefined,
       contact: Number(contact),
     });
@@ -94,11 +99,19 @@ const OrderConfirmation = () => {
     setShippingAddress((prev) => ({ ...prev, [field]: value }));
   };
 
+  // Update shipping charge when payment method changes
+  const handlePaymentChange = (method) => {
+    setPaymentMethod(method);
+    setShippingCharge(method === "cod" ? COD_CHARGES : ONLINE_CHARGES);
+  };
+
   const subtotal = products.reduce(
     (sum, item) => sum + (item.variant?.price || item.price) * item.quantity,
     0
   );
-  const total = subtotal + shippingCharge + codCharge;
+  const total = subtotal + shippingCharge;
+
+  const [showPopup, setShowPopup] = useState(false);
 
   if (!products.length) {
     return (
@@ -218,34 +231,6 @@ const OrderConfirmation = () => {
 
           <div className="bg-white rounded-xl shadow-sm p-6 space-y-4">
             <h2 className="text-xl font-semibold text-gray-800">
-              Shipping Services
-            </h2>
-            <div className="flex flex-col gap-3">
-              <label className="flex items-center gap-3 border rounded-lg p-3 cursor-pointer hover:bg-gray-50">
-                <input
-                  type="radio"
-                  name="shipping"
-                  checked={shippingCharge === 120}
-                  onChange={() => setShippingCharge(120)}
-                />
-                <span className="flex-1">
-                  Standard Shipping (5–7 days) – ₹120
-                </span>
-              </label>
-              <label className="flex items-center gap-3 border rounded-lg p-3 cursor-pointer hover:bg-gray-50">
-                <input
-                  type="radio"
-                  name="shipping"
-                  checked={shippingCharge === 400}
-                  onChange={() => setShippingCharge(400)}
-                />
-                <span className="flex-1">Express (2–3 days) – ₹400</span>
-              </label>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-6 space-y-4">
-            <h2 className="text-xl font-semibold text-gray-800">
               Payment Method
             </h2>
             <div className="flex gap-4">
@@ -271,16 +256,22 @@ const OrderConfirmation = () => {
                   name="payment"
                   value="cod"
                   checked={paymentMethod === "cod"}
-                  onChange={() => setPaymentMethod("cod")}
+                  onChange={() => handlePaymentChange("cod")}
                 />
-                Cash on Delivery
+                Cash on Delivery (₹{COD_CHARGES} Delivery)
               </label>
+              {/* Uncomment when online payment is available */}
+              {/* <label className="flex items-center gap-2 border rounded-lg px-4 py-2 cursor-pointer hover:bg-gray-50">
+                <input
+                  type="radio"
+                  name="payment"
+                  value="online"
+                  checked={paymentMethod === "online"}
+                  onChange={() => handlePaymentChange("online")}
+                />
+                Online Payment (₹{ONLINE_CHARGES} Delivery)
+              </label> */}
             </div>
-            {paymentMethod === "cod" && (
-              <p className="text-sm text-gray-600 mt-2">
-                ⚠️ COD incurs an extra charge of ₹{codCharge}.
-              </p>
-            )}
           </div>
         </div>
 
@@ -317,12 +308,6 @@ const OrderConfirmation = () => {
               <span>Delivery</span>
               <span>₹{shippingCharge.toLocaleString("en-IN")}</span>
             </div>
-            {codCharge > 0 && (
-              <div className="flex justify-between">
-                <span>COD Charges</span>
-                <span>₹{codCharge.toLocaleString("en-IN")}</span>
-              </div>
-            )}
             <div className="flex justify-between font-bold text-lg pt-2 border-t">
               <span>Total</span>
               <span>₹{total.toLocaleString("en-IN")}</span>
