@@ -307,7 +307,7 @@ const Cart = () => {
             </button>
             <button
               onClick={() => setSelectMode(!selectMode)}
-              className="px-6 py-3 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition hover:cursor-pointer"
+              className="px-6 py-3 border border-primary bg-white text-primary rounded-md transition hover:cursor-pointer"
             >
               {selectMode ? 'Cancel Selection' : 'Select Items'}
             </button>
