@@ -13,7 +13,7 @@ export const getVariantImages = async (params = {}) => {
 
 export const getVariantImagesById = async (id) => {
   try {
-    const response = await api.get(`/variantImage/${id}`);
+    const response = await api.get(`/images/${id}`);
     return response.data.data;
   } catch (error) {
     throw new Error(
@@ -24,7 +24,7 @@ export const getVariantImagesById = async (id) => {
 
 export const createVariantImages = async (formData) => {
   try {
-    const response = await api.post("/variantImage", formData, {
+    const response = await api.post("/images", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     return response.data.data;
@@ -37,7 +37,7 @@ export const createVariantImages = async (formData) => {
 
 export const updateVariantImages = async (id, formData) => {
   try {
-    const response = await api.put(`/variantImage/${id}`, formData, {
+    const response = await api.put(`/images/${id}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     return response.data.data;
@@ -50,7 +50,7 @@ export const updateVariantImages = async (id, formData) => {
 
 export const deleteVariantImages = async (id) => {
   try {
-    const response = await api.delete(`/variantImage/${id}`);
+    const response = await api.delete(`/images/${id}`);
     return response.data.data;
   } catch (error) {
     throw new Error(

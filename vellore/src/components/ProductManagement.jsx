@@ -1,7 +1,7 @@
-import React from 'react'
 import AdminColors from './adminProductManagement/AdminColors'
 import AdminProducts from './adminProductManagement/AdminProducts'
 import AdminVariants from './adminProductManagement/AdminVariants'
+import AdminVariantImages from './adminProductManagement/AdminVariantImages'
 
 const ProductManagement = () => {
   return (
@@ -9,6 +9,7 @@ const ProductManagement = () => {
         <AdminColors/>
         <AdminProducts/>
         <AdminVariants/>
+        <AdminVariantImages/>
     </div>
   )
 }

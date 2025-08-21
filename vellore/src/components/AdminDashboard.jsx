@@ -67,7 +67,9 @@ const AdminDashboard = () => {
       setSelectedStatus("");
       queryClient.invalidateQueries(["recentOrders", "userOrders", "allOrders"]);
     },
-    onError: (err) => toast.error(err.message || "Failed to update order status"),
+    onError: (err) => {
+      toast.error(err.message || "Failed to update order status")
+    }
   });
 
   const formatDate = (dateString) => {
@@ -274,7 +276,7 @@ const AdminDashboard = () => {
                 {productsData.map((item) => (
                   <tr key={item.variantId} className="hover:bg-gray-50 transition-colors duration-150">
                     <td className="border-b p-3">
-                      <img src={item.image} alt={item.productName} className="h-10 w-10 object-cover rounded" />
+                      <img src={item.image.url} alt={item.productName} className="h-10 w-10 object-cover rounded" />
                     </td>
                     <td className="border-b p-3">{item.productName}</td>
                     <td className="border-b p-3">{item.colorName}</td>
