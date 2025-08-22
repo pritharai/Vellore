@@ -3,14 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { getWishlist, removeFromWishlist, clearWishlist } from "../services/wishlistService";
+import { addToCart } from "../services/cartService";
 import { useAuth } from "../hooks/useAuth";
+import { useDispatch } from "react-redux";
+import { setCart } from "../redux/cartSlice";
 import ConfirmationPopup from "./ConfirmationPopup";
 
 const Wishlist = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { isAuthenticated } = useAuth();
   const [removingId, setRemovingId] = useState(null);
+  const [addingToCartId, setAddingToCartId] = useState(null);
   const [isClearWishlistPopupOpen, setIsClearWishlistPopupOpen] = useState(false);
 
   const { data: wishlist, isLoading, isError } = useQuery({
@@ -46,6 +51,50 @@ const Wishlist = () => {
       setIsClearWishlistPopupOpen(false);
     },
   });
+
+  const addToCartMutation = useMutation({
+    mutationFn: addToCart,
+    onMutate: (data) => {
+      setAddingToCartId(data.wishlistItemId);
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(['cart']);
+      dispatch(setCart(data));
+      toast.success(data.message || "Item added to cart successfully");
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+    onSettled: () => {
+      setAddingToCartId(null);
+    },
+  });
+
+  const handleAddToCart = (item) => {
+    if (!isAuthenticated) {
+      toast.error("Please log in to add to cart");
+      setTimeout(() => navigate("/auth"), 2000);
+      return;
+    }
+    if (!item.size) {
+      toast.error("No size selected for this item");
+      return;
+    }
+    if (!item.variant?._id) {
+      toast.error("Invalid variant for this item");
+      return;
+    }
+    if (item.variant.quantity[item.size] <= 0) {
+      toast.error("This item is out of stock");
+      return;
+    }
+    addToCartMutation.mutate({
+      variantId: item.variant._id,
+      size: item.size,
+      quantity: 1,
+      wishlistItemId: item._id, // Used to track loading state
+    });
+  };
 
   if (!isAuthenticated) {
     toast.error("Please log in to view your wishlist");
@@ -99,8 +148,16 @@ const Wishlist = () => {
               <p className="text-lg font-semibold text-primary">₹{item.variant.price}</p>
 
               <div className="flex gap-3 mt-4">
-                <button className="px-4 py-2 border-2 border-primary text-primary rounded-md hover:bg-primary hover:cursor-pointer hover:text-white transition">
-                  Add to Cart
+                <button
+                  onClick={() => handleAddToCart(item)}
+                  disabled={addingToCartId === item._id || item.variant.quantity[item.size] <= 0}
+                  className={`px-4 py-2 border-2 border-primary text-primary rounded-md transition hover:cursor-pointer
+                    ${addingToCartId === item._id || item.variant.quantity[item.size] <= 0
+                      ? 'opacity-60 cursor-not-allowed'
+                      : 'hover:bg-primary hover:text-white'
+                    }`}
+                >
+                  {addingToCartId === item._id ? "Adding..." : "Add to Cart"}
                 </button>
                 <button
                   onClick={() => removeMutation.mutate(item._id)}

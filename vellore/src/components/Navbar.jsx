@@ -3,13 +3,38 @@ import { FaPhone, FaSearch, FaHeart, FaShoppingCart, FaEllipsisV, FaUser } from 
 import { GiClothes } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getCart } from "../services/cartService";
+import { clearCart, setCart } from "../redux/cartSlice";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showMore, setShowMore] = useState(false);
   const { isAuthenticated } = useAuth();
   const { user } = useSelector((state) => state.auth);
+  const { itemCount } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+
+  // Fetch cart data
+  const { data: cart, isLoading, error } = useQuery({
+    queryKey: ['cart'],
+    queryFn: getCart,
+    enabled: isAuthenticated,
+  });
+
+  useEffect(() => {
+    if (cart) {
+      dispatch(setCart(cart));
+    }
+  }, [cart, dispatch]);
+
+    useEffect(() => {
+    if (!isAuthenticated) {
+      dispatch(clearCart());
+    }
+  }, [isAuthenticated, dispatch]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,7 +46,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  
   const accountRoute = isAuthenticated ? "/my-account" : "/auth";
   const isAdmin = isAuthenticated && user?.role === "admin";
 
@@ -45,6 +69,11 @@ const Navbar = () => {
               <div className="relative cursor-pointer">
                 <Link to="/cart">
                   <FaShoppingCart className="hover:text-primary-hover transition-colors" />
+                  {itemCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-primary text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+                      {itemCount}
+                    </span>
+                  )}
                 </Link>
               </div>
               <div className="relative cursor-pointer">
@@ -119,6 +148,11 @@ const Navbar = () => {
               <div className="relative cursor-pointer">
                 <Link to="/cart">
                   <FaShoppingCart className="hover:text-primary-hover transition-colors" />
+                  {itemCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-primary text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+                      {itemCount}
+                    </span>
+                  )}
                 </Link>
               </div>
               <div className="relative cursor-pointer">
@@ -141,7 +175,14 @@ const Navbar = () => {
               </div>
             </Link>
             <Link to="/cart">
-              <FaShoppingCart className="hover:text-primary-hover transition-colors" />
+              <div className="relative cursor-pointer">
+                <FaShoppingCart className="hover:text-primary-hover transition-colors" />
+                {itemCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-primary text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+                    {itemCount}
+                  </span>
+                )}
+              </div>
             </Link>
             <button
               onClick={() => setShowMore(!showMore)}
