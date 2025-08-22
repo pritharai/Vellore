@@ -219,13 +219,18 @@ const OrderConfirmation = () => {
                 className="w-full border-b rounded-lg p-3 text-sm focus:ring-2 focus:ring-black outline-none"
                 disabled={addressesLoading || !addresses?.length}
               >
-                <option value="">Select a saved address</option>
-                {addresses?.map((addr) => (
-                  <option key={addr._id} value={addr._id}>
-                    {`${addr.houseNumber}, ${addr.street}, ${addr.colony}, ${addr.city}, ${addr.state}, ${addr.country} - ${addr.postalCode}`}
-                  </option>
-                ))}
+                {addresses?.length > 0 && (
+                  <option value="">Select a saved address</option>
+                )}
+
+                {addresses?.length > 0 &&
+                  addresses.map((addr) => (
+                    <option key={addr._id} value={addr._id}>
+                      {`${addr.houseNumber}, ${addr.street}, ${addr.colony}, ${addr.city}, ${addr.state}, ${addr.country} - ${addr.postalCode}`}
+                    </option>
+                  ))}
               </select>
+
             )}
           </div>
 
@@ -320,10 +325,9 @@ const OrderConfirmation = () => {
             onClick={handleConfirm}
             disabled={createOrderMutation.isPending}
             className={`w-full flex items-center justify-center gap-2 px-6 py-3 text-white font-semibold rounded-lg transition-all duration-300
-              ${
-                createOrderMutation.isPending
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-primary hover:bg-primary-hover hover:cursor-pointer shadow-md"
+              ${createOrderMutation.isPending
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-primary hover:bg-primary-hover hover:cursor-pointer shadow-md"
               }`}
           >
             {createOrderMutation.isPending ? (

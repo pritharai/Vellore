@@ -37,7 +37,7 @@ const Products = () => {
     const v = product.variant; // single variant or null
     return {
       ...product,
-      image: v?.image?.url || "/placeholder.png", // fallback if no variant image
+      image: v?.image?.url || "/images/about-1.png", // fallback if no variant image
       price: v?.price || 0,
       title: product.name,
     };
