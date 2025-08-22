@@ -7,7 +7,7 @@ import { getCart, updateCartItem, removeFromCart, clearCart } from '../services/
 import { useAuth } from '../hooks/useAuth';
 import { setCart } from '../redux/cartSlice';
 import { addToWishlist } from '../services/wishlistService';
-import { FaSave, FaTimes } from 'react-icons/fa';
+import { FaSave, FaTimes, FaCheck } from 'react-icons/fa';
 import ConfirmationPopup from './ConfirmationPopup';
 
 const Cart = () => {
@@ -252,7 +252,7 @@ const Cart = () => {
                       onClick={() => saveQuantity(item._id)}
                       className="text-primary hover:text-primary-hover"
                     >
-                      <FaSave />
+                      <FaCheck />
                     </button>
                     <button
                       onClick={cancelEdit}

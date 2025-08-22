@@ -146,7 +146,7 @@ const ProductDetail = () => {
   if (error) {
     toast.error(error.message);
     return (
-      <div className="text-center py-12 text-red-500">
+      <div className="text-center py-12 text-primary">
         Failed to load product: {error.message}
       </div>
     );
@@ -230,7 +230,7 @@ const ProductDetail = () => {
             {/* Wishlist Button */}
             <button
               onClick={handleAddToWishlist}
-              className="text-2xl text-gray-400 hover:text-red-500 transition"
+              className="text-2xl text-gray-400 hover:text-primary transition"
               disabled={wishlistMutation.isPending}
             >
               <FaHeart />
