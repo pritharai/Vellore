@@ -62,7 +62,6 @@ const AdminDashboard = () => {
   const updateOrderStatusMutation = useMutation({
     mutationFn: ({ id, status }) => updateOrderStatus(id, { status }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["userOrders"] });
       toast.success("Order status updated successfully");
       setUpdateOrder(null);
       setSelectedStatus("");
@@ -332,6 +331,7 @@ const AdminDashboard = () => {
                     <th className="border-b p-3 text-left">Order ID</th>
                     <th className="border-b p-3 text-left">User Name</th>
                     <th className="border-b p-3 text-left">User Email</th>
+                    <th className="border-b p-3 text-left">Contact</th>
                     <th className="border-b p-3 text-left">Status</th>
                     <th className="border-b p-3 text-left">Payment Method</th>
                     <th className="border-b p-3 text-right">Total Amount</th>
@@ -342,10 +342,12 @@ const AdminDashboard = () => {
                 <tbody>
                   {userOrdersData.orders.map((order) => (
                     <tr key={order._id} className="hover:bg-gray-50 transition-colors duration-150">
-                      <td className="border-b p-3">{order._id}</td>
-                      <td className="border-b p-3">{order.user.name}</td>
-                      <td className="border-b p-3">{order.user.email}</td>
-                      <td className={`border-b p-3 capitalize ${order.status === "cancelled" ? "text-red-500" : order.status === "delivered" ? "text-green-600" : ""}`}>
+                    
+                    <td className="border-b p-3">{order._id}</td>
+                    <td className="border-b p-3">{order.user.name}</td>
+                    <td className="border-b p-3">{order.user.email}</td>
+                    <td className="border-b p-3">{order.contact}</td>
+                    <td className={`border-b p-3 capitalize ${order.status === "cancelled" ? "text-red-500" : order.status === "delivered" ? "text-green-600" : ""}`}>
                         {order.status}
                       </td>
                       <td className="border-b p-3 capitalize">{order.paymentMethod === "cod" ? "Cash on Delivery" : "Online"}</td>
@@ -432,6 +434,7 @@ const AdminDashboard = () => {
                     <th className="border-b p-3 text-left">Order ID</th>
                     <th className="border-b p-3 text-left">User Name</th>
                     <th className="border-b p-3 text-left">User Email</th>
+                    <th className="border-b p-3 text-left">Contact</th>
                     <th className="border-b p-3 text-left">Status</th>
                     <th className="border-b p-3 text-left">Payment Method</th>
                     <th className="border-b p-3 text-right">Total Amount</th>
@@ -445,6 +448,7 @@ const AdminDashboard = () => {
                       <td className="border-b p-3">{order._id}</td>
                       <td className="border-b p-3">{order.user.name}</td>
                       <td className="border-b p-3">{order.user.email}</td>
+                    <td className="border-b p-3">{order.contact}</td>
                       <td className={`border-b p-3 capitalize ${order.status === "cancelled" ? "text-red-500" : order.status === "delivered" ? "text-green-600" : ""}`}>
                         {order.status}
                       </td>
@@ -535,6 +539,7 @@ const AdminDashboard = () => {
                     <th className="border-b p-3 text-left">Order ID</th>
                     <th className="border-b p-3 text-left">User Name</th>
                     <th className="border-b p-3 text-left">User Email</th>
+                    <th className="border-b p-3 text-left">Contact</th>
                     <th className="border-b p-3 text-left">Status</th>
                     <th className="border-b p-3 text-left">Payment Method</th>
                     <th className="border-b p-3 text-right">Total Amount</th>
@@ -548,6 +553,7 @@ const AdminDashboard = () => {
                       <td className="border-b p-3">{order._id}</td>
                       <td className="border-b p-3">{order.user.name}</td>
                       <td className="border-b p-3">{order.user.email}</td>
+                      <td className="border-b p-3">{order.contact}</td>
                       <td className={`border-b p-3 capitalize ${order.status === "cancelled" ? "text-red-500" : order.status === "delivered" ? "text-green-600" : ""}`}>
                         {order.status}
                       </td>

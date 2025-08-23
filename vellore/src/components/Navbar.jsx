@@ -70,7 +70,7 @@ const Navbar = () => {
                 <Link to="/cart">
                   <FaShoppingCart className="hover:text-primary-hover transition-colors" />
                   {itemCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-primary text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+                    <span className="absolute -top-2 -right-3 border border-primary bg-white text-primary text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
                       {itemCount}
                     </span>
                   )}
@@ -149,7 +149,7 @@ const Navbar = () => {
                 <Link to="/cart">
                   <FaShoppingCart className="hover:text-primary-hover transition-colors" />
                   {itemCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-primary text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+                    <span className="absolute -top-2 -right-3 border border-primary bg-white text-primary text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
                       {itemCount}
                     </span>
                   )}
@@ -178,7 +178,7 @@ const Navbar = () => {
               <div className="relative cursor-pointer">
                 <FaShoppingCart className="hover:text-primary-hover transition-colors" />
                 {itemCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-primary text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute -top-2 -right-3 bg-white border border-primary text-primary text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
                     {itemCount}
                   </span>
                 )}
