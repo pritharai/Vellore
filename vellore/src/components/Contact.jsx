@@ -45,7 +45,7 @@ const Contact = () => {
         <div className="hidden md:block w-full md:w-1/2">
           <div className="relative h-full">
             <img
-              src="/images/contact.jpg"
+              src="https://res.cloudinary.com/dlon1jww2/image/upload/v1755957530/contact-us_t8ho9p.gif"
               alt="Contact us"
               className="rounded-md w-full h-full object-cover"
             />
