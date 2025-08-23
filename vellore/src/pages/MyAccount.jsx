@@ -289,38 +289,47 @@ const TrackOrders = () => {
       )}
 
       {/* Cancellation Modal */}
-      {isCancelModalOpen && (
-        <div className="fixed inset-0 backdrop-blur-sm  flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg">
-            <h3 className="text-lg font-semibold mb-4">Request Order Cancellation</h3>
-            <form onSubmit={handleCancelSubmit} className="space-y-3">
-              <textarea
-                value={cancelReason}
-                onChange={(e) => setCancelReason(e.target.value)}
-                placeholder="Please provide a reason for cancellation"
-                className="w-full border border-gray-300 resize-none rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary"
-                rows={4}
-              />
-              <div className="flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsCancelModalOpen(false)}
-                  className="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={cancelOrderMutation.isPending}
-                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition disabled:opacity-50"
-                >
-                  {cancelOrderMutation.isPending ? "Submitting..." : "Submit Request"}
-                </button>
-              </div>
-            </form>
-          </div>
+   
+{isCancelModalOpen && (
+  <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg">
+      <h3 className="text-lg font-semibold mb-4">Request Order Cancellation</h3>
+      
+      {/* ⚠️ Warning Message */}
+      <div className="bg-yellow-100 border border-yellow-300 text-yellow-800 text-sm p-3 rounded-md mb-3">
+        ⚠️ You can cancel your order only within <strong>24 hours</strong> of placing it. 
+        Once the order is shipped, it cannot be cancelled.
+      </div>
+
+      <form onSubmit={handleCancelSubmit} className="space-y-3">
+        <textarea
+          value={cancelReason}
+          onChange={(e) => setCancelReason(e.target.value)}
+          placeholder="Please provide a reason for cancellation"
+          className="w-full border border-gray-300 resize-none rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary"
+          rows={4}
+        />
+        <div className="flex justify-end gap-2">
+          <button
+            type="button"
+            onClick={() => setIsCancelModalOpen(false)}
+            className="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
+          >
+            Close
+          </button>
+          <button
+            type="submit"
+            disabled={cancelOrderMutation.isPending}
+            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition disabled:opacity-50"
+          >
+            {cancelOrderMutation.isPending ? "Submitting..." : "Submit Request"}
+          </button>
         </div>
-      )}
+      </form>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
