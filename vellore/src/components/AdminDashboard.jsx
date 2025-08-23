@@ -62,6 +62,7 @@ const AdminDashboard = () => {
   const updateOrderStatusMutation = useMutation({
     mutationFn: ({ id, status }) => updateOrderStatus(id, { status }),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userOrders"] });
       toast.success("Order status updated successfully");
       setUpdateOrder(null);
       setSelectedStatus("");
