@@ -10,7 +10,7 @@ const Refund = () => {
         className="mx-auto p-8"
       >
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-6">
-          Refund & Return Policy
+          Refund, Return & Cancellation Policy
         </h1>
 
         <p className="text-gray-600 mb-6">
@@ -61,6 +61,19 @@ const Refund = () => {
             <p className="text-gray-700">
               We offer exchanges only for size issues. Please email us with your order details for assistance.
             </p>
+          </section>
+
+          {/* Cancellation Policy */}
+          <section>
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">
+              5. Cancellation Policy
+            </h2>
+            <ul className="list-disc list-inside text-gray-700 space-y-1">
+              <li>Orders can be cancelled within <strong>24 hours</strong> of placing the order.</li>
+              <li>Once the order has been shipped, it cannot be cancelled.</li>
+              <li>For Order Cancellation please mention a detailed reason. </li>
+              <li>Refunds for cancelled orders will be processed to the original payment method within <strong>5–7 business days</strong>.</li>
+            </ul>
           </section>
         </div>
       </motion.div>
