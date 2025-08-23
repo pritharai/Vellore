@@ -902,10 +902,10 @@ const ContactSupport = () => (
       If you have any questions or issues, feel free to reach out to us.
     </p>
     <p className="flex items-center gap-2">
-      <FaMapMarkerAlt /> 123 Street, New Delhi, India
+      <FaMapMarkerAlt /> Pakhowal Road, Ludhiana, Punjab, India - 141001
     </p>
     <p className="flex items-center gap-2 mt-2">
-      <FaPhoneAlt /> +91 9876543210
+      <FaPhoneAlt /> +91 98104 46149
     </p>
   </div>
 );
