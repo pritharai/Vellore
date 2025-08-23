@@ -36,7 +36,7 @@ const Refund = () => {
               2. Return Process
             </h2>
             <ul className="list-disc list-inside text-gray-700 space-y-1">
-              <li>Email us at <strong>theveloor20@gmail.com</strong> with your order number and reason for return.</li>
+              <li>Email us at <strong>thevellor20@gmail.com</strong> with your order number and reason for return.</li>
               <li>Once approved, you'll receive a return shipping address.</li>
               <li>Customers are responsible for return shipping charges unless the product is defective.</li>
             </ul>
