@@ -294,7 +294,7 @@ const ProductDetail = () => {
                 <button
                   key={color.name}
                   onClick={() => selectColor(color)}
-                  className={`w-8 h-8 rounded-full hover:cursor-pointer hover:scale-105 transition ${selectedColor?.name === color.name ? "ring-2 ring-black" : ""
+                  className={`w-8 h-8 border rounded-full hover:cursor-pointer hover:scale-105 transition ${selectedColor?.name === color.name ? "ring-2 ring-black" : ""
                     }`}
                   style={{ backgroundColor: color.hex }}
                 ></button>
