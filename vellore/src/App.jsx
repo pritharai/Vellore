@@ -30,6 +30,7 @@ import Privacy from "./components/Privacy";
 import Refund from "./components/Refund";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import ProductManagement from "./components/ProductManagement";
+import Terms from "./components/Terms";
 
 const App = () => {
   return (
@@ -133,6 +134,17 @@ const App = () => {
                 </>
               }
             />
+            <Route
+                path="/terms"
+                element={
+                  <>
+                    <Navbar />
+                    <Terms />
+                    <InstagramButton />
+                    <Footer />
+                  </>
+                }
+              />
                 <Route
                 path="/search"
                 element={
