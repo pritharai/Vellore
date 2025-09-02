@@ -40,11 +40,11 @@ const Footer = () => {
                 Return & Refund Policy
               </Link>
             </li>
-            {/* <li>
-              <a href="/faqs" className="hover:text-primary-light transition">
-                FAQs
+            <li>
+              <a href="/terms" className="hover:text-primary-light transition">
+                Terms & Conditions
               </a>
-            </li> */}
+            </li>
             {/* <li>
               <a href="#" className="hover:text-primary-light transition">
                 Privacy Policy
