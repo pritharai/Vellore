@@ -58,11 +58,10 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("orders")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
-                  activeTab === "orders"
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${activeTab === "orders"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
-                }`}
+                  }`}
               >
                 <FaBoxOpen /> <span>Track Orders</span>
               </button>
@@ -70,11 +69,10 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("history")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
-                  activeTab === "history"
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${activeTab === "history"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
-                }`}
+                  }`}
               >
                 <FaHistory /> <span>Order History</span>
               </button>
@@ -82,11 +80,10 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("feedback")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
-                  activeTab === "feedback"
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${activeTab === "feedback"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
-                }`}
+                  }`}
               >
                 <FaEdit /> <span>Give Feedback</span>
               </button>
@@ -94,11 +91,10 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("profile")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
-                  activeTab === "profile"
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${activeTab === "profile"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
-                }`}
+                  }`}
               >
                 <FaUser /> <span>Profile Details</span>
               </button>
@@ -106,11 +102,10 @@ const MyAccount = () => {
             <li>
               <button
                 onClick={() => setActiveTab("support")}
-                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${
-                  activeTab === "support"
+                className={`flex items-center gap-3 w-full p-3 rounded-lg transition hover:cursor-pointer ${activeTab === "support"
                     ? "bg-primary text-white"
                     : "hover:bg-gray-100"
-                }`}
+                  }`}
               >
                 <FaHeadset /> <span>Contact Support</span>
               </button>
@@ -129,7 +124,7 @@ const MyAccount = () => {
         </aside>
 
         {/* Main Content */}
-        <section className="lg:col-span-3 bg-white rounded-2xl shadow p-6 min-h-[400px]">
+        <section className="lg:col-span-3 bg-white rounded-2xl shadow p-6 h-screen overflow-y-scroll">
           {activeTab === "orders" && <TrackOrders />}
           {activeTab === "history" && <OrderHistory />}
           {activeTab === "feedback" && <Feedback />}
@@ -217,11 +212,10 @@ const TrackOrders = () => {
                   Order #{order._id}
                 </h3>
                 <span
-                  className={`text-sm capitalize px-3 py-1 rounded-full ${
-                    order.status === "pending" || order.status === "processing"
+                  className={`text-sm capitalize px-3 py-1 rounded-full ${order.status === "pending" || order.status === "processing"
                       ? "bg-yellow-100 text-yellow-700"
                       : "bg-green-100 text-green-700"
-                  }`}
+                    }`}
                 >
                   {order.status}
                 </span>
@@ -289,46 +283,46 @@ const TrackOrders = () => {
       )}
 
       {/* Cancellation Modal */}
-   
-{isCancelModalOpen && (
-  <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
-    <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg">
-      <h3 className="text-lg font-semibold mb-4">Request Order Cancellation</h3>
-      
-      {/* ⚠️ Warning Message */}
-      <div className="bg-yellow-100 border border-yellow-300 text-yellow-800 text-sm p-3 rounded-md mb-3">
-        ⚠️ You can cancel your order only within <strong>24 hours</strong> of placing it. 
-        Once the order is shipped, it cannot be cancelled.
-      </div>
 
-      <form onSubmit={handleCancelSubmit} className="space-y-3">
-        <textarea
-          value={cancelReason}
-          onChange={(e) => setCancelReason(e.target.value)}
-          placeholder="Please provide a reason for cancellation"
-          className="w-full border border-gray-300 resize-none rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary"
-          rows={4}
-        />
-        <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            onClick={() => setIsCancelModalOpen(false)}
-            className="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
-          >
-            Close
-          </button>
-          <button
-            type="submit"
-            disabled={cancelOrderMutation.isPending}
-            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition disabled:opacity-50"
-          >
-            {cancelOrderMutation.isPending ? "Submitting..." : "Submit Request"}
-          </button>
+      {isCancelModalOpen && (
+        <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg">
+            <h3 className="text-lg font-semibold mb-4">Request Order Cancellation</h3>
+
+            {/* ⚠️ Warning Message */}
+            <div className="bg-yellow-100 border border-yellow-300 text-yellow-800 text-sm p-3 rounded-md mb-3">
+              ⚠️ You can cancel your order only within <strong>24 hours</strong> of placing it.
+              Once the order is shipped, it cannot be cancelled.
+            </div>
+
+            <form onSubmit={handleCancelSubmit} className="space-y-3">
+              <textarea
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                placeholder="Please provide a reason for cancellation"
+                className="w-full border border-gray-300 resize-none rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                rows={4}
+              />
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsCancelModalOpen(false)}
+                  className="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
+                >
+                  Close
+                </button>
+                <button
+                  type="submit"
+                  disabled={cancelOrderMutation.isPending}
+                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition disabled:opacity-50"
+                >
+                  {cancelOrderMutation.isPending ? "Submitting..." : "Submit Request"}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </form>
-    </div>
-  </div>
-)}
+      )}
 
     </div>
   );
@@ -375,13 +369,12 @@ const OrderHistory = () => {
                   Order #{order._id}
                 </h3>
                 <span
-                  className={`text-sm capitalize px-3 py-1 rounded-full ${
-                    order.status === "pending" || order.status === "processing"
+                  className={`text-sm capitalize px-3 py-1 rounded-full ${order.status === "pending" || order.status === "processing"
                       ? "bg-yellow-100 text-yellow-700"
                       : order.status === "shipped" || order.status === "delivered"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
                 >
                   {order.status}
                 </span>
