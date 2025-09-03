@@ -3,7 +3,7 @@ import { useLocation, Link } from "react-router-dom";
 const ThankYou = () => {
   const { state } = useLocation();
   const order = state?.order;
-
+console.log(order)
   // Format date
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-IN", {
@@ -47,6 +47,11 @@ const ThankYou = () => {
               <strong>Payment Method:</strong>{" "}
               {order.paymentMethod === "cod" ? "Cash on Delivery" : "Online"}
             </p>
+            {order.paymentMethod === "online" && order.razorpayPaymentId && (
+              <p className="text-sm text-gray-600">
+                <strong>Payment ID:</strong> {order.razorpayPaymentId}
+              </p>
+            )}  
             <p className="text-sm text-gray-600">
               <strong>Expected Delivery:</strong>{" "}
               {formatDate(order.expectedDelivery)}

@@ -35,8 +35,8 @@ const ProductCard = ({ product }) => {
           {/* Buttons */}
           <div className="flex gap-3 mt-4">
             {/* View Product Button with animation */}
-            <button className="group relative w-full py-3 px-3 text-lg rounded-md font-semibold text-white backdrop-blur-md border border-white/30 overflow-hidden shadow-lg shadow-primary/20 transition-all duration-500 ease-in-out hover:scale-[1.03] active:scale-95 hover:cursor-pointer">
-              <span className="relative z-10" onClick={goToProduct}>
+            <button  onClick={goToProduct} className="group relative w-full py-3 px-3 text-lg rounded-md font-semibold text-white backdrop-blur-md border border-white/30 overflow-hidden shadow-lg shadow-primary/20 transition-all duration-500 ease-in-out hover:scale-[1.03] active:scale-95 hover:cursor-pointer">
+              <span className="relative z-10">
                 View Product
               </span>
 

@@ -14,6 +14,7 @@ export const verifyPayment = async (data) => {
     const response = await api.post("/order/verify", data);
     return response.data.data;
   } catch (error) {
+    console.log(error)
     throw new Error(
       error.response?.data?.message || "Payment verification failed"
     );

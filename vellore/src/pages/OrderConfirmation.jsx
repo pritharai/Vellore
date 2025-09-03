@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { FaSpinner } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { createOrder } from "../services/orderService";
+import { createOrder, verifyPayment } from "../services/orderService";
 import { allUserAddresses } from "../services/userService";
 import { useAuth } from "../hooks/useAuth";
+import { loadRazorpayScript } from "../utils/loadRazorpay";
 
 const OrderConfirmation = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth(); 
   const products = state?.products || [];
-
+  const queryClient = useQueryClient();
   const [addressOption, setAddressOption] = useState("new");
   const [addressId, setAddressId] = useState("");
   const [shippingAddress, setShippingAddress] = useState({
@@ -27,12 +28,10 @@ const OrderConfirmation = () => {
   });
   const [contact, setContact] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("cod");
+  const [razorpayOrder, setRazorpayOrder] = useState(null); 
 
-  // Define shipping charges based on environment variables
   const COD_CHARGES = Number(import.meta.env.VITE_COD_CHARGES) || 200;
   const ONLINE_CHARGES = Number(import.meta.env.VITE_ONLINE_CHARGES) || 120;
-
-  // Set shipping charge based on payment method
   const [shippingCharge, setShippingCharge] = useState(
     paymentMethod === "cod" ? COD_CHARGES : ONLINE_CHARGES
   );
@@ -46,15 +45,82 @@ const OrderConfirmation = () => {
   const createOrderMutation = useMutation({
     mutationFn: createOrder,
     onSuccess: (data) => {
-      toast.success("Order created successfully");
-      navigate("/thank-you", { state: { order: data.order } });
+      if (paymentMethod === "cod") {
+        toast.success("Order created successfully");
+        queryClient.invalidateQueries(['cart']);
+        navigate("/thank-you", { state: { order: data.order } });
+      } else {
+        console.log(data)
+        setRazorpayOrder(data.razorpayOrder); // Store Razorpay order
+        handleRazorpayPayment(data); // Trigger Razorpay modal
+      }
     },
     onError: (err) => {
       toast.error(err.message || "Failed to create order");
     },
   });
 
+  const verifyPaymentMutation = useMutation({
+    mutationFn: verifyPayment,
+    onSuccess: (data) => {
+      toast.success("Payment verified successfully");
+      queryClient.invalidateQueries(['cart']);
+      console.log(data)
+      console.log(verifyPaymentMutation.variables.razorpayPaymentId )
+      navigate("/thank-you", {
+        state: { order: data, paymentId: verifyPaymentMutation.variables.razorpayPaymentId },
+      });
+    },
+    onError: (err) => {
+      console.log(err)
+      toast.error(err.message || "Payment verification failed");
+    },
+  });
+
+  const handleRazorpayPayment = async (data) => {
+    console.log(data)
+    try {
+      await loadRazorpayScript();
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: data.razorpayOrder.amount,
+        currency: data.razorpayOrder.currency,
+        order_id: data.razorpayOrder.id,
+        name: "Vellor",
+        description: `Order #${data.order._id}`,
+        prefill: {
+          name: user?.name || "",
+          email: user?.email || "",
+          contact: contact || "",
+        },
+        handler: (response) => {
+          const itemIds = products.map((item) => item._id).filter(Boolean);
+          verifyPaymentMutation.mutate({
+            orderId: data.order._id,
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpaySignature: response.razorpay_signature,
+            itemIds: itemIds.length > 0 ? itemIds : undefined,
+          });
+        },
+        modal: {
+          ondismiss: () => {
+            toast.warn("Payment cancelled. You can retry the payment.");
+          },
+        },
+      };
+      const rzp = new window.Razorpay(options);
+      rzp.on("payment.failed", (response) => {
+        toast.error(response.error.description || "Payment failed. Please try again.");
+      });
+      rzp.open();
+    } catch (error) {
+      console.log(error)
+      toast.error("Failed to load Razorpay. Please try again.");
+    }
+  };
+
   const handleConfirm = () => {
+    setRazorpayOrder(null);
     if (!isAuthenticated) {
       toast.error("Please log in to place an order");
       setTimeout(() => navigate("/auth"), 2000);
@@ -91,15 +157,22 @@ const OrderConfirmation = () => {
       addressId: addressOption === "saved" ? addressId : undefined,
       paymentMethod,
       shippingAddress: addressOption === "new" ? shippingAddress : undefined,
-      contact: Number(contact),
+      contact: Number(contact), // Convert contact to number
     });
+  };
+
+  const handleRetryPayment = () => {
+    if (razorpayOrder) {
+      handleRazorpayPayment({ order: createOrderMutation.data?.order, razorpayOrder });
+    } else {
+      toast.error("No Razorpay order available. Please create a new order.");
+    }
   };
 
   const handleAddressChange = (field, value) => {
     setShippingAddress((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Update shipping charge when payment method changes
   const handlePaymentChange = (method) => {
     setPaymentMethod(method);
     setShippingCharge(method === "cod" ? COD_CHARGES : ONLINE_CHARGES);
@@ -219,10 +292,11 @@ const OrderConfirmation = () => {
                 className="w-full border-b rounded-lg p-3 text-sm focus:ring-2 focus:ring-black outline-none"
                 disabled={addressesLoading || !addresses?.length}
               >
-                {addresses?.length > 0 && (
+                {addresses?.length > 0 ? (
                   <option value="">Select a saved address</option>
+                ) : (
+                  <option value="">No saved addresses</option>
                 )}
-
                 {addresses?.length > 0 &&
                   addresses.map((addr) => (
                     <option key={addr._id} value={addr._id}>
@@ -230,7 +304,6 @@ const OrderConfirmation = () => {
                     </option>
                   ))}
               </select>
-
             )}
           </div>
 
@@ -238,23 +311,7 @@ const OrderConfirmation = () => {
             <h2 className="text-xl font-semibold text-gray-800">
               Payment Method
             </h2>
-            <div className="flex gap-4">
-              <label
-                className="flex items-center gap-2 border rounded-lg px-4 py-2 opacity-50 cursor-not-allowed relative group"
-                title="Card payment is temporarily unavailable"
-              >
-                <input
-                  type="radio"
-                  name="payment"
-                  value="card"
-                  disabled
-                  className="cursor-not-allowed"
-                />
-                Card
-                <span className="absolute hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 -top-8 left-1/2 transform -translate-x-1/2">
-                  Temporarily unavailable
-                </span>
-              </label>
+            <div className="flex flex-col md:flex-row gap-4">
               <label className="flex items-center gap-2 border rounded-lg px-4 py-2 cursor-pointer hover:bg-gray-50">
                 <input
                   type="radio"
@@ -265,8 +322,7 @@ const OrderConfirmation = () => {
                 />
                 Cash on Delivery (₹{COD_CHARGES} Delivery)
               </label>
-              {/* Uncomment when online payment is available */}
-              {/* <label className="flex items-center gap-2 border rounded-lg px-4 py-2 cursor-pointer hover:bg-gray-50">
+              <label className="flex items-center gap-2 border rounded-lg px-4 py-2 cursor-pointer hover:bg-gray-50">
                 <input
                   type="radio"
                   name="payment"
@@ -275,7 +331,7 @@ const OrderConfirmation = () => {
                   onChange={() => handlePaymentChange("online")}
                 />
                 Online Payment (₹{ONLINE_CHARGES} Delivery)
-              </label> */}
+              </label>
             </div>
           </div>
         </div>
@@ -284,7 +340,6 @@ const OrderConfirmation = () => {
         <div className="bg-white rounded-xl shadow-sm p-6 space-y-6">
           <h2 className="text-xl font-semibold text-gray-800">Summary</h2>
 
-          {/* Product Display */}
           {products.map((item, index) => (
             <div key={index} className="flex gap-4 border-b pb-4">
               <img
@@ -303,7 +358,6 @@ const OrderConfirmation = () => {
             </div>
           ))}
 
-          {/* Breakdown */}
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span>Subtotal</span>
@@ -319,30 +373,38 @@ const OrderConfirmation = () => {
             </div>
           </div>
 
-          {/* Confirm Button */}
+          {paymentMethod === "online" && createOrderMutation.isError && razorpayOrder && (
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={handleRetryPayment}
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 text-white font-semibold rounded-lg bg-yellow-500 hover:bg-yellow-600 transition-all duration-300 shadow-md"
+            >
+              Retry Payment
+            </motion.button>
+          )}
+
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={handleConfirm}
-            disabled={createOrderMutation.isPending}
+            disabled={createOrderMutation.isPending || verifyPaymentMutation.isPending}
             className={`w-full flex items-center justify-center gap-2 px-6 py-3 text-white font-semibold rounded-lg transition-all duration-300
-              ${createOrderMutation.isPending
+              ${(createOrderMutation.isPending || verifyPaymentMutation.isPending)
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-primary hover:bg-primary-hover hover:cursor-pointer shadow-md"
               }`}
           >
-            {createOrderMutation.isPending ? (
+            {(createOrderMutation.isPending || verifyPaymentMutation.isPending) ? (
               <>
                 <FaSpinner className="animate-spin" />
-                Placing Order...
+                {paymentMethod === "online" ? "Processing..." : "Placing Order..."}
               </>
             ) : (
-              "Confirm Order"
+              paymentMethod === "online" ? "Pay Now" : "Confirm Order"
             )}
           </motion.button>
         </div>
       </div>
 
-      {/* Popup Modal */}
       {showPopup && (
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/30 z-50">
           <div className="bg-white p-6 rounded-xl shadow-lg w-80 text-center">
