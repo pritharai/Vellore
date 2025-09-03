@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { createContact } from "../services/contactService"; 
+import { createContact } from "../services/contactService";
+import { FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -15,7 +16,7 @@ const Contact = () => {
     mutationFn: createContact,
     onSuccess: () => {
       toast.success("Message sent successfully!");
-      setFormData({ name: "", email: "", phone: "", message: "" }); 
+      setFormData({ name: "", email: "", phone: "", message: "" });
     },
     onError: (error) => {
       toast.error(error.message);
@@ -43,12 +44,22 @@ const Contact = () => {
       >
         {/* Left image */}
         <div className="hidden md:block w-full md:w-1/2">
-          <div className="relative h-full">
+          {/* <div className="relative h-full">
             <img
               src="https://res.cloudinary.com/dlon1jww2/image/upload/v1755957530/contact-us_t8ho9p.gif"
               alt="Contact us"
               className="rounded-md w-full h-full object-cover"
             />
+          </div> */}
+          <div>
+            <h2 className="text-xl font-semibold mb-4">Contact Support</h2>
+
+            <p className="flex items-center gap-2">
+              <FaMapMarkerAlt /> Pakhowal Road, Ludhiana, Punjab, India - 141001
+            </p>
+            <p className="flex items-center gap-2 mt-2">
+              <FaPhoneAlt /> +91 98104 46149
+            </p>
           </div>
         </div>
 
@@ -69,7 +80,9 @@ const Contact = () => {
                 />
               </div>
               <div className="flex-1">
-                <p className="font-bold text-[18px] text-primary mb-3">E-mail address</p>
+                <p className="font-bold text-[18px] text-primary mb-3">
+                  E-mail address
+                </p>
                 <input
                   type="email"
                   name="email"
@@ -81,7 +94,9 @@ const Contact = () => {
               </div>
             </div>
             <div>
-              <p className="font-bold text-[18px] text-primary mb-3">Contact Number</p>
+              <p className="font-bold text-[18px] text-primary mb-3">
+                Contact Number
+              </p>
               <input
                 type="number"
                 name="phone"
