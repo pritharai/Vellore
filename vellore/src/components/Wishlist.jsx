@@ -8,6 +8,8 @@ import { useAuth } from "../hooks/useAuth";
 import { useDispatch } from "react-redux";
 import { setCart } from "../redux/cartSlice";
 import ConfirmationPopup from "./ConfirmationPopup";
+import VellorLoader from './VellorLoader';
+
 
 const Wishlist = () => {
   const queryClient = useQueryClient();
@@ -102,7 +104,7 @@ const Wishlist = () => {
     return null;
   }
 
-  if (isLoading) return <p className="text-center mt-10">Loading wishlist...</p>;
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center"><VellorLoader /></div>;
   if (isError) return <p className="text-center mt-10 text-red-500">Failed to load wishlist.</p>;
 
   return (

@@ -27,6 +27,7 @@
     "react-router-dom": "^7.7.1",
     "react-simple-typewriter": "^5.0.1",
     "react-toastify": "^11.0.5",
+    "styled-components": "^6.1.19",
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {

@@ -30,6 +30,7 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import { setUser } from "../redux/authSlice";
 import { useDispatch } from "react-redux";
+import VellorLoader from "../components/VellorLoader";
 
 const MyAccount = () => {
   const [activeTab, setActiveTab] = useState("orders");
@@ -349,9 +350,6 @@ const OrderHistory = () => {
     return `${houseNumber}, ${street}, ${colony}, ${city}, ${state}, ${country} - ${postalCode}`;
   };
 
-  if (isLoading) {
-    return <p className="text-gray-600">Loading orders...</p>;
-  }
 
   if (error) {
     return <p className="text-red-500">Error loading orders: {error.message}</p>;

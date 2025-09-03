@@ -9,6 +9,7 @@ import { setCart } from '../redux/cartSlice';
 import { addToWishlist } from '../services/wishlistService';
 import { FaSave, FaTimes, FaCheck } from 'react-icons/fa';
 import ConfirmationPopup from './ConfirmationPopup';
+import VellorLoader from './VellorLoader';
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -176,8 +177,7 @@ const Cart = () => {
     setTimeout(() => navigate('/auth'), 2000);
     return null;
   }
-
-  if (isLoading) return <div className="max-w-[1100px] md:mt-50 mx-auto p-6 mb-20 text-center py-12">Loading cart...</div>;
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center"><VellorLoader /></div>;
   if (error) return <div className="max-w-[1100px] md:mt-50 mx-auto p-6 mb-20 text-center py-12 text-red-500">Failed to load cart</div>;
   if (!cart?.items?.length) return (
     <div className="max-w-[1100px] md:mt-50 mx-auto p-6 mb-20">

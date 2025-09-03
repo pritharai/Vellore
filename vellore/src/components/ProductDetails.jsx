@@ -11,6 +11,7 @@ import Reviews from "./Reviews";
 import { useAuth } from "../hooks/useAuth";
 import { useDispatch } from "react-redux";
 import { setCart } from "../redux/cartSlice";
+import VellorLoader from "./VellorLoader";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -142,7 +143,8 @@ const ProductDetail = () => {
     setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
-  if (isLoading) return <div className="text-center py-12">Loading product...</div>;
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center"><VellorLoader /></div>;
+
   if (error) {
     toast.error(error.message);
     return (

@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import ProductCard from "./ProductCard";
 import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../services/productService";
-
+import VellorLoader from './VellorLoader'
 const containerVariants = {
   hidden: {},
   show: {
@@ -24,7 +24,7 @@ const Products = () => {
     queryFn: () => getProducts(),
   });
 
-  if (isLoading) return <div className="text-center py-20">Loading products...</div>;
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center"><VellorLoader /></div>;
   if (isError) return <div className="text-center py-20 text-red-500">Failed to load products</div>;
 
   // Map products to include the single variant for listing
