@@ -3,8 +3,9 @@ import { refreshAccessToken } from "./userService";
 import {store} from '../redux/index';
 import {setUser} from '../redux/authSlice'
 const api = axios.create({
-  baseURL: '/api/v1',
-  withCredentials: true,
+  // baseURL: '/api/v1',
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}`,
+withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {
