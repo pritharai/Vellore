@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react"; // Add useState and useEffect
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Provider, useSelector } from "react-redux";
 import {store} from "./redux/index";
@@ -31,8 +32,12 @@ import Refund from "./components/Refund";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import ProductManagement from "./components/ProductManagement";
 import Terms from "./components/Terms";
+// import VellorLoader from "./components/VellorLoader";
+// import Loader from "./components/Loader";
+import SplashScreen from "./components/SplashScreen";
 
-const App = () => {
+// Main App Component (extracted from the original return)
+const MainApp = () => {
   return (
     <Provider store={store}>
       <Router>
@@ -50,7 +55,7 @@ const App = () => {
               element={
                 <>
                   <Navbar />
-                  <Home />
+                  <Home /> {/* Changed from Loader to Home */}
                   <InstagramButton />
                   <Footer />
                 </>
@@ -112,7 +117,6 @@ const App = () => {
               }
             />
             <Route
-
               path="/privacy"
               element={
                 <>
@@ -156,7 +160,6 @@ const App = () => {
                   </>
                 }
               />
-
 
             {/* Protected Routes (Authenticated Users) */}
             <Route element={<ProtectedRoute />}>
@@ -254,7 +257,6 @@ const App = () => {
               />
             </Route>
 
-
             {/* Catch-all Route */}
             <Route
               path="*"
@@ -272,6 +274,33 @@ const App = () => {
       </Router>
     </Provider>
   );
+};
+
+// Main App Component with Splash Screen
+const App = () => {
+  const [showSplash, setShowSplash] = useState(() => {
+  
+    const splashShown = sessionStorage.getItem('vellor_splash_shown');
+    return !splashShown; 
+  });
+
+  useEffect(() => {
+    if (showSplash) {
+      const timer = setTimeout(() => {
+        setShowSplash(false);
+        sessionStorage.setItem('vellor_splash_shown', 'true');
+      }, 5000);
+
+      
+      return () => clearTimeout(timer);
+    }
+  }, [showSplash]);
+
+  if (showSplash) {
+    return <SplashScreen />;
+  }
+
+  return <MainApp />;
 };
 
 export default App;
