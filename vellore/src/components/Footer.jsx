@@ -1,12 +1,12 @@
 // components/Footer.jsx
-import { FaInstagram, FaTwitter, FaFacebookF, FaEnvelope } from "react-icons/fa";
+import { FaInstagram, FaTwitter, FaWhatsapp, FaFacebookF, FaEnvelope } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
     <footer className="bg-white text-primary py-12 px-6 sm:px-12 shadow-[0_-6px_12px_-2px_rgba(0,0,0,0.1)] max-w-[1560px] mx-auto">
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        
+
         {/* Brand */}
         <div>
           {/* <h2 className="text-2xl font-semibold tracking-wide text-primary" style={{ fontFamily: 'Brittany Signature' }}>Vellor</h2>
@@ -71,19 +71,37 @@ const Footer = () => {
           </form> */}
 
           <div className="flex space-x-4 text-primary-light text-xl">
-            <a href="#" className="hover:text-primary-light transition">
+            {/* Instagram */}
+            <a
+              href="https://www.instagram.com/the.vellor?igsh=Z3ppZ2x3c2p1Mnly"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-primary-light transition"
+            >
               <FaInstagram />
             </a>
-            <a href="#" className="hover:text-primary-light transition">
-              <FaTwitter />
+
+            {/* WhatsApp */}
+            <a
+              href="https://wa.me/919810446149"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-primary-light transition"
+            >
+              <FaWhatsapp />
             </a>
-            <a href="#" className="hover:text-primary-light transition">
-              <FaFacebookF />
-            </a>
-            <a href="#" className="hover:text-primary-light transition">
+
+            {/* Email */}
+            <a
+              href="mailto:thevellor20@gmail.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-primary-light transition"
+            >
               <FaEnvelope />
             </a>
           </div>
+
         </div>
       </div>
 
