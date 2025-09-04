@@ -41,13 +41,13 @@ const Contact = () => {
   };
 
   return (
-    <section className="max-w-[1200px] py-16 px-6 mx-auto mt-40">
+    <section className="max-w-[1200px] pt-10 md:pt-16 pb-16 px-6 mx-auto md:mt-40">
       {/* Heading */}
-      <div className="text-center mb-10">
-        <h1 className="text-3xl md:text-4xl font-bold text-primary">
+      <div className=" mb-10">
+        <h1 className="text-3xl md:text-center md:text-5xl font-bold text-primary">
           Contact Us
         </h1>
-        <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
+        <p className="text-left md:text-center text-gray-600 mt-3 max-w-2xl mx-auto">
           Have questions, feedback, or need help? Our support team is here to assist you. 
           Get in touch with us anytime — we’re committed to making your experience smooth, safe, and satisfying.
         </p>
