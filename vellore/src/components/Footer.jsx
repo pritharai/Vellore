@@ -56,7 +56,7 @@ const Footer = () => {
         {/* Stay Connected */}
         <div>
           <h3 className="text-lg font-semibold mb-4 text-primary ">Stay Connected</h3>
-          <form className="flex items-center space-x-2 mb-4">
+          {/* <form className="flex items-center space-x-2 mb-4">
             <input
               type="email"
               placeholder="Enter your email"
@@ -68,7 +68,7 @@ const Footer = () => {
             >
               Subscribe
             </button>
-          </form>
+          </form> */}
 
           <div className="flex space-x-4 text-primary-light text-xl">
             <a href="#" className="hover:text-primary-light transition">
