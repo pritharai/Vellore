@@ -3,14 +3,22 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { createContact } from "../services/contactService";
 import { FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
-
+import {useNavigate} from 'react-router-dom'
 const Contact = () => {
+  const navigate = useNavigate(); 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     message: "",
   });
+
+  const handleFaqClick = () =>{
+        navigate("/about");
+    setTimeout(() => {
+      document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" });
+    }, 300);
+  }
 
   const mutation = useMutation({
     mutationFn: createContact,
@@ -135,7 +143,7 @@ const Contact = () => {
             <p className="text-gray-600 mb-3">
               Explore our FAQs section to get instant answers to your common questions.
             </p>
-            <button className="bg-primary text-white px-4 py-2 rounded-lg">
+            <button onClick={handleFaqClick} className="bg-primary text-white px-4 py-2 rounded-lg">
               Visit FAQ
             </button>
           </div>

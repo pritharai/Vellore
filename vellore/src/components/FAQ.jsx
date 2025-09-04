@@ -33,6 +33,7 @@ const FAQ = () => {
   };
 
   return (
+    <div id="faq" className="scroll-mt-18" >
     <section className="max-w-[1560px] py-20 px-6 bg-[#fef9f6] text-primary md:h-[660px] mx-auto">
       <div className="mx-auto max-w-[1280px]">
         <h2
@@ -85,6 +86,7 @@ const FAQ = () => {
         </div>
       </div>
     </section>
+    </div>
   );
 };
 
